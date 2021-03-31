@@ -3,17 +3,19 @@ from flask_login import LoginManager, logout_user, login_required
 
 from flask_restful import reqparse, abort, Api, Resource
 from flask import Flask, render_template, redirect, request
-from data import db_session, jobs_api, user_api
-from data.users import User
 from forms.register import RegisterForm
 from forms.login import LoginForm
 from flask import make_response
 from flask import jsonify
 from requests import get
-from data import users_resource
 from flask_login import login_user, logout_user
 
+from data import db_session
+from data.users import User
 from data import users_resource
+from data.rooms import Rooms
+from data import rooms_resource
+from in_room import *
 
 import os
 print(os.getcwd())
@@ -22,9 +24,19 @@ app = Flask(__name__)
 api = Api(app)
 app.config['SECRET_KEY'] = 'key'
 
-
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+api.add_resource(users_resource.UserListResource, '/api/users')
+api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
+api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
+api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
+
+# пока не понял как добавлять комнаты
+# это одна комната для теста она есть в БД
+test1 = InGameRoom(1)
+test1.add_player(1)
+active_rooms = {1: test1}
 
 
 @login_manager.user_loader
@@ -45,15 +57,16 @@ def method_not_allowed(error):
 
 def main():
     db_session.global_init("db/users.db")
-    api.add_resource(users_resource.UserListResource, '/api/users')
-    api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
     app.run()
 
 
 @app.route('/', methods=['GET', 'POST'])
 def base():
+    db_sess = db_session.create_session()
     params = dict()
     params["title"] = "Title"
+    print(db_sess.query(Rooms).all())
+    params["rooms"] = db_sess.query(Rooms).all()
 
     return render_template('index.html', **params)
 
@@ -104,6 +117,19 @@ def reqister():
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
+def connect_to_room(room_id, player_id):
+    # какие-нибудь проверки
+    active_rooms[room_id].add_player(player_id)
+    return redirect(f'/in_room/{room_id}')
+
+
+@app.route('/in_room/<int:room_id>', methods=['GET', 'POST'])
+def in_room(room_id):
+    current_room = active_rooms[room_id]
+    return render_template('in_room.html', title='В игре', players=current_room.players)
 
 
 if __name__ == '__main__':

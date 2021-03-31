@@ -21,28 +21,31 @@
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" class="btn btn-primary">Создать</button>
+          <button type="submit" class="btn btn-primary"> Создать</button>
         </div>
       </div>
     </div>
   </div>
 </div>
 
+{% if current_user.is_authenticated %}
+
     <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
-    {% for room in roms %}
+    <br>
+    <br>
+    {% for room in rooms %}
         <div class="col-md6 border rounded">
-            <h2></h2>
-            <div>
-                {{ room.players }}
-            </div>
             <div class="card">
-                <h5 class="card-header">{{ room.title }}</h5>
+                <h5 class="card-header">{{ room.title }} creator: {{ room.creator }}</h5>
                 <div class="card-body">
                     <h5 class="card-title">{{ room.players }}</h5>
-                    <a href="#" class="btn btn-primary">Присоединится</a>
+                    <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
                 </div>
             </div>
         </div>
+        <br>
     {% endfor %}
+
+{% endif %}
 
 {% endblock %}
