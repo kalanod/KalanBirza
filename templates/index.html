@@ -1,0 +1,48 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+
+<div class="bd-example">
+  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+
+          <h4 class="modal-title" id="exampleModalLabel">Новая комната</h4>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="form-group">
+              <label for="recipient-name" class="form-control-label">Название:</label>
+              <input type="text" class="form-control" id="recipient-name">
+            </div>
+          </form>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+          <button type="button" class="btn btn-primary">Создать</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+    <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
+    {% for room in roms %}
+        <div class="col-md6 border rounded">
+            <h2></h2>
+            <div>
+                {{ room.players }}
+            </div>
+            <div class="card">
+                <h5 class="card-header">{{ room.title }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.players }}</h5>
+                    <a href="#" class="btn btn-primary">Присоединится</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}

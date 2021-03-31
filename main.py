@@ -55,7 +55,7 @@ def base():
     params = dict()
     params["title"] = "Title"
 
-    return render_template('base.html', **params)
+    return render_template('index.html', **params)
 
 
 @app.route('/login', methods=['GET', 'POST'])
