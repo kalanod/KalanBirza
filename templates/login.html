@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <a class="btn btn-primary" style="margin-left: 90%; margin-top: 10px" href="/create_room">Создать комнату</a>
+    {% for room in roms %}
+        <div class="col-md6 border rounded">
+            <h2></h2>
+            <div>
+                {{ room.players }}
+            </div>
+            <div class="card">
+                <h5 class="card-header">{{ room.title }}</h5>
+                <div class="card-body">
+                    <h5 class="card-title">{{ room.players }}</h5>
+                    <a href="#" class="btn btn-primary">Присоединится</a>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+
+{% endblock %}
