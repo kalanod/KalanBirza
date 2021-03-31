@@ -1,0 +1,97 @@
+<!doctype html>
+ <html lang="en">
+ <head>
+     <meta charset="utf-8">
+     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+     <link rel="stylesheet"
+           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+           crossorigin="anonymous">
+     <title> {{ title }} </title>
+     <style>
+         #zatemnenie {
+             background: rgba(102, 102, 102, 0.5);
+             width: 100%;
+             height: 100%;
+             position: absolute;
+             top: 0;
+             left: 0;
+             display: none;
+         }
+
+         #okno {
+             width: 300px;
+             height: 50px;
+             text-align: center;
+             padding: 15px;
+             border: 3px solid #0000cc;
+             border-radius: 10px;
+             color: #0000cc;
+             position: absolute;
+             top: 0;
+             right: 0;
+             bottom: 0;
+             left: 0;
+             margin: auto;
+             background: #fff;
+         }
+
+         #zatemnenie:target {
+             display: block;
+         }
+
+         .close {
+             display: inline-block;
+             border: 1px solid #0000cc;
+             color: #0000cc;
+             padding: 0 12px;
+             margin: 10px;
+             text-decoration: none;
+             background: #f2f2f2;
+             font-size: 14pt;
+             cursor: pointer;
+         }
+
+         .close:hover {
+             background: #e6e6ff;
+         }
+     </style>
+ </head>
+ <body>
+ <header>
+     <nav class="navbar navbar-light bg-light">
+         <a class="navbar-brand" href="#">Каланбиржа</a>
+         {% if current_user.is_authenticated %}
+             <h5 style="margin-left: 80%; margin-right: 10px">{{ current_user.nickname }}</h5>
+             <a class="navbar-brand" href="/logout">выйти</a>
+         {% else %}
+             <p>
+                 <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                 <a class="btn btn-success" href="/login">Войти</a>
+             </p>
+         {% endif %}
+     </nav>
+ </header>
+ <!-- Container -->
+ <main role="main">
+     {% block content %}{% endblock %}
+ </main>
+ <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
+ <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+ <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+ <script>
+     $(document).ready(function () {
+         $("#myModal").modal('show');
+     });
+     $('#exampleModal').on('show.bs.modal', function (event) {
+         var button = $(event.relatedTarget) // Кнопка, что спровоцировало модальное окно
+         var recipient = button.data('whatever') // Извлечение информации из данных-* атрибутов
+         // Если необходимо, вы могли бы начать здесь AJAX-запрос (и выполните обновление в обратного вызова).
+         // Обновление модальное окно Контента. Мы будем использовать jQuery здесь, но вместо него можно использовать привязки данных библиотеки или других методов.
+         var modal = $(this)
+         modal.find('.modal-title').text('Новая комната')
+         modal.find('.modal-body input').val(recipient)
+     })
+ </script>
+ </body>
+ </html>
