@@ -58,6 +58,7 @@ class RoomsListResource(Resource):
             players=args['players'],
             status=args['status']
         )
-        session.add(Rooms)
+        session.add(rooms)
         session.commit()
+        print("ok")
         return jsonify({'success': 'OK'})
