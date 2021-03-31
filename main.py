@@ -18,6 +18,7 @@ from data import rooms_resource
 from in_room import *
 
 import os
+
 print(os.getcwd())
 
 app = Flask(__name__)
@@ -57,7 +58,12 @@ def method_not_allowed(error):
 
 def main():
     db_session.global_init("db/users.db")
-    app.run()
+    app.run(debug=True)
+
+
+@app.route('/create_room/<title>')
+def create_room(title):
+    return title
 
 
 @app.route('/', methods=['GET', 'POST'])

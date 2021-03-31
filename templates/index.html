@@ -10,28 +10,29 @@
         <div class="modal-header">
 
           <h4 class="modal-title" id="exampleModalLabel">Новая комната</h4>
+
         </div>
         <div class="modal-body">
           <form>
             <div class="form-group">
-              <label for="recipient-name" class="form-control-label">Название:</label>
-              <input type="text" class="form-control" id="recipient-name">
+              <label for="room_name" class="form-control-label">Название:</label>
+              <input type="text" class="form-control" id="room_name">
             </div>
           </form>
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="submit" class="btn btn-primary"> Создать</button>
+          <button type="button" class="btn btn-primary" id="create_room">Создать</button>
+
+          <div id="create_room_result">-</div>
         </div>
       </div>
     </div>
   </div>
 </div>
 
-{% if current_user.is_authenticated %}
-
     <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
-    <br>
+<br>
     <br>
     {% for room in rooms %}
         <div class="col-md6 border rounded">
@@ -46,6 +47,5 @@
         <br>
     {% endfor %}
 
-{% endif %}
 
 {% endblock %}
