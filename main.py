@@ -65,11 +65,13 @@ def main():
 def create_room(title, name):
     # id_player = player.get_id(name) Получени ид из класса надо сделать
     id = 0  # временная строка
-    a = post('http://127.0.0.1:5000/api/rooms', json={
-        'title': title,
-        'creator': id,
-        'players': "None",
-        'status': 0}).json()
+    a = post('http://127.0.0.1:5000/api/rooms',
+             json={
+                   'title': title,
+                   'creator': id,
+                   'players': "None",
+                   'status': 0
+             }).json()
     return a
 
 
