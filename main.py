@@ -63,13 +63,14 @@ def main():
 
 @app.route('/create_room/<title>/<name>')
 def create_room(title, name):
-    a = post('/api/rooms', json={
+    # id_player = player.get_id(name) Получени ид из класса надо сделать
+    id = 0  # временная строка
+    a = post('http://127.0.0.1:5000/api/rooms', json={
         'title': title,
-        'creator': name,
+        'creator': id,
         'players': "None",
-        'is_private': False,
-        'is_published': True}).json()
-    return title
+        'status': 0}).json()
+    return a
 
 
 @app.route('/', methods=['GET', 'POST'])
