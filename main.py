@@ -7,7 +7,7 @@ from forms.register import RegisterForm
 from forms.login import LoginForm
 from flask import make_response
 from flask import jsonify
-from requests import get
+from requests import get, post
 from flask_login import login_user, logout_user
 
 from data import db_session
@@ -57,9 +57,18 @@ def method_not_allowed(error):
 
 def main():
     db_session.global_init("db/users.db")
-    app.run()
+    app.run(debug=True)
 
-
+@app.route('/create_room/<title>/<name>')
+def create_room(title, name):
+    # id_player = player.get_id(name) Получени ид из класса надо сделать
+    id = 0  # временная строка
+    a = post('http://127.0.0.1:5000/api/rooms', json={
+        'title': title,
+        'creator': id,
+        'players': "None",
+        'status': 0}).json()
+    return a
 @app.route('/', methods=['GET', 'POST'])
 def base():
     db_sess = db_session.create_session()
