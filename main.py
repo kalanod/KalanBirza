@@ -1,20 +1,43 @@
-from datetime import datetime
-from flask import Flask, render_template, redirect
-from data import db_session
-from data.our_users import User
-from data.news import News
-from forms.user import RegisterForm
-from forms.login import LoginForm
-from flask_login import login_user
-
+from flask import Flask, redirect, render_template
 from flask_login import LoginManager, logout_user, login_required
 
-app = Flask(__name__)
-app.config['SECRET_KEY'] = 'yandexlyceum_secret_key'
+from flask_restful import reqparse, abort, Api, Resource
+from flask import Flask, render_template, redirect, request
+from forms.register import RegisterForm
+from forms.login import LoginForm
+from flask import make_response
+from flask import jsonify
+from flask_login import login_user, logout_user
 
-# новенькие функции
+from data import db_session
+from data.users import User
+from data import users_resource
+from data.rooms import Rooms
+from data import rooms_resource
+from in_room import *
+from requests import get, post, delete
+
+import os
+
+print(os.getcwd())
+
+app = Flask(__name__)
+api = Api(app)
+app.config['SECRET_KEY'] = 'key'
+
 login_manager = LoginManager()
 login_manager.init_app(app)
+
+api.add_resource(users_resource.UserListResource, '/api/users')
+api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
+api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
+api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
+
+# пока не понял как добавлять комнаты
+# это одна комната для теста она есть в БД
+test1 = InGameRoom(1)
+test1.add_player(1)
+active_rooms = {1: test1}
 
 
 @login_manager.user_loader
@@ -23,11 +46,66 @@ def load_user(user_id):
     return db_sess.query(User).get(user_id)
 
 
-@app.route("/")
-def index():
+@app.errorhandler(404)
+def not_found(error):
+    return make_response(jsonify({'error': 'Not found - 404'}), 404)
+
+
+@app.errorhandler(405)
+def method_not_allowed(error):
+    return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
+
+
+def main():
+    db_session.global_init("db/users.db")
+    app.run(debug=True)
+
+
+@app.route('/create_room/<title>/<name>')
+def create_room(title, name):
+    # id_player = player.get_id(name) Получени ид из класса надо сделать
+    id = 0  # временная строка
+    a = post('http://127.0.0.1:5000/api/rooms', json={
+        'title': title,
+        'creator': id,
+        'players': "None",
+        'status': 0}).json()
+    return a
+
+
+@app.route('/', methods=['GET', 'POST'])
+def base():
     db_sess = db_session.create_session()
-    news = db_sess.query(News).filter(News.is_private != True)
-    return render_template("index.html", news=news)
+    params = dict()
+    params["title"] = "Title"
+    print(db_sess.query(Rooms).all())
+    params["rooms"] = db_sess.query(Rooms).all()
+
+    return render_template('index.html', **params)
+
+
+@app.route('/login', methods=['GET', 'POST'])
+def login():
+    form = LoginForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.email == form.email.data).first()
+        if user and user.check_password(form.password.data):
+            login_user(user, remember=form.remember_me.data)
+            param = dict()
+            param["title"] = "Успех"
+            return redirect('/')
+        return render_template('login.html',
+                               message="Неправильный логин или пароль",
+                               form=form)
+    return render_template('login.html', title='Авторизация', form=form)
+
+
+@app.route('/logout')
+@login_required
+def logout():
+    logout_user()
+    return redirect("/")
 
 
 @app.route('/register', methods=['GET', 'POST'])
@@ -44,116 +122,27 @@ def reqister():
                                    form=form,
                                    message="Такой пользователь уже есть")
         user = User(
-            name=form.name.data,
+            nickname=form.nickname.data,
             email=form.email.data,
-            about=form.about.data
         )
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/login')
+        return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
 
 
-@app.route('/login', methods=['GET', 'POST'])
-def login():
-    form = LoginForm()
-    if form.validate_on_submit():
-        db_sess = db_session.create_session()
-        user = db_sess.query(User).filter(User.email == form.email.data).first()
-        if user and user.check_password(form.password.data):
-            login_user(user, remember=form.remember_me.data)
-            return redirect("/")
-        return render_template('login_for_news.html',
-                               message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('login_for_news.html', title='Авторизация', form=form)
+@app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
+def connect_to_room(room_id, player_id):
+    # какие-нибудь проверки
+    active_rooms[room_id].add_player(player_id)
+    return redirect(f'/in_room/{room_id}')
 
 
-@app.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect("/")
-
-
-def main():
-    db_session.global_init("db/blogs.db")
-    db_sess = db_session.create_session()
-
-    # добавление пользователей
-    # user = User()
-    # user.name = "Пользователь 1"
-    # user.about = "биография пользователя 1"
-    # user.email = "email@gmail.com"
-    # db_sess.add(user)
-    #
-    # user = User()
-    # user.name = "Пользователь 2"
-    # user.about = "биография пользователя 2"
-    # user.email = "email@mail.ru"
-    # db_sess.add(user)
-    #
-    # user = User()
-    # user.name = "Пользователь 3"
-    # user.about = "биография пользователя 3"
-    # user.email = "email@yandex.ru"
-    #
-    # db_sess.commit()
-
-    # вывод всех пользователей
-    for user in db_sess.query(User).all():
-        print(user)
-
-    print()
-
-    # фильтруем данные: ',' - аналог AND,  '|' - аналог ИЛИ, скобки частей - обязательны
-    for user in db_sess.query(User).filter((User.id > 1), (User.email.notilike("%yandex%"))):
-        print(user)
-
-    print()
-
-    # изменение данных: ищем - меняем - коммитим
-    user = db_sess.query(User).filter(User.id == 1).first()
-    print(user)
-    user.name = "Измененное имя пользователя12"
-    user.created_date = datetime.now()
-    db_sess.commit()
-    print(user)
-
-    # удаление всех по фильтру
-    # db_sess.query(User).filter(User.id >= 3).delete()
-    # db_sess.commit()
-    # # или кого-то конкретного
-    # user = db_sess.query(User).filter(User.id == 2).first()
-    # db_sess.delete(user)
-    # db_sess.commit()
-
-    # добавление новости объекту USER
-    user = db_sess.query(User).filter(User.id == 1).first()
-    news = News(title="Первая новость", content="УРАААААА!!!!!",
-                user=user, is_private=False)
-    db_sess.add(news)
-    db_sess.commit()
-
-    # взаимодействие со списоком новостей
-    user = db_sess.query(User).filter(User.id == 1).first()
-    news = News(title="Личная запись #1", content="Эта запись личная",
-                is_private=True)
-    user.news.append(news)
-    db_sess.commit()
-
-    user = db_sess.query(User).filter(User.id == 2).first()
-    news = News(title="Личная запись #33", content="Эта запись пользователя №2, вот так то",
-                is_private=False)
-    user.news.append(news)
-    db_sess.commit()
-
-    print()
-    for news in user.news:
-        print(news)
-
-    app.run(debug=True)
+@app.route('/in_room/<int:room_id>', methods=['GET', 'POST'])
+def in_room(room_id):
+    current_room = active_rooms[room_id]
+    return render_template('in_room.html', title='В игре', players=current_room.players)
 
 
 if __name__ == '__main__':
