@@ -18,6 +18,7 @@ from data import rooms_resource
 from in_room import *
 
 import os
+
 print(os.getcwd())
 
 app = Flask(__name__)
@@ -59,6 +60,7 @@ def main():
     db_session.global_init("db/users.db")
     app.run(debug=True)
 
+
 @app.route('/create_room/<title>/<name>')
 def create_room(title, name):
     # id_player = player.get_id(name) Получени ид из класса надо сделать
@@ -69,6 +71,8 @@ def create_room(title, name):
         'players': "None",
         'status': 0}).json()
     return a
+
+
 @app.route('/', methods=['GET', 'POST'])
 def base():
     db_sess = db_session.create_session()
