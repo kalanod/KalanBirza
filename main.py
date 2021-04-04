@@ -140,13 +140,15 @@ def reqister():
 def connect_to_room(room_id, player_id):
     # какие-нибудь проверки
     active_rooms[room_id].add_player(player_id)
-    return redirect(f'/in_room/{room_id}')
+    return redirect(f'/room/{room_id}')
 
 
-@app.route('/in_room/<int:room_id>', methods=['GET', 'POST'])
+@app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
     current_room = active_rooms[room_id]
-    return render_template('in_room.html', title='В игре', players=current_room.players)
+    db_sess = db_session.create_session()
+    #players = filter(lambda x: "ADS" != db_sess.query(User).filter(User.id == x[0].id).first().email,current_room.players)
+    return render_template('room.html', title_room=current_room.id, title="В игре", players=current_room.players)
 
 
 if __name__ == '__main__':
