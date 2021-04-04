@@ -17,6 +17,8 @@
             <div class="form-group">
               <label for="room_name" class="form-control-label">Название:</label>
               <input type="text" class="form-control" id="room_name">
+                <label for="room_name" class="form-control-label">ID создателя:</label>
+                <label id="creator_id">{{ current_user.id }}</label>
             </div>
           </form>
         </div>
@@ -32,7 +34,7 @@
 </div>
 
     <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
-<br>
+    <br>
     <br>
     {% for room in rooms %}
         <div class="col-md6 border rounded">

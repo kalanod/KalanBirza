@@ -33,12 +33,6 @@ api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
 
-# пока не понял как добавлять комнаты
-# это одна комната для теста она есть в БД
-test1 = InGameRoom(1)
-test1.add_player(1)
-active_rooms = {1: test1}
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -56,23 +50,18 @@ def method_not_allowed(error):
     return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
 
 
-def main():
-    db_session.global_init("db/users.db")
-    port = int(os.environ.get("PORT", 5000))
-    app.run(debug=True)
-
-
-@app.route('/create_room/<title>/<name>')
-def create_room(title, name):
-    # id_player = player.get_id(name) Получени ид из класса надо сделать
-    id = 0  # временная строка
+@app.route('/create_room/<title>/<creator_id>')
+def create_room(title, creator_id):
+    print('launch create_room')
+    print(creator_id)
     a = post('http://0.0.0.0:5000/api/rooms',
              json={
                    'title': title,
-                   'creator': id,
-                   'players': "None",
+                   'creator': creator_id,
+                   'players': '',
                    'status': 0
              }).json()
+    print('complete create_room')
     return a
 
 
@@ -153,6 +142,24 @@ def in_room(room_id):
     db_sess = db_session.create_session()
     #players = filter(lambda x: "ADS" != db_sess.query(User).filter(User.id == x[0].id).first().email,current_room.players)
     return render_template('room.html', title_room=current_room.id, title="В игре", players=current_room.players)
+
+
+def load_all_room():
+    db_sess = db_session.create_session()
+    rooms_from_db = db_sess.query(Rooms).all()
+    in_game_rooms = {}
+    for room_from_db in rooms_from_db:
+        new_room = InGameRoom(room_from_db.id)
+        in_game_rooms[room_from_db.id] = new_room
+    return in_game_rooms
+
+
+def main():
+    db_session.global_init("db/users.db")
+    global active_rooms
+    active_rooms = load_all_room()
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host='0.0.0.0', port=port, debug=True)
 
 
 if __name__ == '__main__':

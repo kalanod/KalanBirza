@@ -25,7 +25,7 @@
     <nav class="navbar navbar-light bg-light">
         <a class="navbar-brand" href="/">Каланбиржа</a>
         {% if current_user.is_authenticated %}
-            <h5 style="margin-left: 80%; margin-right: 10px" id="name">{{ current_user.nickname }}</h5>
+            <a style="margin-left: 80%; margin-right: 10px"> {{ current_user.nickname }}</a>
             <a class="navbar-brand" href="/logout">выйти</a>
         {% else %}
             <p>
@@ -37,7 +37,8 @@
 </header>
 <!-- Container -->
 <main role="main">
-    {% block content %}{% endblock %}
+    {% block content %}
+    {% endblock %}
 </main>
 <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
@@ -52,7 +53,7 @@
         $('#create_room').click(function () {
 
             //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
-            $('#create_room_result').load('http://0.0.0.0:32745/create_room/' + $('#room_name').val() + "/" + $('#name').text());
+            $('#create_room_result').load('http://0.0.0.0:5000/create_room/' + $('#room_name').val() + "/" + $('#creator_id').text());
             //console.log($('#name').text())
             //$('#create_room_result').text('main.php?name=');
 
