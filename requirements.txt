@@ -4,3 +4,4 @@ flask_login
 flask_restful
 flask_wtf
 sqlalchemy
+sqlalchemy_serializer
