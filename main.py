@@ -74,7 +74,9 @@ def create_room(title, name):
              }).json()
     return a
 
-
+@app.route('/room')
+def room():
+    return render_template('room.html')
 @app.route('/', methods=['GET', 'POST'])
 def base():
     db_sess = db_session.create_session()
