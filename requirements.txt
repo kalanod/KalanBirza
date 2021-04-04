@@ -2,4 +2,3 @@ flask
 requests
 flask_login
 flask_restful
-os
