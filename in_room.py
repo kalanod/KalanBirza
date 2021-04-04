@@ -21,6 +21,7 @@ class InGameRoom:
         pass
         # для сохранения в БД
 
+
 class InGamePlayer:
     def __init__(self, id):
         self.id = id
