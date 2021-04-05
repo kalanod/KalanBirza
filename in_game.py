@@ -1,3 +1,7 @@
+from data import db_session
+from data.rooms import Rooms
+from data.users import User
+
 START_BUDGET = 1000000
 
 
@@ -44,8 +48,15 @@ class InGameRoom:
         return None
 
     def load_to_db(self):
-        pass
-        # для сохранения в БД
+        # создаем строки на основе данных комнаты и игроков для сохранения в ДБ
+        data = ' '.join(list(map(lambda x: f'{str(x)}:{str(self.stock[x])}', self.stock.keys())))
+        players = ' '.join(list(map(lambda x: x.get_string_for_bd(), self.players)))
+        db_sess = db_session.create_session()
+        room = db_sess.query(Rooms).filter(Rooms.id == self.id).first()
+        if room:
+            room.data = data
+            room.players = players
+            db_sess.commit()
 
     def turn(self):
         self.load_to_db()
@@ -62,5 +73,15 @@ class InGamePlayer:
         player_data = player_data.split(',')
         self.id = int(player_data[0])
         self.budget = int(player_data[1])
-        self.nickname = f'{self.id} nickname'
+
+        db_sess = db_session.create_session()
+        user = db_sess.query(User).filter(User.id == self.id).first()
+        if user:
+            self.nickname = user.nickname
+
+        else:
+            raise ValueError
+
+    def get_string_for_bd(self):
+        return f'{self.id},{self.budget}'
 
