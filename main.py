@@ -158,7 +158,7 @@ def leave_from_room(room_id, player_id):
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
     current_room = get_room(room_id)
-    return render_template('room_prototype.html', current_room=current_room, title="В игре")
+    return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
 def main():
