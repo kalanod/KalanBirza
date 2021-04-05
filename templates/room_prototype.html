@@ -22,7 +22,7 @@
 
 </head>
 <body>
-    <a class="btn btn-primary" style="margin-left: auto; margin-right: 20px; margin-top: 20px; float: right" href="/">Покинуть игру</a>
+    <a class="btn btn-primary" style="margin-left: auto; margin-right: 20px; margin-top: 20px; float: right" href="{{ '/leave_from_room/' + current_room.id|string + '/' + current_user.id|string }}">Покинуть игру</a>
     <div style="width: 200px; margin-left: 30px; margin-right: auto">
     {% for player in current_room.players %}
         <div> {{ player.nickname }}</div>

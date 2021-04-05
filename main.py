@@ -51,34 +51,6 @@ def method_not_allowed(error):
     return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
 
 
-@app.route('/create_room/<title>/<creator_id>')
-def create_room(title, creator_id):
-    id = random.randint(1, 2**32)
-
-    stock = {'company_a': random.randint(100, 1000),
-             'company_b': random.randint(100, 1000),
-             'company_c': random.randint(100, 1000),
-             'company_d': random.randint(100, 1000),
-             'company_e': random.randint(100, 1000),
-             'company_f': random.randint(100, 1000),
-             'company_g': random.randint(100, 1000),
-             'company_h': random.randint(100, 1000),
-             'company_i': random.randint(100, 1000)}
-
-    data = ' '.join(list(map(lambda x: f'{str(x)}:{str(stock[x])}', stock.keys())))
-    post_request = post('http://0.0.0.0:5000/api/rooms',
-                        json={
-                              'id': id,
-                              'title': title,
-                              'creator': creator_id,
-                              'data': data,
-                              'players': '',
-                              'status': 0
-                        }).json()
-    active_rooms[id] = InGameRoom(id, title, data, '')
-    return post_request
-
-
 @app.route('/room')
 def room():
     return render_template('room.html')
@@ -141,6 +113,37 @@ def reqister():
         db_sess.commit()
         return redirect('/')
     return render_template('register.html', title='Регистрация', form=form)
+
+
+@app.route('/create_room/<title>/<creator_id>')
+def create_room(title, creator_id):
+    id = random.randint(1, 2**32)
+
+    stock = {'company_a': random.randint(100, 1000),
+             'company_b': random.randint(100, 1000),
+             'company_c': random.randint(100, 1000),
+             'company_d': random.randint(100, 1000),
+             'company_e': random.randint(100, 1000),
+             'company_f': random.randint(100, 1000),
+             'company_g': random.randint(100, 1000),
+             'company_h': random.randint(100, 1000),
+             'company_i': random.randint(100, 1000)}
+
+    data = ' '.join(list(map(lambda x: f'{str(x)}:{str(stock[x])}', stock.keys())))
+    db_sess = db_session.create_session()
+    room = Rooms(
+        id=id,
+        title=title,
+        creator=creator_id,
+        data=data,
+        players=''
+    )
+    db_sess.add(room)
+    db_sess.commit()
+    active_rooms[id] = InGameRoom(id, title, data, '')
+    # return redirect('/')
+    # нам надо на главную страницу, а не результат
+    return 'Комната создана'
 
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])

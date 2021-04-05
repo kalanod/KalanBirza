@@ -21,8 +21,7 @@ class RoomsResource(Resource):
                                                      'title',
                                                      'creator',
                                                      'data',
-                                                     'players',
-                                                     'status'))})
+                                                     'players'))})
 
     def delete(self, rooms_id):
         abort_if_rooms_not_found(rooms_id)
@@ -44,8 +43,7 @@ class RoomsListResource(Resource):
                                         'title',
                                         'creator',
                                         'data',
-                                        'players',
-                                        'status'))
+                                        'players'))
                      for item in rooms]
             }
         )
@@ -58,8 +56,7 @@ class RoomsListResource(Resource):
             title=args['title'],
             creator=args['creator'],
             data=args['data'],
-            players=args['players'],
-            status=args['status']
+            players=args['players']
         )
         session.add(rooms)
         session.commit()

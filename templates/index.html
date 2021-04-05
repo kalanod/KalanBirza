@@ -32,22 +32,23 @@
     </div>
   </div>
 </div>
-
-    <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
-    <br>
-    <br>
-    {% for room in rooms %}
-        <div class="col-md6 border rounded">
-            <div class="card">
-                <h5 class="card-header">{{ room.title }} creator: {{ room.creator }}</h5>
-                <div class="card-body">
-                    <h5 class="card-title">{{ room.players }}</h5>
-                    <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
+    {% if current_user.is_authenticated %}
+        <button style="margin-left: 90%; margin-top: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
+        <br>
+        <br>
+        {% for room in rooms %}
+            <div class="col-md6 border rounded">
+                <div class="card">
+                    <h5 class="card-header">{{ room.title }} creator: {{ room.creator }}</h5>
+                    <div class="card-body">
+                        <h5 class="card-title">{{ room.players }}</h5>
+                        <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
+                    </div>
                 </div>
             </div>
-        </div>
-        <br>
-    {% endfor %}
+            <br>
+        {% endfor %}
+    {% endif %}
 
 
 {% endblock %}

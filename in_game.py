@@ -21,7 +21,7 @@ class InGameRoom:
 
     def add_player(self, player_id):
         if self.player_in_room(player_id):
-            self.del_player(player_id).online = True
+            self.get_player(player_id).online = True
 
         else:
             self.players.append(InGamePlayer(f'{player_id},{START_BUDGET}'))
@@ -36,7 +36,7 @@ class InGameRoom:
     def player_online(self, player_id):
         return self.del_player(player_id).online
 
-    def get_in_game_player(self, player_id):
+    def get_player(self, player_id):
         for player in self.players:
             if player.id == player_id:
                 return player

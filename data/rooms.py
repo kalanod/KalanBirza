@@ -14,7 +14,6 @@ class Rooms(SqlAlchemyBase, SerializerMixin):
     creator = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
     data = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     players = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    status = sqlalchemy.Column(sqlalchemy.Integer)
 
     def __repr__(self):
         return f'<Room> {self.id} {self.title} creator: {self.creator}'
