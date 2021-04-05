@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet"
+          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
+          crossorigin="anonymous">
+    <title> {{ title }} </title>
+    <style>
+        body {
+            background-color: #e9e9e9;
+        }
+
+        html, body, main{
+            margin: 0;
+            height: 100%;
+            padding: 0;
+        }
+    </style>
+
+</head>
+<body>
+    <a class="btn btn-primary" style="margin-left: auto; margin-right: 20px; margin-top: 20px; float: right" href="/">Покинуть игру</a>
+    <div style="width: 200px; margin-left: 30px; margin-right: auto">
+    {% for player in current_room.players %}
+        <div> {{ player.nickname }}</div>
+        <div> {{ player.budget }}</div>
+    {% endfor %}
+    </div>
+
+    <div style="width: 200px; margin-left: auto; margin-right: 30px", title="Стоимость акций">
+    {% for key in current_room.stock_dict.keys() %}
+        <div> {{ key }}</div>
+        <div> {{ current_room.stock_dict[key] }}</div>
+    {% endfor %}
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+
+</body>
+</html>

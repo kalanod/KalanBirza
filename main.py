@@ -15,9 +15,10 @@ from data.users import User
 from data import users_resource
 from data.rooms import Rooms
 from data import rooms_resource
-from in_room import *
+from in_game import *
 
 import os
+import random
 
 print(os.getcwd())
 
@@ -52,17 +53,30 @@ def method_not_allowed(error):
 
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
-    print('launch create_room')
-    print(creator_id)
-    a = post('http://0.0.0.0:5000/api/rooms',
-             json={
-                   'title': title,
-                   'creator': creator_id,
-                   'players': '',
-                   'status': 0
-             }).json()
-    print('complete create_room')
-    return a
+    id = random.randint(1, 2**32)
+
+    stock = {'company_a': random.randint(100, 1000),
+             'company_b': random.randint(100, 1000),
+             'company_c': random.randint(100, 1000),
+             'company_d': random.randint(100, 1000),
+             'company_e': random.randint(100, 1000),
+             'company_f': random.randint(100, 1000),
+             'company_g': random.randint(100, 1000),
+             'company_h': random.randint(100, 1000),
+             'company_i': random.randint(100, 1000)}
+
+    data = ' '.join(list(map(lambda x: f'{str(x)}:{str(stock[x])}', stock.keys())))
+    post_request = post('http://0.0.0.0:5000/api/rooms',
+                        json={
+                              'id': id,
+                              'title': title,
+                              'creator': creator_id,
+                              'data': data,
+                              'players': '',
+                              'status': 0
+                        }).json()
+    active_rooms[id] = InGameRoom(id, title, data, '')
+    return post_request
 
 
 @app.route('/room')
@@ -136,28 +150,30 @@ def connect_to_room(room_id, player_id):
     return redirect(f'/room/{room_id}')
 
 
+@app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
+def leave_from_room(room_id, player_id):
+    # какие-нибудь проверки
+    active_rooms[room_id].del_player(player_id)
+    return redirect('/')
+
+
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
     current_room = active_rooms[room_id]
-    db_sess = db_session.create_session()
-    #players = filter(lambda x: "ADS" != db_sess.query(User).filter(User.id == x[0].id).first().email,current_room.players)
-    return render_template('in_room.html', title_room=current_room.id, title="В игре", players=current_room.players)
-
-
-def load_all_room():
-    db_sess = db_session.create_session()
-    rooms_from_db = db_sess.query(Rooms).all()
-    in_game_rooms = {}
-    for room_from_db in rooms_from_db:
-        new_room = InGameRoom(room_from_db.id)
-        in_game_rooms[room_from_db.id] = new_room
-    return in_game_rooms
+    return render_template('room_prototype.html', current_room=current_room, title="В игре")
 
 
 def main():
-    db_session.global_init("db/users.db")
+    db_session.global_init("db/project_db.db")
+    db_sess = db_session.create_session()
+
+    rooms_from_db = db_sess.query(Rooms).all()
     global active_rooms
-    active_rooms = load_all_room()
+    active_rooms = {}
+    for room_from_db in rooms_from_db:
+        new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
+        active_rooms[room_from_db.id] = new_room
+
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
 

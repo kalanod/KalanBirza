@@ -20,6 +20,7 @@ class RoomsResource(Resource):
         return jsonify({'rooms': rooms.to_dict(only=('id',
                                                      'title',
                                                      'creator',
+                                                     'data',
                                                      'players',
                                                      'status'))})
 
@@ -42,6 +43,7 @@ class RoomsListResource(Resource):
                     [item.to_dict(only=('id',
                                         'title',
                                         'creator',
+                                        'data',
                                         'players',
                                         'status'))
                      for item in rooms]
@@ -52,8 +54,10 @@ class RoomsListResource(Resource):
         args = parser.parse_args()
         session = db_session.create_session()
         rooms = Rooms(
+            id=args['id'],
             title=args['title'],
             creator=args['creator'],
+            data=args['data'],
             players=args['players'],
             status=args['status']
         )
