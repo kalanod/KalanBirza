@@ -1,4 +1,3 @@
-
 <!doctype html>
 <html lang="en">
 <head>
@@ -17,45 +16,73 @@
 
         #players {
             width: 60%;
-            height: 15%;
+            height: 20%;
             background-color: #98703a;
             float: left
         }
 
         #board {
             width: 60%;
-            height: 70%;
+            height: 65%;
             background-color: #2a1440;
             float: left
         }
-        #price{
+
+        #price {
             width: 40%;
-            height: 70%;
+            height: 65%;
             background-color: #314014;
             float: left;
             padding: 15px;
         }
-        #me{
+
+        #me {
             width: 100%;
             height: 15%;
             background-color: hotpink;
             float: left;
         }
-        #menu{
+
+        #menu {
             width: 40%;
-            height: 15%;
+            height: 20%;
             float: left;
             background-color: #f91111;
         }
-        td{
+
+        td {
             width: 10%;
             height: 17.5%;
             padding: 5px;
+            margin: 5px;
+
         }
 
-        .img_stonk{
+        tr {
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .img_stonk {
             width: 30%;
             float: top;
+        }
+
+        table {
+            border: 10px double black;
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .player_card {
+            background-color: #c6c6c6;
+            float: left;
+            width: 15%;
+            height: 100%;
+            margin-right: 10px;
+            text-align: center;
         }
     </style>
 </head>
@@ -65,7 +92,38 @@
 {% endfor %}
 <div class="main">
     <div id="players">
+        <a href="#">
+            <div class="player_card">
+                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
 
+                <h5>ник</h5>
+                <h5>деньги</h5>
+            </div>
+        </a>
+        <a href="#">
+            <div class="player_card">
+                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
+
+                <h5>ник</h5>
+                <h5>деньги</h5>
+            </div>
+        </a>
+        <a href="#">
+            <div class="player_card">
+                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
+
+                <h5>ник</h5>
+                <h5>деньги</h5>
+            </div>
+        </a>
+        <a href="#">
+            <div class="player_card">
+                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
+
+                <h5>ник</h5>
+                <h5>деньги</h5>
+            </div>
+        </a>
     </div>
     <div id="menu">
         <a class="btn btn-primary" style="float: right; margin-right: 30px">выйти</a>
@@ -75,448 +133,448 @@
 
     </div>
     <div id="price">
-    <table style="border: 10px double black; width: 100%; height: 100%">
-        <tr style="border: 10px double black; height: 17.5%;">
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-        </tr>
-        <tr style="border: 10px double black; height: 17.5%;">
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="stonk_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price2
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-        </tr>
-        <tr style="border: 10px double black; height: 17.5%;">
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-        </tr>
-        <tr style="border: 10px double black; height: 17.5%;">
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-            <td>
-                <a href="#" class="busines_card">
-                <div style="float: top">
-                    <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
-                </div>
-                <div>
-                    <h4>
-                        name
-                    </h4>
-                </div>
-                <div style="float: left">
-                    <h4>
-                        price1
-                    </h4>
-                </div>
-                <div>
-                    <h4>
-                        simb
-                    </h4>
-                </div>
-                </a>
-            </td>
-        </tr>
-    </table>
+        <table>
+            <tr style="border: 10px double black; height: 17.5%;">
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+            <tr style="border: 10px double black; height: 17.5%;">
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="stonk_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price2
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+            <tr style="border: 10px double black; height: 17.5%;">
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+            <tr style="border: 10px double black; height: 17.5%;">
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+                <td>
+                    <a href="#" class="busines_card">
+                        <div style="float: top">
+                            <img src="https://i.ytimg.com/vi/QFpU-sSZAZE/maxresdefault.jpg" class="img_stonk">
+                        </div>
+                        <div>
+                            <h4>
+                                name
+                            </h4>
+                        </div>
+                        <div style="float: left">
+                            <h4>
+                                price1
+                            </h4>
+                        </div>
+                        <div>
+                            <h4>
+                                simb
+                            </h4>
+                        </div>
+                    </a>
+                </td>
+            </tr>
+        </table>
     </div>
     <div id="me">
 
