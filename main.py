@@ -141,7 +141,7 @@ def in_room(room_id):
     current_room = active_rooms[room_id]
     db_sess = db_session.create_session()
     #players = filter(lambda x: "ADS" != db_sess.query(User).filter(User.id == x[0].id).first().email,current_room.players)
-    return render_template('room.html', title_room=current_room.id, title="В игре", players=current_room.players)
+    return render_template('in_room.html', title_room=current_room.id, title="В игре", players=current_room.players)
 
 
 def load_all_room():

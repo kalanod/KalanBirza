@@ -53,7 +53,7 @@
         $('#create_room').click(function () {
 
             //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
-            $('#create_room_result').load('http://0.0.0.0:5000/create_room/' + $('#room_name').val() + "/" + $('#creator_id').text());
+            $('#create_room_result').load('/create_room/' + $('#room_name').val() + "/" + $('#creator_id').text());
             //console.log($('#name').text())
             //$('#create_room_result').text('main.php?name=');
 
