@@ -138,7 +138,7 @@ def create_room(title, creator_id):
     active_rooms.append(InGameRoom(id, title, data, ''))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
-    return 'Комната создана'
+    return redirect('/')
 
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -158,7 +158,7 @@ def leave_from_room(room_id, player_id):
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
     current_room = get_room(room_id)
-    return render_template('room_prototype.html', current_room=current_room, title="В игре")
+    return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
 def main():
@@ -173,7 +173,7 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)
 
 
 def get_room(room_id):

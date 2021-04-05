@@ -29,7 +29,7 @@
             <a class="navbar-brand" href="/logout">выйти</a>
         {% else %}
             <p>
-                <a class="btn btn-primary " href="/register">Зарегистрироваться</a>
+                <a class="btn btn-primary" href="/register">Зарегистрироваться</a>
                 <a class="btn btn-success" href="/login">Войти</a>
             </p>
         {% endif %}
@@ -53,7 +53,7 @@
         $('#create_room').click(function () {
 
             //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
-            $('#create_room_result').load('/create_room/' + $('#room_name').val() + "/" + $('#creator_id').text());
+            window.location.replace('/create_room/' + $('#room_name').val() + "/" + $('#creator_id').text());
             //console.log($('#name').text())
             //$('#create_room_result').text('main.php?name=');
 
