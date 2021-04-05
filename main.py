@@ -138,7 +138,7 @@ def create_room(title, creator_id):
     active_rooms.append(InGameRoom(id, title, data, ''))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
-    return 'Комната создана'
+    return redirect('/')
 
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -173,7 +173,7 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port, debug=True)
+    app.run(debug=True)
 
 
 def get_room(room_id):
