@@ -51,11 +51,6 @@ def method_not_allowed(error):
     return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
 
 
-@app.route('/room')
-def room():
-    return render_template('room.html')
-
-
 @app.route('/', methods=['GET', 'POST'])
 def base():
     db_sess = db_session.create_session()
@@ -140,7 +135,7 @@ def create_room(title, creator_id):
     )
     db_sess.add(room)
     db_sess.commit()
-    active_rooms[id] = InGameRoom(id, title, data, '')
+    active_rooms.append(InGameRoom(id, title, data, ''))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
     return 'Комната создана'
@@ -149,20 +144,20 @@ def create_room(title, creator_id):
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def connect_to_room(room_id, player_id):
     # какие-нибудь проверки
-    active_rooms[room_id].add_player(player_id)
+    get_room(room_id).add_player(player_id)
     return redirect(f'/room/{room_id}')
 
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def leave_from_room(room_id, player_id):
     # какие-нибудь проверки
-    active_rooms[room_id].del_player(player_id)
+    get_room(room_id).del_player(player_id)
     return redirect('/')
 
 
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
-    current_room = active_rooms[room_id]
+    current_room = get_room(room_id)
     return render_template('room_prototype.html', current_room=current_room, title="В игре")
 
 
@@ -172,13 +167,21 @@ def main():
 
     rooms_from_db = db_sess.query(Rooms).all()
     global active_rooms
-    active_rooms = {}
+    active_rooms = []
     for room_from_db in rooms_from_db:
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
-        active_rooms[room_from_db.id] = new_room
+        active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port, debug=True)
+
+
+def get_room(room_id):
+    for room in active_rooms:
+        if room.id == room_id:
+            return room
+
+    return None
 
 
 if __name__ == '__main__':
