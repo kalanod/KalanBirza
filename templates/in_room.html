@@ -36,6 +36,8 @@
             background-color: #314014;
             float: right;
             padding: 15px;
+            overflow-x: scroll; /* прокрутка по горизонтали */
+
         }
 
         #me {
@@ -88,23 +90,23 @@
             margin: 10px;
             text-align: center;
             padding-top: 10px;
-            border-radius: 4px;
         }
 
         .row_price {
-            height: 25%;
+            height: 40px;
+            min-height: 40px;
             width: 100%;
             float: left;
+            padding-top: 10px;
         }
 
         .price_card {
             background-color: #c6c6c6;
             float: left;
-            width: 23%;
-            height: 90%;
+            width: 100%;
+            height: 100%;
             margin: 10px;
             text-align: center;
-            border-radius: 4px;
         }
 
         .img_card_stonk {
@@ -129,6 +131,13 @@
         a {
             text-decoration: none;
             color: #080808;
+        }
+
+        .title_stonk {
+            float: left;
+            width: 20%;
+            text-align: center;
+            margin-top: auto;
         }
     </style>
 </head>
@@ -177,14 +186,91 @@
         <div class="row_price">
             <a href="#">
                 <div class="price_card">
-                    <div class="img_card_stonk">
-                        <img src="https://itchief.ru/assets/img/bootstrap/bootstrap-4-card-with-form.png"
-                             class="img_stonk">
-                    </div>
-                    <div class="text_card_stonk">
-                        <h5 id="price_nicco">asd</h5>
-                        <h5>asd</h5>
-                    </div>
+                    <div class="title_stonk"><h5>Компания</h5></div>
+                    <div class="l_prise_stonk"><h5>Изменение</h5></div>
+                    <div class="prise_stonk"><h5>Цена</h5></div>
+                    <div class="inp_stonk"><h5>Коллебание</h5><</div>
+
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_0"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_0"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_0"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_1"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_1"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_1"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_2"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_2"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_2"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_3"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_3"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_3"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_4"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_4"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_4"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_5"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_5"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_5"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_6"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_6"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_6"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                </div>
+            </a>
+        </div>
+        <div class="row_price">
+            <a href="#">
+                <div class="price_card">
+                    <div class="title_stonk"><h5 id="com_7"></h5></div>
+                    <div class="l_prise_stonk"><h5 id="l_price_7"></h5></div>
+                    <div class="prise_stonk"><h5 id="price_7"></h5></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
                 </div>
             </a>
         </div>
@@ -201,15 +287,24 @@
 <script>
 
     $(document).ready(function () {
+
         function refresh_rooms() {
 
             setTimeout(function () {
-                $('#price_nicco').load('/create_room/')[0];
+                $('#price_0').load('/get_price/0');
+                $('#price_1').load('/get_price/1');
+                $('#price_2').load('/get_price/2');
+                $('#price_3').load('/get_price/3');
+                $('#price_4').load('/get_price/4');
+                $('#price_5').load('/get_price/5');
+                $('#price_6').load('/get_price/6');
+                $('#price_7').load('/get_price/7');
                 refresh_rooms();
             }, 5000);
         }
 
         //refresh_rooms();
+        $form-range-track-width:100%;
     });
 </script>
 </body>
