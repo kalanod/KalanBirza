@@ -1,0 +1,9 @@
+1 KalanCO-200-20
+2 United Aerospace Corporation-300-30
+3 MetIndustries-100-10
+4 NiccoDixit-400-40
+5 Union of Soviet Socialist Gastronomes-300-30
+6 Concordance Extraction Corporation-550-55
+7 Yeniseimetal forces-330-33
+8 OUnity Games-340-34
+9 Nuclear Fusion Control Systems-220-22
