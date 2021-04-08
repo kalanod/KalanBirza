@@ -12,18 +12,20 @@
         .main, body, html {
             height: 100%;
             width: 100%;
+            padding: 0;
+            margin: 0;
         }
 
         #players {
-            width: 60%;
-            height: 20%;
+            width: 100%;
+            height: 6%;
             background-color: #98703a;
             float: left
         }
 
         #board {
             width: 60%;
-            height: 65%;
+            height: 84%;
             background-color: #2a1440;
             float: left;
 
@@ -31,18 +33,16 @@
 
         #price {
             width: 40%;
-            height: 85%;
-            max-height: 85%;
+            height: 84%;
             background-color: #314014;
             float: right;
-            padding: 15px;
-            overflow-x: scroll; /* прокрутка по горизонтали */
+            overflow-y: scroll; /* прокрутка по горизонтали */
 
         }
 
         #me {
             width: 100%;
-            height: 15%;
+            height: 10%;
             background-color: hotpink;
             float: left;
         }
@@ -70,7 +70,7 @@
         }
 
         .img_stonk {
-            width: 100%;
+            width: 30%;
             float: top;
         }
 
@@ -86,16 +86,16 @@
             background-color: #c6c6c6;
             float: left;
             width: 13%;
-            height: 90%;
-            margin: 10px;
+            height: 85%;
+            margin: 3px;
             text-align: center;
-            padding-top: 10px;
+            border-radius: 4px;
         }
 
         .row_price {
             height: 40px;
             min-height: 40px;
-            width: 100%;
+            width: 95%;
             float: left;
             padding-top: 5px;
         }
@@ -151,60 +151,129 @@
             text-align: center;
             margin-top: auto;
         }
+        .exit{
+        margin-right:15px;
+        width: 160px;
+        height: 30px;
+        background-color: #c6c6c6;
+        float: right;
+        border: 2px solid black;
+        border-radius: 4px;
+        text-align: center;
+        }
+        .me_elem{
+        width:10%;
+        height:80%;
+        margin: 10px;
+        float: right;
+        }
+        ul {
+
+    /* Убираю маркеры у списка*/
+    list-style: none;
+    /* Делаю элементы блочными. */
+    display: block;
+    /* Убираю отступы. */
+    margin:0px;
+    /* Убираю еще отступы! */
+    padding:0px;
+}
+ul:after {
+    /* Делаю элементы блочными. */
+    display: block;
+    /* Убираю выравнивание. */
+    float: none;
+    content: ' ';
+    clear: both;
+}
+ul.mmenuu > li {
+    /* Задаю выравнивание и позиционирование. */
+    float: left;
+    /* Считаем координаты относительно исходного места*/
+    position: relative;
+}
+ul.mmenuu > li > a {
+    /* Делаю элементы блочными: */
+    display: block;
+    /* Задаю белый цвет. */
+    color: #fff;
+    /* Задаю отступ 10px. */
+    padding: 10px;
+    /* Убираю форматирование*/
+    text-decoration: none;
+    /* Задаю цвет. */
+    background-color: #da570f;
+}
+ul.mmenuu > li > a:hover {
+    /* Задаю цвет при наведении. */
+    background-color: #eb9316;
+}
+ul.ssubmenuu {
+    position: absolute;
+    width: 240px;
+    bottom: 37px;
+    left:0px;
+    /* Делаю субменю скрытыми. */
+    display: none;
+    /* Цвет — белый. */
+    background-color: white;
+}
+ul.ssubmenuu > li {
+    /* Блочное расположение элементов*/
+    display: block;
+}
+ul.ssubmenuu > li > a {
+    /* Делаю элементы блочными. */
+    display: block;
+    /* Убираю форматирование*/
+    text-decoration: none;
+    /* Задаю отступ. */
+    padding: 10px;
+    /* Задаю цвет. */
+    color: #ffffff;
+    /* Еще цвет. */
+    background-color: #da570f;
+}
+ul.ssubmenuu > li > a:hover {
+    background-color: #eb9316;
+    text-decoration: none
+}
+ul.mmenuu > li:hover > ul.ssubmenuu {
+    display: block;
+}
+br{
+height: 1px}
+
+
+
+
     </style>
 </head>
 <body>
-{% for player in players %}
-    <h1> {{ player.nickname }} </h1>
-{% endfor %}
 <div class="main">
     <div id="players">
+        {% for player in players %}
         <a href="#">
             <div class="player_card">
-                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
-
-                <h5>ник</h5>
+                <h5>{{ player.nickname }}</h5>
                 <h5>деньги</h5>
             </div>
         </a>
-        <a href="#">
-            <div class="player_card">
-                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
-
-                <h5>ник</h5>
-                <h5>деньги</h5>
-            </div>
+        {% endfor %}
+        <a href="/">
+            <div class="exit">выйти</div>
         </a>
-        <a href="#">
-            <div class="player_card">
-                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
 
-                <h5>ник</h5>
-                <h5>деньги</h5>
-            </div>
-        </a>
-        <a href="#">
-            <div class="player_card">
-                <img src="https://antislang.ru/wp-content/uploads/лол-1.jpg" class="img_stonk">
-
-                <h5>ник</h5>
-                <h5>деньги</h5>
-            </div>
-        </a>
-        <a class="btn btn-primary" style="float: right; margin-right: 30px">выйти</a>
     </div>
-
     <div id="price">
         <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5>Компания</h5></div>
-                    <div class="l_prise_stonk"><h5>Изменение</h5></div>
-                    <div class="prise_stonk"><h5>Цена</h5></div>
-                    <div class="inp_stonk"><h5>Коллебание</h5><</div>
+            <div class="price_card">
+                <div class="title_stonk"><h5>Компания</h5></div>
+                <div class="l_prise_stonk"><h5>Изменение</h5></div>
+                <div class="prise_stonk"><h5>Цена</h5></div>
+                <div class="inp_stonk"><h5>Коллебание</h5><</div>
 
-                </div>
-            </a>
+            </div>
         </div>
         <div class="row_price">
             <a href="#">
@@ -212,94 +281,89 @@
                     <div class="title_stonk"><h5 id="com_0"></h5></div>
                     <div class="l_prise_stonk"><h5 id="l_price_0"></h5></div>
                     <div class="prise_stonk"><h5 id="price_0"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
+                    <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
                 </div>
             </a>
         </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_1"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_1"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_1"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_2"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_2"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_2"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_3"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_3"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_3"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_4"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_4"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_4"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_5"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_5"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_5"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_6"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_6"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_6"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_7"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_7"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_7"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="disabledRange" disabled></div>
-                </div>
-            </a>
-        </div>
+
     </div>
     <div id="board">
 
     </div>
-
-
     <div id="me">
+        <div class="me_elem"></div>
+        <div class="me_elem">
+            <ul class="mmenuu">
+                <li><a href=#>Мои компании</a>
+                    <ul class="ssubmenuu">
+                        <li><h6 id="k0_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k1_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k2_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k3_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k4_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k5_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k6_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        <li><h6 id="k7_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div class="me_elem">
+            <ul class="mmenuu">
+                <li><a href=#>Портфель</a>
+                    <ul class="ssubmenuu">
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s0_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s1_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s2_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s3_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s4_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s5_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s6_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
+                        </br>
+                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s7_count"
+                                                                                  style="float: left; margin: 10px">
+                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
+                                href="#">продать</a></li>
 
+
+                    </ul>
+                </li>
+            </ul>
+
+        </div>
+        <div class="me_elem">деньги</div>
     </div>
 </div>
 <script>
 
     $(document).ready(function () {
-
         function refresh_rooms() {
 
             setTimeout(function () {
@@ -311,6 +375,24 @@
                 $('#price_5').load('/get_price/5');
                 $('#price_6').load('/get_price/6');
                 $('#price_7').load('/get_price/7');
+
+                $('#k0_count').load('/get_income/0);
+                $('#k1_count').load('/get_income/1);
+                $('#k2_count').load('/get_income/2);
+                $('#k3_count').load('/get_income/3);
+                $('#k4_count').load('/get_income/4);
+                $('#k5_count').load('/get_income/5);
+                $('#k6_count').load('/get_income/6);
+                $('#k7_count').load('/get_income/7);
+
+                $('#s0_count').load('/get_count/0);
+                $('#s1_count').load('/get_count/1);
+                $('#s2_count').load('/get_count/2);
+                $('#s3_count').load('/get_count/3);
+                $('#s4_count').load('/get_count/4);
+                $('#s5_count').load('/get_count/5);
+                $('#s6_count').load('/get_count/6);
+                $('#s7_count').load('/get_count/7);
                 refresh_rooms();
             }, 5000);
         }
@@ -318,6 +400,15 @@
         //refresh_rooms();
         $form-range-track-width:100%;
     });
+
+
+
+
+
+
+
+
+
 </script>
 </body>
 </html>
