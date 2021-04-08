@@ -140,8 +140,6 @@ class InGameRoom:
     def turn(self):
         self.stage = FirstStage()
 
-        waited_players = self.players[]
-
         self.load_to_db()
         # вызываем эту функцию каждый ход
         # каждый ход сохраняемся в бд
