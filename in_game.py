@@ -63,7 +63,9 @@ class InGameRoom:
             2: "Аукцион",
             3: "Событие"
         }
-        self.stage = WaitingStage(self)
+        self.stage = 0
+        self.decisions = []
+
     def load_to_db(self):
         print(f'saving room {self.id} to bd...')
         # создаем строки на основе данных комнаты и игроков для сохранения в ДБ
@@ -138,16 +140,9 @@ class InGameRoom:
             player.stocks[stock_id] -= quantity
 
     def turn(self):
-        self.stage = FirstStage()
-
         self.load_to_db()
         # вызываем эту функцию каждый ход
         # каждый ход сохраняемся в бд
-
-    def share_generator(self):
-        conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
-        return conclusion
-
 
     def event_generator(self):
         changes = []
@@ -195,6 +190,10 @@ class InGameRoom:
         for i in back:
             check_file.write(i)
         check_file.close()
+
+    def share_generator(self):
+        conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
+        return conclusion
 
 
 class InGamePlayer:
@@ -312,20 +311,4 @@ class Auction:
             check_file.close()
         else:
             print('Нужно запустить аукцион')
-
-
-# сюда пока можно еще не смотреть
-class Stage:
-    def __init__(self, room, id):
-        self.id = id
-
-class WaitingStage(Stage):
-    def __init__(self, room):
-        self.timer
-
-
-class FirstStage:
-    def __init__(self):
-        self.id = 1
-        self.cards = self.share_generator()
 
