@@ -252,13 +252,15 @@ height: 1px}
 <body>
 <div class="main">
     <div id="players">
-        {% for player in players %}
+        {% for player in current_room.players %}
+        {% if player.id != current_user.id%}
         <a href="#">
             <div class="player_card">
                 <h5>{{ player.nickname }}</h5>
                 <h5>деньги</h5>
             </div>
         </a>
+        {% endif %}
         {% endfor %}
         <a href="/">
             <div class="exit">выйти</div>
@@ -275,16 +277,18 @@ height: 1px}
 
             </div>
         </div>
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_0"></h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_0"></h5></div>
-                    <div class="prise_stonk"><h5 id="price_0"></h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
-                </div>
-            </a>
-        </div>
+        {% for stock in current_room.stock_list %}
+            <div class="row_price">
+                <a href="#">
+                    <div class="price_card">
+                        <div class="title_stonk"><h5 id="com_0"> {{ stock.short_name }} </h5></div>
+                        <div class="l_prise_stonk"><h5 id="l_price_0"> -- </h5></div>
+                        <div class="prise_stonk"><h5 id="price_0"> {{ stock.cost }} </h5></div>
+                        <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
+                    </div>
+                </a>
+            </div>
+        {% endfor %}
 
     </div>
     <div id="board">
@@ -294,16 +298,15 @@ height: 1px}
         <div class="me_elem"></div>
         <div class="me_elem">
             <ul class="mmenuu">
-                <li><a href=#>Мои компании</a>
+                <li><a href=#>Недвижимость</a>
                     <ul class="ssubmenuu">
-                        <li><h6 id="k0_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k1_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k2_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k3_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k4_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k5_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k6_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
-                        <li><h6 id="k7_count" style="float: left; margin: 10px">0</h6><a href="#">KalanCO</a></li>
+                        {% for stock in current_room.get_player(current_user.id).stocks %}
+                        <li>
+                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                            <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px"> название </h6>
+                            <a href="#"> . </a>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul>
@@ -312,53 +315,19 @@ height: 1px}
             <ul class="mmenuu">
                 <li><a href=#>Портфель</a>
                     <ul class="ssubmenuu">
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s0_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s1_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s2_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s3_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s4_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s5_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s6_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-                        </br>
-                        <li><h6 style="float: left; margin: 10px">KalanCO</h6><h6 id="s7_count"
-                                                                                  style="float: left; margin: 10px">
-                            0</h6> <input type="text" style="float: left; width: 10%; height: 100%; margin: 10px"><a
-                                href="#">продать</a></li>
-
-
+                        {% for stock in current_room.get_player(current_user.id).stocks %}
+                        <li>
+                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                            <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
+                            <a href="#">продать</a>
+                        </li>
+                        {% endfor %}
                     </ul>
                 </li>
             </ul>
 
         </div>
-        <div class="me_elem">деньги</div>
+        <div class="me_elem">{{ current_room.get_player(current_user.id).budget }}</div>
     </div>
 </div>
 <script>
@@ -400,14 +369,6 @@ height: 1px}
         //refresh_rooms();
         $form-range-track-width:100%;
     });
-
-
-
-
-
-
-
-
 
 </script>
 </body>

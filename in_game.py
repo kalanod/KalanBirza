@@ -6,6 +6,7 @@ import random
 import json
 
 START_BUDGET = 1000000
+EVENT_CHANCE = 3  # 1/3 ходов
 
 
 class InGameRoom:
@@ -56,6 +57,13 @@ class InGameRoom:
 
         print('')
 
+        self.stages = {
+            0: "Подготовка к игре",
+            1: "Покупка акций и недвижимости ",
+            2: "Аукцион",
+            3: "Событие"
+        }
+        self.stage = WaitingStage(self)
     def load_to_db(self):
         print(f'saving room {self.id} to bd...')
         # создаем строки на основе данных комнаты и игроков для сохранения в ДБ
@@ -130,20 +138,18 @@ class InGameRoom:
             player.stocks[stock_id] -= quantity
 
     def turn(self):
+        self.stage = FirstStage()
+
+        waited_players = self.players[]
+
         self.load_to_db()
         # вызываем эту функцию каждый ход
         # каждый ход сохраняемся в бд
 
     def share_generator(self):
-        check_file = open('stocks.txt', 'r')
-        stocks = check_file.read().split('\n')
-        conclusion = []
-        for i in range(3):
-            new_share = random.choice(stocks)
-            index = stocks.index(new_share)
-            del stocks[index]
-            conclusion.append([new_share[2:], random.randint(1, 5)])
+        conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
         return conclusion
+
 
     def event_generator(self):
         changes = []
@@ -214,10 +220,10 @@ class InGamePlayer:
         self.stocks = dict()
         for stock in self.room.stock_list:
             if stock.id in stocks_from_bd.keys():
-                self.stocks[stock.id] = stocks_from_bd[stock.id]
+                self.stocks[stock] = stocks_from_bd[stock.id]
 
             else:
-                self.stocks[stock.id] = 0
+                self.stocks[stock] = 0
 
         self.realty = dict()
 
@@ -230,7 +236,7 @@ class InGamePlayer:
             raise ValueError
 
     def get_string_for_bd(self):
-        return f'{self.id},{self.budget},{"|".join(list(map(lambda x: f"{x}:{self.stocks[x]}", self.stocks.keys())))}'
+        return f'{self.id},{self.budget},{"|".join(list(map(lambda x: f"{x.id}:{self.stocks[x]}", self.stocks.keys())))}'
 
     def buy_realty(self, realty):  # realty - строка 'название,цена,доход'
         realty = realty.split(',')
@@ -247,6 +253,13 @@ class InGamePlayer:
 
     def __repr__(self):
         return f'<InGamePlayer> id: {self.id}, budget: {self.budget}'
+
+
+class StockCard:
+    def __init__(self, stock, quantity):
+        self.stock = stock
+        self.quantity = quantity
+        self.players = []
 
 
 class Stock:
@@ -266,6 +279,12 @@ class Stock:
 
     def __repr__(self):
         return f'<Stock> id: {self.id}, short_name: {self.short_name}, cost: {self.cost}'
+
+
+class Property:
+    def __init__(self):
+        self.id = id
+        self.description = 'Описание'
 
 
 class Auction:
@@ -295,3 +314,20 @@ class Auction:
             check_file.close()
         else:
             print('Нужно запустить аукцион')
+
+
+# сюда пока можно еще не смотреть
+class Stage:
+    def __init__(self, room, id):
+        self.id = id
+
+class WaitingStage(Stage):
+    def __init__(self, room):
+        self.timer
+
+
+class FirstStage:
+    def __init__(self):
+        self.id = 1
+        self.cards = self.share_generator()
+
