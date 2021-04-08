@@ -112,30 +112,18 @@ def reqister():
 
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
-    id = random.randint(1, 2**32)
-
-    stock = {'company_a': random.randint(100, 1000),
-             'company_b': random.randint(100, 1000),
-             'company_c': random.randint(100, 1000),
-             'company_d': random.randint(100, 1000),
-             'company_e': random.randint(100, 1000),
-             'company_f': random.randint(100, 1000),
-             'company_g': random.randint(100, 1000),
-             'company_h': random.randint(100, 1000),
-             'company_i': random.randint(100, 1000)}
-
-    data = ' '.join(list(map(lambda x: f'{str(x)}:{str(stock[x])}', stock.keys())))
     db_sess = db_session.create_session()
+    id = random.randint(1, 2**32)
     room = Rooms(
         id=id,
         title=title,
         creator=creator_id,
-        data=data,
+        data='',
         players=''
     )
     db_sess.add(room)
     db_sess.commit()
-    active_rooms.append(InGameRoom(id, title, data, ''))
+    active_rooms.append(InGameRoom(id, title))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
     return redirect('/')
@@ -151,7 +139,7 @@ def connect_to_room(room_id, player_id):
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def leave_from_room(room_id, player_id):
     # какие-нибудь проверки
-    get_room(room_id).del_player(player_id)
+    get_room(room_id).leave_player(player_id)
     return redirect('/')
 
 
@@ -169,6 +157,7 @@ def main():
     global active_rooms
     active_rooms = []
     for room_from_db in rooms_from_db:
+        print(f'main: {room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players}')
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 

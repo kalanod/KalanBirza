@@ -61,7 +61,7 @@ def event_generator():
     check_file.close()
 
 
-class auction:
+class Auction:
     def end_auction(self):
         check_file = open('auction.txt', 'r')
         check_file = check_file.read().split('\n')
