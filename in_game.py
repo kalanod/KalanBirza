@@ -103,7 +103,7 @@ class InGameRoom:
         return any([player_id == player.id for player in self.players])
 
     def player_online(self, player_id):
-        return self.del_player(player_id).online
+        return self.get_player(player_id).online
 
     def get_player(self, player_id):
         for player in self.players:
