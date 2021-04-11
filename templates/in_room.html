@@ -271,7 +271,7 @@
             {% if player.id != current_user.id %}
                 <a href="#">
                     <div class="player_card">
-                        <h5>{{ player.nickname }}</h5>
+                        <h5 id="player_name">{{ player.nickname }}</h5>
                         <h5>деньги</h5>
                     </div>
                 </a>
@@ -364,19 +364,46 @@
                 $('#com_' + {{i}}).text('{{ current_room.stock_list[i - 1].short_name }}')
                 $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i - 1].lowest_cost }}')
                 $('#price_' + {{i}}).text('{{ current_room.stock_list[i - 1].cost }}')
-                console.log('{{ current_room.stock_list[i - 1].short_name }}')
+                //console.log('{{ current_room.stock_list[i - 1].short_name }}')
             {% endfor %}
 
         });
+        socket.on('connect', () => {
+                socket.emit('add_players', '{{ current_room.players[-1] }}');
 
-        $('#exit').click(function () {
-            socket.emit('add_message', {
-                    room: '1',
-                    text: 'asddsasdddd'
-                },
-                {{ current_room.id }}
-            );
+            }
+        )
+        socket.on('disconnect', () => {
+                socket.emit('remove_players', '{{ current_room.players[-1] }}');
+
+            }
+        )
+        socket.on('remove_players', player => {
+            $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
+                '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
+            console.log('aaaaaaaaaaa')
+
         });
+        socket.on('add_players', player => {
+            $('#players').append('<a href="#"><div class="player_card"><h5 id=' +
+                '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
+            console.log('aaaaaaaaaaa')
+
+        });
+
+        function refresh_rooms() {
+
+            setTimeout(function () {
+                $('#list_rooms').load('list_rooms.php');
+
+                refresh_rooms();
+
+            }, 1000);
+
+        }
+
+
+        //refresh_rooms();
     });
 </script>
 </body>

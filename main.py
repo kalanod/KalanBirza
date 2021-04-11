@@ -153,7 +153,7 @@ def in_room(room_id):
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
-    send('Someone has entered the room ' + room, to=room)
+    emit('add_players', json, to=room)
 
 
 @socketIO.on('leave')
@@ -161,6 +161,7 @@ def on_leave(data):
     room = data['room']
     leave_room(room)
     send('Someone has left the room ' + room, to=room)
+
 
 @socketIO.event
 def add_message(json, room_id):
@@ -171,6 +172,18 @@ def add_message(json, room_id):
         roomes[room] = []
     roomes[room][0] = text
     emit('new_message', json, to=room)
+
+
+@socketIO.on('add_players')
+def add_players(data):
+    room = '1'
+    emit('add_players', data, to=room)
+
+
+@socketIO.on('remove_players')
+def add_players(data):
+    room = '1'
+    emit('remove_players', data, to=room)
 
 
 def main():
