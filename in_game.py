@@ -250,7 +250,7 @@ class InGamePlayer:
             self.realty.pop(realty[0])
 
     def __repr__(self):
-        return f'<InGamePlayer> id: {self.id}, budget: {self.budget}'
+        return self.nickname
 
 
 class StockCard:

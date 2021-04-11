@@ -34,6 +34,7 @@ api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
 roomes = {'1': ['1', '2']}
+active_rooms = []  # список со всеми комнатами
 
 
 @login_manager.user_loader
@@ -58,7 +59,7 @@ def base():
     params = dict()
     params["title"] = "Title"
     print(db_sess.query(Rooms).all())
-    params["rooms"] = db_sess.query(Rooms).all()
+    params["rooms"] = active_rooms
 
     return render_template('index.html', **params)
 
@@ -179,7 +180,6 @@ def main():
 
     rooms_from_db = db_sess.query(Rooms).all()
     global active_rooms
-    active_rooms = []
     for room_from_db in rooms_from_db:
         print(f'main: {room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players}')
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)

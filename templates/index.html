@@ -39,9 +39,9 @@
         {% for room in rooms %}
             <div class="col-md6 border rounded">
                 <div class="card">
-                    <h5 class="card-header">{{ room.title }} creator: {{ room.creator }}</h5>
+                    <h5 class="card-header">{{ room.title }}</h5>
                     <div class="card-body">
-                        <h5 class="card-title">{{ room.players }}</h5>
+                        <h5 class="card-title">{{ room.players|join(', ') }}</h5>
                         <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
                     </div>
                 </div>
