@@ -2,6 +2,7 @@ flask
 requests
 flask_login
 flask_restful
+flask_socketio
 flask_wtf
 sqlalchemy
 sqlalchemy_serializer
