@@ -80,6 +80,7 @@ class InGameRoom:
             print(f'saving room {self.id} to bd complete')
             print(f'data: {data}')
             print(f'players: {players}')
+            print(self.players)
 
         else:
             print(f"not find room {self.id}")
