@@ -16,7 +16,7 @@ from data import users_resource
 from data.rooms import Rooms
 from data import rooms_resource
 from in_game import *
-
+from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import os
 import random
 
@@ -28,11 +28,12 @@ app.config['SECRET_KEY'] = 'key'
 
 login_manager = LoginManager()
 login_manager.init_app(app)
-
+socketIO = SocketIO(app)
 api.add_resource(users_resource.UserListResource, '/api/users')
 api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
+roomes = {'1': ['1', '2']}
 
 
 @login_manager.user_loader
@@ -113,7 +114,7 @@ def reqister():
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     db_sess = db_session.create_session()
-    id = random.randint(1, 2**32)
+    id = random.randint(1, 2 ** 32)
     room = Rooms(
         id=id,
         title=title,
@@ -149,6 +150,29 @@ def in_room(room_id):
     return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
+@socketIO.on('join')
+def on_join(room):
+    join_room(room)
+    send('Someone has entered the room ' + room, to=room)
+
+
+@socketIO.on('leave')
+def on_leave(data):
+    room = data['room']
+    leave_room(room)
+    send('Someone has left the room ' + room, to=room)
+
+@socketIO.event
+def add_message(json, room_id):
+    get_room(room_id)
+    room = '1'
+    text = json['text']
+    if room not in roomes:
+        roomes[room] = []
+    roomes[room][0] = text
+    emit('new_message', json, to=room)
+
+
 def main():
     db_session.global_init("db/project_db.db")
     db_sess = db_session.create_session()
@@ -162,14 +186,14 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
 
 
 def get_room(room_id):
     for room in active_rooms:
         if room.id == room_id:
             return room
-
     return None
 
 

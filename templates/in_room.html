@@ -3,6 +3,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="preconnect" href="https://fonts.gstatic.com">
     <link rel="stylesheet"
           href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
           integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
@@ -139,112 +140,126 @@
             text-align: center;
             margin-top: auto;
         }
-        .l_prise_stonk{
+
+        .l_prise_stonk {
             float: left;
             width: 22%;
             text-align: center;
             margin-top: auto;
         }
-        .prise_stonk{
+
+        .prise_stonk {
             float: left;
             width: 22%;
             text-align: center;
             margin-top: auto;
         }
-        .exit{
-        margin-right:15px;
-        width: 160px;
-        height: 30px;
-        background-color: #c6c6c6;
-        float: right;
-        border: 2px solid black;
-        border-radius: 4px;
-        text-align: center;
+
+        .exit {
+            margin-right: 15px;
+            width: 160px;
+            height: 30px;
+            background-color: #c6c6c6;
+            float: right;
+            border: 2px solid black;
+            border-radius: 4px;
+            text-align: center;
         }
-        .me_elem{
-        width:10%;
-        height:80%;
-        margin: 10px;
-        float: right;
+
+        .me_elem {
+            width: 10%;
+            height: 80%;
+            margin: 10px;
+            float: right;
         }
+
         ul {
 
-    /* Убираю маркеры у списка*/
-    list-style: none;
-    /* Делаю элементы блочными. */
-    display: block;
-    /* Убираю отступы. */
-    margin:0px;
-    /* Убираю еще отступы! */
-    padding:0px;
-}
-ul:after {
-    /* Делаю элементы блочными. */
-    display: block;
-    /* Убираю выравнивание. */
-    float: none;
-    content: ' ';
-    clear: both;
-}
-ul.mmenuu > li {
-    /* Задаю выравнивание и позиционирование. */
-    float: left;
-    /* Считаем координаты относительно исходного места*/
-    position: relative;
-}
-ul.mmenuu > li > a {
-    /* Делаю элементы блочными: */
-    display: block;
-    /* Задаю белый цвет. */
-    color: #fff;
-    /* Задаю отступ 10px. */
-    padding: 10px;
-    /* Убираю форматирование*/
-    text-decoration: none;
-    /* Задаю цвет. */
-    background-color: #da570f;
-}
-ul.mmenuu > li > a:hover {
-    /* Задаю цвет при наведении. */
-    background-color: #eb9316;
-}
-ul.ssubmenuu {
-    position: absolute;
-    width: 240px;
-    bottom: 37px;
-    left:0px;
-    /* Делаю субменю скрытыми. */
-    display: none;
-    /* Цвет — белый. */
-    background-color: white;
-}
-ul.ssubmenuu > li {
-    /* Блочное расположение элементов*/
-    display: block;
-}
-ul.ssubmenuu > li > a {
-    /* Делаю элементы блочными. */
-    display: block;
-    /* Убираю форматирование*/
-    text-decoration: none;
-    /* Задаю отступ. */
-    padding: 10px;
-    /* Задаю цвет. */
-    color: #ffffff;
-    /* Еще цвет. */
-    background-color: #da570f;
-}
-ul.ssubmenuu > li > a:hover {
-    background-color: #eb9316;
-    text-decoration: none
-}
-ul.mmenuu > li:hover > ul.ssubmenuu {
-    display: block;
-}
-br{
-height: 1px}
+            /* Убираю маркеры у списка*/
+            list-style: none;
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю отступы. */
+            margin: 0px;
+            /* Убираю еще отступы! */
+            padding: 0px;
+        }
 
+        ul:after {
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю выравнивание. */
+            float: none;
+            content: ' ';
+            clear: both;
+        }
 
+        ul.mmenuu > li {
+            /* Задаю выравнивание и позиционирование. */
+            float: left;
+            /* Считаем координаты относительно исходного места*/
+            position: relative;
+        }
+
+        ul.mmenuu > li > a {
+            /* Делаю элементы блочными: */
+            display: block;
+            /* Задаю белый цвет. */
+            color: #fff;
+            /* Задаю отступ 10px. */
+            padding: 10px;
+            /* Убираю форматирование*/
+            text-decoration: none;
+            /* Задаю цвет. */
+            background-color: #da570f;
+        }
+
+        ul.mmenuu > li > a:hover {
+            /* Задаю цвет при наведении. */
+            background-color: #eb9316;
+        }
+
+        ul.ssubmenuu {
+            position: absolute;
+            width: 240px;
+            bottom: 37px;
+            left: 0px;
+            /* Делаю субменю скрытыми. */
+            display: none;
+            /* Цвет — белый. */
+            background-color: white;
+        }
+
+        ul.ssubmenuu > li {
+            /* Блочное расположение элементов*/
+            display: block;
+        }
+
+        ul.ssubmenuu > li > a {
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю форматирование*/
+            text-decoration: none;
+            /* Задаю отступ. */
+            padding: 10px;
+            /* Задаю цвет. */
+            color: #ffffff;
+            /* Еще цвет. */
+            background-color: #da570f;
+        }
+
+        ul.ssubmenuu > li > a:hover {
+            background-color: #eb9316;
+            text-decoration: none
+        }
+
+        ul.mmenuu > li:hover > ul.ssubmenuu {
+            display: block;
+        }
+
+        br {
+            height: 1px
+        }
 
 
     </style>
@@ -253,17 +268,17 @@ height: 1px}
 <div class="main">
     <div id="players">
         {% for player in current_room.players %}
-        {% if player.id != current_user.id%}
-        <a href="#">
-            <div class="player_card">
-                <h5>{{ player.nickname }}</h5>
-                <h5>деньги</h5>
-            </div>
-        </a>
-        {% endif %}
+            {% if player.id != current_user.id %}
+                <a href="#">
+                    <div class="player_card">
+                        <h5>{{ player.nickname }}</h5>
+                        <h5>деньги</h5>
+                    </div>
+                </a>
+            {% endif %}
         {% endfor %}
-        <a href="/">
-            <div class="exit">выйти</div>
+        <a href="#">
+            <div class="exit" id="exit">выйти</div>
         </a>
 
     </div>
@@ -281,9 +296,9 @@ height: 1px}
             <div class="row_price">
                 <a href="#">
                     <div class="price_card">
-                        <div class="title_stonk"><h5 id="com_0"> {{ stock.short_name }} </h5></div>
-                        <div class="l_prise_stonk"><h5 id="l_price_0"> -- </h5></div>
-                        <div class="prise_stonk"><h5 id="price_0"> {{ stock.cost }} </h5></div>
+                        <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
+                        <div class="l_prise_stonk"><h5 id="l_price_{{ stock.id }}"> {{ stock.lowest_cost }} </h5></div>
+                        <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
                         <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
                     </div>
                 </a>
@@ -301,11 +316,12 @@ height: 1px}
                 <li><a href=#>Недвижимость</a>
                     <ul class="ssubmenuu">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
-                        <li>
-                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
-                            <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px"> название </h6>
-                            <a href="#"> . </a>
-                        </li>
+                            <li>
+                                <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                                <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px">
+                                    название </h6>
+                                <a href="#"> . </a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -316,11 +332,11 @@ height: 1px}
                 <li><a href=#>Портфель</a>
                     <ul class="ssubmenuu">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
-                        <li>
-                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
-                            <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
-                            <a href="#">продать</a>
-                        </li>
+                            <li>
+                                <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                                <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
+                                <a href="#">продать</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -330,46 +346,38 @@ height: 1px}
         <div class="me_elem">{{ current_room.get_player(current_user.id).budget }}</div>
     </div>
 </div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+<script type="text/javascript" charset="utf-8"></script>
+<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
-
     $(document).ready(function () {
-        function refresh_rooms() {
+        var socket = io();
+        socket.on('connect', function () {
+            socket.emit('join', '1');
+        });
 
-            setTimeout(function () {
-                $('#price_0').load('/get_price/0');
-                $('#price_1').load('/get_price/1');
-                $('#price_2').load('/get_price/2');
-                $('#price_3').load('/get_price/3');
-                $('#price_4').load('/get_price/4');
-                $('#price_5').load('/get_price/5');
-                $('#price_6').load('/get_price/6');
-                $('#price_7').load('/get_price/7');
+        // Обработка входящих сообщений
+        socket.on('new_message', function (data) {
+            {% for i in range(9) %}
+                $('#com_' + {{i}}).text('{{ current_room.stock_list[i].short_name }}')
+                $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i].lowest_cost }}')
+                $('#price_' + {{i}}).text('{{ current_room.stock_list[i].cost }}')
+                console.log('{{ current_room.stock_list[i].short_name }}')
+            {% endfor %}
 
-                $('#k0_count').load('/get_income/0);
-                $('#k1_count').load('/get_income/1);
-                $('#k2_count').load('/get_income/2);
-                $('#k3_count').load('/get_income/3);
-                $('#k4_count').load('/get_income/4);
-                $('#k5_count').load('/get_income/5);
-                $('#k6_count').load('/get_income/6);
-                $('#k7_count').load('/get_income/7);
+        });
 
-                $('#s0_count').load('/get_count/0);
-                $('#s1_count').load('/get_count/1);
-                $('#s2_count').load('/get_count/2);
-                $('#s3_count').load('/get_count/3);
-                $('#s4_count').load('/get_count/4);
-                $('#s5_count').load('/get_count/5);
-                $('#s6_count').load('/get_count/6);
-                $('#s7_count').load('/get_count/7);
-                refresh_rooms();
-            }, 5000);
-        }
-
-        //refresh_rooms();
-        $form-range-track-width:100%;
+        $('#exit').click(function () {
+            socket.emit('add_message', {
+                    room: '1',
+                    text: 'asddsasdddd'
+                },
+                {{ current_room.id }}
+            );
+        });
     });
-
 </script>
 </body>
 </html>
