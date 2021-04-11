@@ -28,6 +28,7 @@ class InGameRoom:
             for stock in stocks:
                 if stock["id"] in data_from_bd.keys():
                     self.stock_list.append(Stock({"id": stocks["id"],
+                                                  "department_id": stocks["department_id"],
                                                   "name": stock["name"],
                                                   "short_name": stock["short_name"],
                                                   "cost": data_from_bd[stocks["id"]],
@@ -264,6 +265,7 @@ class Stock:
     def __init__(self, stock_dict):
         if isinstance(stock_dict, dict):
             self.id = stock_dict["id"]
+            self.department_id = stock_dict["department_id"]
             self.name = stock_dict["name"]
             self.short_name = stock_dict["short_name"]
             self.cost = stock_dict["cost"]

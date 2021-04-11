@@ -8,15 +8,15 @@
       "changes":
       [
         {
-          "id": 1,
+          "department_id": 1,
           "value": -10
         },
         {
-          "id": 9,
+          "department_id": 9,
           "value": 20
         },
         {
-          "id": 2,
+          "department_id": 2,
           "value": -40
         }
       ]
@@ -28,11 +28,11 @@
       "changes":
       [
         {
-          "id": 4,
+          "department_id": 4,
           "value": -30
         },
         {
-          "id": 9,
+          "department_id": 9,
           "value": -50
         }
       ]
