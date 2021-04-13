@@ -260,7 +260,19 @@
         br {
             height: 1px
         }
+        .play_zone{
+            height: 85%;
+            width: 100%;
 
+        }
+        .stonks_for_sale{
+            width: 60%;
+            height: 60%;
+            margin-top: 10%;
+            margin-left: auto;
+            margin-right: auto;
+            background-color: #f91111;
+        }
 
     </style>
 </head>
@@ -272,12 +284,12 @@
                 <a href="#">
                     <div class="player_card">
                         <h5 id="player_name">{{ player.nickname }}</h5>
-                        <h5>деньги</h5>
+                        <h5>{{ player.budget }}</h5>
                     </div>
                 </a>
             {% endif %}
         {% endfor %}
-        <a href="#">
+        <a href="/">
             <div class="exit" id="exit">выйти</div>
         </a>
 
@@ -307,7 +319,15 @@
 
     </div>
     <div id="board">
-
+        <div class="play_zone">
+            <div class="stonks_for_sale">
+                <div class="card_stonks_for_sale"></div>
+            </div>
+        </div>
+        <div class="progress">
+            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+                 aria-valuemax="100"></div>
+        </div>
     </div>
     <div id="me">
         <div class="me_elem"></div>
