@@ -327,17 +327,19 @@
         <div class="play_zone">
             <div class="stonks_for_sale">
                 {% for i in range(3) %}
-                <div class="card" style="width: 18rem; float: left; margin-right: 10px" id="stonk_{{ i }}">
-                    <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png" class="card-img-top"
-                         alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                        <a href="#" class="btn btn-primary" style="margin-left: auto; margin-right: auto">Go
-                            somewhere</a>
+                    <div class="card" style="width: 33%; float: left; margin-right: 10px" id="stonk_{{ i }}">
+                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                             class="card-img-top"
+                             alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary" style="margin-left: auto; margin-right: auto">Go
+                                somewhere</a>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
 
@@ -406,7 +408,15 @@
 
         });
 
-
+        socket.on('update_players', function () {
+            $('#players').empty()
+            {% for player in current_room.players %}
+                {% if player.id != current_user.id %}
+                    $('#players').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
+                        'ame" >{{player.nickname}} </h5><h5>{{player.budget}} </h5></div></a>')
+                {% endif %}
+            {% endfor %}
+        });
         socket.on('remove_players', player => {
             $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')

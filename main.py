@@ -8,7 +8,7 @@ from forms.login import LoginForm
 from flask import make_response
 from flask import jsonify
 from requests import get, post
-from flask_login import login_user, logout_user
+from flask_login import login_user, logout_user, current_user
 
 from data import db_session
 from data.users import User
@@ -162,14 +162,14 @@ def make_decision(room_id, player_id):
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
-    emit('add_players', to=room)
+    emit('update_players', to=room)
 
 
 @socketIO.on('leave')
-def on_leave(data):
-    room = data['room']
+def on_leave(room):
     leave_room(room)
-    send('Someone has left the room ' + room, to=room)
+    user = current_user.id
+    emit('update_players', to=room)
 
 
 @socketIO.event
