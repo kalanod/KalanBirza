@@ -268,6 +268,10 @@ class InGameRoom:
                             if stock.department_id == change['department_id']:
                                 stock.cost += change['value']
 
+            elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
+                self.stage = 1
+                make_all_players_unready()
+
 
 class InGamePlayer:
     def __init__(self, player_data: str, room: InGameRoom):
