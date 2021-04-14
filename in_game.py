@@ -207,7 +207,7 @@ class InGameRoom:
     def decision_handler(self):
         while len(self.decisions_queue) > 0:
             decision = self.decisions_queue.pop(0)
-            code = int(decision.data['code'])
+            code = decision.code
             player = decision.player
 
             # игрок готов
@@ -246,7 +246,11 @@ class InGameRoom:
 
         elif self.stage == 1:
             self.stage = 2
-            # аукцион и добавление акций пока пропустим
+            # аукцион и добавление акций пока пропустим, для теста их получат все, кто купил
+            for card in self.cards:
+                for player in card.players:
+                    player.budget -= card.cost
+                    player.stocks[card.stock] += card.quantity
             self.next_stage()
 
         elif self.stage == 2:
@@ -263,7 +267,6 @@ class InGameRoom:
                         for stock in self.stock_list:
                             if stock.department_id == change['department_id']:
                                 stock.cost += change['value']
-
 
 
 class InGamePlayer:
@@ -326,6 +329,7 @@ class InGamePlayer:
 class Decision:
     def __init__(self, player, data):
         self.player = player
+        self.code = data['code']
         self.data = data
 
 
