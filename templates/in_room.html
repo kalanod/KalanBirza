@@ -326,7 +326,8 @@
         </div>
         <div class="play_zone">
             <div class="stonks_for_sale">
-                <div class="card" style="width: 18rem; float: left; margin-right: 10px">
+                {% for i in range(3) %}
+                <div class="card" style="width: 18rem; float: left; margin-right: 10px" id="stonk_{{ i }}">
                     <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png" class="card-img-top"
                          alt="...">
                     <div class="card-body">
@@ -337,6 +338,7 @@
                             somewhere</a>
                     </div>
                 </div>
+                {% endfor %}
             </div>
 
         </div>
@@ -390,7 +392,7 @@
     $(document).ready(function () {
         var socket = io();
         socket.on('connect', function () {
-            socket.emit('join', '1');
+            socket.emit('join', {{current_room.id}});
         });
 
         // Обработка входящих сообщений
@@ -403,16 +405,8 @@
             {% endfor %}
 
         });
-        socket.on('connect', () => {
-                socket.emit('add_players', '{{ current_room.players[-1] }}');
 
-            }
-        )
-        socket.on('disconnect', () => {
-                socket.emit('remove_players', '{{ current_room.players[-1] }}');
 
-            }
-        )
         socket.on('remove_players', player => {
             $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
