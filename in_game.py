@@ -153,53 +153,6 @@ class InGameRoom:
             player.budget += cost
             player.stocks[stock_id] -= quantity
 
-    def event_generator(self):  # это наверное можно будет удалить
-        changes = []
-        check_file = open('events.txt', 'r')
-        events = check_file.read().split('\n')
-        check_file.close()
-        new_events = random.choice(events)
-        new_events = new_events.split(':')
-        events = new_events[1].split(',')
-        for i in events:
-            if '+' in i:
-                i = i.split('+')
-                changes.append(f'+{i[1]}')
-            else:
-                i = i.split('-')
-                changes.append(f'-{i[1]}')
-        new_list = []
-        stocks_prase = []
-        check_file = open('stocks.txt', 'r')
-        for i in check_file.read().split('\n'):
-            if i != '':
-                i = i.split()
-                stocks_prase.append(i[-1].split('-')[1:])
-        back = ''
-        for i, j in zip(stocks_prase, changes):
-            if '+' in j:
-                sum = int(i[0]) + int(j[1:])
-                if sum > int(i[-1]):
-                    new_list.append(str(sum))
-                else:
-                    new_list.append(i[1])
-            else:
-                sum = int(i[0]) - int(j[1:])
-                if sum > int(i[-1]):
-                    new_list.append(str(sum))
-                else:
-                    new_list.append(i[1])
-        check_file = open('stocks.txt', 'r')
-        for i, j in zip(check_file.read().split('\n'), new_list):
-            i = i.split('-')
-            back += f'{i[0]}-{str(j)}-{i[2]}\n'
-        check_file.close()
-        check_file = open('stocks.txt', 'w')
-        check_file.truncate()
-        for i in back:
-            check_file.write(i)
-        check_file.close()
-
     def share_generator(self):
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
         return conclusion
@@ -207,7 +160,7 @@ class InGameRoom:
     def decision_handler(self):
         while len(self.decisions_queue) > 0:
             decision = self.decisions_queue.pop(0)
-            code = int(decision.data['code'])
+            code = decision.code
             player = decision.player
 
             # игрок готов
@@ -246,7 +199,11 @@ class InGameRoom:
 
         elif self.stage == 1:
             self.stage = 2
-            # аукцион и добавление акций пока пропустим
+            # аукцион и добавление акций пока пропустим, для теста их получат все, кто купил
+            for card in self.cards:
+                for player in card.players:
+                    player.budget -= card.cost
+                    player.stocks[card.stock] += card.quantity
             self.next_stage()
 
         elif self.stage == 2:
@@ -263,7 +220,12 @@ class InGameRoom:
                         for stock in self.stock_list:
                             if stock.department_id == change['department_id']:
                                 stock.cost += change['value']
+                                if stock.cost < stock.lowest_cost:
+                                    stock.cost = stock.lowest_cost
 
+            elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
+                self.stage = 1
+                make_all_players_unready()
 
 
 class InGamePlayer:
@@ -326,6 +288,7 @@ class InGamePlayer:
 class Decision:
     def __init__(self, player, data):
         self.player = player
+        self.code = data['code']
         self.data = data
 
 
