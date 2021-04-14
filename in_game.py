@@ -65,7 +65,8 @@ class InGameRoom:
             3: "Событие"
         }
         self.stage = 0
-        self.decisions = []
+        self.cards = []
+        self.decisions_queue = []
 
     def load_to_db(self):
         print(f'saving room {self.id} to bd...')
@@ -85,6 +86,9 @@ class InGameRoom:
 
         else:
             print(f"not find room {self.id}")
+
+    def add_decision_to_queue(self, player_id, code):
+        self.decisions_queue.append(Decision(self.get_player(player_id), code))
 
     def add_player(self, player_id):
         if self.player_in_room(player_id):
@@ -111,6 +115,14 @@ class InGameRoom:
                 return player
 
         return None
+
+    def get_unready_players(self):
+        unready_players = []
+        for player in self.players:
+            if not player.ready:
+                unready_players.append(player)
+
+        return unready_players
 
     def get_stock(self, stock_id):
         for stock in self.stock_list:
@@ -141,12 +153,7 @@ class InGameRoom:
             player.budget += cost
             player.stocks[stock_id] -= quantity
 
-    def turn(self):
-        self.load_to_db()
-        # вызываем эту функцию каждый ход
-        # каждый ход сохраняемся в бд
-
-    def event_generator(self):
+    def event_generator(self):  # это наверное можно будет удалить
         changes = []
         check_file = open('events.txt', 'r')
         events = check_file.read().split('\n')
@@ -197,10 +204,72 @@ class InGameRoom:
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
         return conclusion
 
+    def decision_handler(self):
+        while len(self.decisions_queue) > 0:
+            decision = self.decisions_queue.pop(0)
+            code = int(decision.data['code'])
+            player = decision.player
+
+            # игрок готов
+            if code == 1:
+                player.ready = True
+                if len(self.get_unready_players()) == 0:
+                    self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
+
+            if code == 2:
+                if self.stage != 1:
+                    continue
+
+                if int(decision.data['card_num']) not in [0, 1, 2]:
+                    continue
+
+                card = self.cards[int(decision.data['card_num'])]
+
+                if player.budget < card.cost:  # это надо будет показывать на самой карте
+                    continue
+
+                if player in card.players:  # это надо будет показывать на самой карте
+                    continue
+
+                card.players.append(player)
+                player.ready = True
+
+    def next_stage(self):
+        def make_all_players_unready():
+            for player in self.players:
+                player.ready = False
+
+        if self.stage == 0:
+            self.stage = 1
+            make_all_players_unready()
+            self.cards = self.share_generator()
+
+        elif self.stage == 1:
+            self.stage = 2
+            # аукцион и добавление акций пока пропустим
+            self.next_stage()
+
+        elif self.stage == 2:
+            self.stage = 3
+            make_all_players_unready()
+            if random.randint(1, EVENT_CHANCE) == 1:  # если событие не каждый ход
+                with open('events.json') as file:
+                    all_events = json.loads(file.read())['events']
+                    event = random.choice(all_events)
+
+                    # показываем событие игрокам
+
+                    for change in event['changes']:
+                        for stock in self.stock_list:
+                            if stock.department_id == change['department_id']:
+                                stock.cost += change['value']
+
+
 
 class InGamePlayer:
     def __init__(self, player_data: str, room: InGameRoom):
         self.online = False
+        self.ready = False  # нажал ли игрок
         self.room = room
 
         # дальше будем загружать всю информацию из строки
@@ -254,10 +323,17 @@ class InGamePlayer:
         return self.nickname
 
 
+class Decision:
+    def __init__(self, player, data):
+        self.player = player
+        self.data = data
+
+
 class StockCard:
     def __init__(self, stock, quantity):
         self.stock = stock
         self.quantity = quantity
+        self.cost = stock.cost * quantity
         self.players = []
 
 

@@ -151,6 +151,15 @@ def in_room(room_id):
     return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
+@app.route('/decision/<int:room_id>/<int:player_id>', methods=['POST'])
+def make_decision(room_id, player_id):
+    if not request.json:
+        return jsonify({'error': 'Empty request'})
+
+    get_room(room_id).add_decision_to_queue(player_id, request.json)
+    return redirect(f'/room/{room_id}')
+
+
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
