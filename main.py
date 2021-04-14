@@ -33,7 +33,6 @@ api.add_resource(users_resource.UserListResource, '/api/users')
 api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
-roomes = {'1': ['1', '2']}
 active_rooms = []  # список со всеми комнатами
 
 
@@ -163,7 +162,7 @@ def make_decision(room_id, player_id):
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
-    emit('add_players', json, to=room)
+    emit('add_players', to=room)
 
 
 @socketIO.on('leave')
@@ -177,23 +176,17 @@ def on_leave(data):
 def add_message(json, room_id):
     get_room(room_id)
     room = '1'
-    text = json['text']
-    if room not in roomes:
-        roomes[room] = []
-    roomes[room][0] = text
     emit('new_message', json, to=room)
 
 
 @socketIO.on('add_players')
-def add_players(data):
-    room = '1'
-    emit('add_players', data, to=room)
+def add_players(room):
+    emit('update_players', to=room)
 
 
 @socketIO.on('remove_players')
-def add_players(data):
-    room = '1'
-    emit('remove_players', data, to=room)
+def remove_players(room):
+    emit('remove_players', to=room)
 
 
 def main():
