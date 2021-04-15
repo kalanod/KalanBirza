@@ -115,7 +115,7 @@ def reqister():
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     db_sess = db_session.create_session()
-    id = random.randint(1, 2 ** 32)
+    id = len(active_rooms)
     room = Rooms(
         id=id,
         title=title,
@@ -124,7 +124,9 @@ def create_room(title, creator_id):
         players=''
     )
     db_sess.add(room)
+
     db_sess.commit()
+
     active_rooms.append(InGameRoom(id, title))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
@@ -155,9 +157,16 @@ def in_room(room_id):
 def make_decision(room_id, player_id):
     if not request.json:
         return jsonify({'error': 'Empty request'})
-
     get_room(room_id).add_decision_to_queue(player_id, request.json)
     return redirect(f'/room/{room_id}')
+
+
+@app.route('/delete_room/<room_id>')
+def detele_room(room_id):
+    db_sess = db_session.create_session()
+    db_sess.delete()
+    db_sess.commit()
+    active_rooms.pop(room_id)
 
 
 @socketIO.on('join')

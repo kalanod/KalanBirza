@@ -280,6 +280,7 @@
 <body>
 <div class="main">
     <div id="players">
+    <div class="online">
         {% for player in current_room.players %}
             {% if player.id != current_user.id %}
                 <a href="#">
@@ -291,6 +292,7 @@
                 </a>
             {% endif %}
         {% endfor %}
+    </div>
         <a href="/">
             <div class="exit" id="exit">выйти</div>
         </a>
@@ -410,10 +412,10 @@
         });
 
         socket.on('update_players', function () {
-            $('#players').empty()
+            $('#online').empty()
             {% for player in current_room.players %}
                 {% if player.id != current_user.id %}
-                    $('#players').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
+                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
                         'ame" >{{player.nickname}} </h5><h5>{{player.budget}} </h5></div></a>')
                 {% endif %}
             {% endfor %}
