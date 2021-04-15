@@ -404,6 +404,7 @@ class Realty:
         return f'<Realty> {self.id} owner: {self.owner}'
 
 
+
 # что происходит?
 class Auction:
     def end_auction(self):
