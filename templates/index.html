@@ -44,7 +44,7 @@
                     <div class="card-body">
                         <h5 class="card-title">players: {{ room.players|join(', ') }} online: {{ room.get_online_players()|join(', ') }}</h5>
                         <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
-                        <a class="btn del" id="del_{{ room.id }}">удалить комнату</a>
+                        <a class="btn del" id="{{ room.id }}">удалить комнату</a>
                     </div>
                 </div>
             </div>

@@ -115,7 +115,7 @@ def reqister():
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     db_sess = db_session.create_session()
-    id = len(active_rooms)
+    id = random.randint(1, 2 ** 32)
     room = Rooms(
         id=id,
         title=title,
@@ -162,15 +162,24 @@ def make_decision(json):
 
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
-    room_id = int(room_id.split('_')[1])
-    db_sess = db_session.create_session()
+    room_id = int(room_id)
+    global active_rooms
+    print('')
+    room = get_room(room_id)
+    if room is None:
+        print(f'room with id {room_id} not found')
+        return redirect('/')
 
-    room = db_sess.query(Rooms).get(room_id)
-    db_sess.delete(room)
-    print(room)
-    db_sess.delete(room)
+    print(f'deleting {room}')
+    print(f'rooms before deleting: {active_rooms}')
+    active_rooms.remove(room)
+    db_sess = db_session.create_session()
+    room_from_bd = db_sess.query(Rooms).get(room_id)
+    db_sess.delete(room_from_bd)
     db_sess.commit()
-    active_rooms[room_id] = None
+    print(f'rooms before deleting: {active_rooms}')
+    print('')
+
     return redirect('/')
 
 
