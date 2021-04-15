@@ -156,8 +156,10 @@ def in_room(room_id):
 @socketIO.on('decision')
 def make_decision(json):
     room_id = int(json['room_id'])
-    print('json')
     get_room(room_id).add_decision_to_queue(json)
+
+    # пока добавим обработку всех решений в очереди сюда
+    get_room(room_id).decision_handler()
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
@@ -192,12 +194,9 @@ def on_join(room):
 
 @socketIO.on('disconnect')
 def disconnect():
-    id = current_user.id
     for room in active_rooms:
-        for player in room.get_online_players():
-            if player.id == id:
-                player['online'] = False
-                emit('update_players', to=room.id)
+        room.leave_player(  current_user.id)
+        emit('update_players', to=room.id)
 
 
 @socketIO.on('leave')

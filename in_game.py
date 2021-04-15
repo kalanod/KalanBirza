@@ -96,9 +96,14 @@ class InGameRoom:
             print(f"not find room {self.id}")
 
     def add_decision_to_queue(self, json):
-        player_id = json['player_id']
-        code = (json['decision'])
-        self.decisions_queue.append(Decision(self.get_player(player_id), code))
+        player = self.get_player(int(json['player_id']))
+        code = (json['code'])
+        print('')
+        print(f'decision added to queue of {self} by {player}')
+        print(f'code: {code}')
+        print(f'json: {json}')
+        print('')
+        self.decisions_queue.append(Decision(player, json))
 
     def add_player(self, player_id):
         if not self.player_in_room(player_id):
@@ -184,10 +189,17 @@ class InGameRoom:
         return conclusion
 
     def decision_handler(self):
+        print('')
+        print(f'decision_handler of {self} started')
+        print('decisions:')
+
         while len(self.decisions_queue) > 0:
             decision = self.decisions_queue.pop(0)
             code = decision.code
             player = decision.player
+
+            print('')
+            print(decision)
 
             # игрок готов
             if code == 1:
@@ -195,6 +207,7 @@ class InGameRoom:
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
 
+            # нажатие на карту акций
             elif code == 2:
                 if self.stage != 1:
                     continue
@@ -212,10 +225,14 @@ class InGameRoom:
 
                 card.players.append(player)
                 player.ready = True
+                if len(self.get_unready_players()) == 0:
+                    self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
 
+            # продажа акций
             elif code == 3:
-                pass  # продажа акций
+                pass
 
+            # покупка недвижимости
             elif code == 4:
                 realty = self.get_realty(decision.data['company_id'])
 
@@ -235,6 +252,7 @@ class InGameRoom:
                 player.realty.append(realty)
                 realty.owner = player
 
+            # продажа недвижимости
             elif code == 5:
                 realty = self.get_realty(decision.data['company_id'])
 
@@ -251,13 +269,22 @@ class InGameRoom:
                 player.realty.remove(realty)
                 realty.owner = None
 
+        print('')
+
     def next_stage(self):
         def make_all_players_unready():
             for player in self.players:
                 player.ready = False
 
+        print('')
+        print(f'{self} go to next stage')
+        print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
+
         if self.stage == 0:
             self.stage = 1
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
+
             make_all_players_unready()
             self.cards = self.share_generator()
 
@@ -267,6 +294,9 @@ class InGameRoom:
 
         elif self.stage == 1:
             self.stage = 2
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
+
             # аукцион и добавление акций пока пропустим, для теста их получат все, кто купил
             for card in self.cards:
                 for player in card.players:
@@ -275,12 +305,16 @@ class InGameRoom:
 
         elif self.stage == 2:
             self.stage = 3
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
+
             make_all_players_unready()
             if random.randint(1, EVENT_CHANCE) == 1:  # если событие не каждый ход
-                with open('events.json') as file:
+                with open('./data/events.json') as file:
                     all_events = json.loads(file.read())['events']
                     event = random.choice(all_events)
 
+                    print(f'event: {event}')
                     # показываем событие игрокам
 
                     for change in event['changes']:
@@ -290,16 +324,19 @@ class InGameRoom:
                                 if stock.cost < stock.lowest_cost:
                                     stock.cost = stock.lowest_cost
 
-            elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
-                self.stage = 0
-                self.save_to_db()
-                self.next_stage()
+            else:
+                print(f'event: {None}')
 
-            print('')
+        elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
+            self.stage = 0
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
+
+            self.save_to_db()
+            self.next_stage()
 
     def __repr__(self):
-        return f'{self.title}'
+        return f'<InGameRoom> {self.title}'
 
 
 class InGamePlayer:
@@ -355,14 +392,17 @@ class InGamePlayer:
                f'{"|".join(list(map(lambda x: x.id, self.realty)))}'
 
     def __repr__(self):
-        return f'{self.nickname}'
+        return f'<InGamePlayer> {self.nickname}'
 
 
 class Decision:
     def __init__(self, player: InGamePlayer, data):
         self.player = player
-        self.code = data
+        self.code = int(data['code'])
         self.data = data
+
+    def __repr__(self):
+        return f'<Decision> owner: {self.player} code: {self.code} data: {self.data}'
 
 
 class StockCard:
