@@ -115,7 +115,7 @@ def reqister():
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     db_sess = db_session.create_session()
-    id = len(active_rooms)
+    id = random.randint(1, 2 ** 32)
     room = Rooms(
         id=id,
         title=title,
@@ -164,15 +164,14 @@ def make_decision(room_id, player_id):
 
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
-    room_id = int(room_id.split('_')[1])
-    db_sess = db_session.create_session()
+    for room in active_rooms:
+        if room.id == room_id:
+            db_sess = db_session.create_session()
+            room_from_bd = db_sess.query(Rooms).get(room_id)
+            db_sess.delete(room_from_bd)
+            db_sess.commit()
+            active_rooms.remove(room)
 
-    room = db_sess.query(Rooms).get(room_id)
-    db_sess.delete(room)
-    print(room)
-    db_sess.delete(room)
-    db_sess.commit()
-    active_rooms[room_id] = None
     return redirect('/')
 
 
