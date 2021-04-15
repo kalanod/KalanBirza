@@ -124,6 +124,9 @@ class InGameRoom:
 
         return unready_players
 
+    def get_online_players(self):
+        return list(filter(lambda x: x.online, self.players))
+
     def get_stock(self, stock_id):
         for stock in self.stock_list:
             if stock.id == stock_id:
@@ -321,11 +324,13 @@ class Stock:
 
 
 class Property:
-    def __init__(self):
+    def __init__(self, id, bonus, description):
         self.id = id
-        self.description = 'Описание'
+        self.bonus = bonus
+        self.description = description
 
 
+# что происходит?
 class Auction:
     def end_auction(self):
         check_file = open('auction.txt', 'r')
