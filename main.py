@@ -125,6 +125,7 @@ def create_room(title, creator_id):
     )
     db_sess.add(room)
 
+
     db_sess.commit()
 
     active_rooms.append(InGameRoom(id, title))
