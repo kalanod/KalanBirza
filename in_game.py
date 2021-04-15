@@ -299,7 +299,7 @@ class InGameRoom:
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
 
     def __repr__(self):
-        return f'<InGamePlayer> {self.title}'
+        return f'{self.title}'
 
 
 class InGamePlayer:
@@ -355,7 +355,7 @@ class InGamePlayer:
                f'{"|".join(list(map(lambda x: x.id, self.realty)))}'
 
     def __repr__(self):
-        return f'<InGamePlayer> {self.nickname}'
+        return f'{self.nickname}'
 
 
 class Decision:

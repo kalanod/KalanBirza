@@ -190,6 +190,16 @@ def on_join(room):
     emit('update_players', to=room)
 
 
+@socketIO.on('disconnect')
+def disconnect():
+    id = current_user.id
+    for room in active_rooms:
+        for player in room.get_online_players():
+            if player.id == id:
+                player['online'] = False
+                emit('update_players', to=room.id)
+
+
 @socketIO.on('leave')
 def on_leave(room):
     leave_room(room)
