@@ -155,9 +155,10 @@ def in_room(room_id):
 
 @socketIO.on('decision')
 def make_decision(json):
-    room_id = json['room_id']
+    room_id = int(json['room_id'])
+    print('json')
     get_room(room_id).add_decision_to_queue(json)
-    return redirect(f'/room/{room_id}')
+    # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
 @app.route('/delete_room/<room_id>')

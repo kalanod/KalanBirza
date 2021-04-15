@@ -403,9 +403,9 @@
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
-            socket.emit('/decision/',
+            socket.emit('decision',
                 {'room_id': '{{ current_room.id }}',
-                'player_id': '{{ current_user }}',
+                'player_id': '{{ current_user.id }}',
                     'decision': '1'})
 
         })

@@ -95,7 +95,9 @@ class InGameRoom:
         else:
             print(f"not find room {self.id}")
 
-    def add_decision_to_queue(self, player_id, code):
+    def add_decision_to_queue(self, json):
+        player_id = json['player_id']
+        code = (json['decision'])
         self.decisions_queue.append(Decision(self.get_player(player_id), code))
 
     def add_player(self, player_id):
@@ -359,7 +361,7 @@ class InGamePlayer:
 class Decision:
     def __init__(self, player: InGamePlayer, data):
         self.player = player
-        self.code = data['code']
+        self.code = data
         self.data = data
 
 
