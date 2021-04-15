@@ -403,7 +403,11 @@
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
-            socket.emit('/decision/', {{ current_room.id }}, {{ current_user }})
+            socket.emit('/decision/',
+                {'room_id': '{{ current_room.id }}',
+                'player_id': '{{ current_user }}',
+                    'decision': '1'})
+
         })
         // Обработка входящих сообщений
         socket.on('new_message', function (data) {
