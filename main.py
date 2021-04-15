@@ -164,13 +164,23 @@ def make_decision(room_id, player_id):
 
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
-    for room in active_rooms:
-        if room.id == room_id:
-            db_sess = db_session.create_session()
-            room_from_bd = db_sess.query(Rooms).get(room_id)
-            db_sess.delete(room_from_bd)
-            db_sess.commit()
-            active_rooms.remove(room)
+    room_id = int(room_id)
+    global active_rooms
+    print('')
+    room = get_room(room_id)
+    if room is None:
+        print(f'room with id {room_id} not found')
+        return redirect('/')
+
+    print(f'deleting {room}')
+    print(f'rooms before deleting: {active_rooms}')
+    active_rooms.remove(room)
+    db_sess = db_session.create_session()
+    room_from_bd = db_sess.query(Rooms).get(room_id)
+    db_sess.delete(room_from_bd)
+    db_sess.commit()
+    print(f'rooms before deleting: {active_rooms}')
+    print('')
 
     return redirect('/')
 
