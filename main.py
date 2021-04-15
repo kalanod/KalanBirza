@@ -163,10 +163,16 @@ def make_decision(room_id, player_id):
 
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
+    room_id = int(room_id.split('_')[1])
     db_sess = db_session.create_session()
-    db_sess.delete()
+
+    room = db_sess.query(Rooms).get(room_id)
+    db_sess.delete(room)
+    print(room)
+    db_sess.delete(room)
     db_sess.commit()
-    active_rooms.pop(room_id)
+    active_rooms[room_id] = None
+    return redirect('/')
 
 
 @socketIO.on('join')

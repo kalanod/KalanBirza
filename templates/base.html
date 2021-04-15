@@ -50,6 +50,10 @@
 
 
         $("#myModal").modal('show');
+        $('.del').click(function (){
+            window.location.replace('/delete_room/' + $(this).attr('id'));
+
+        })
         $('#create_room').click(function () {
 
             //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
