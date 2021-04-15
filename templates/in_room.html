@@ -274,6 +274,7 @@
             margin-left: auto;
             margin-right: auto;
 
+
         }
     </style>
 </head>
@@ -330,7 +331,7 @@
         <div class="play_zone">
             <div class="stonks_for_sale">
                 {% for i in range(3) %}
-                    <div class="card" style="width: 33%; float: left; margin-right: 10px" id="stonk_{{ i }}">
+                    <div class="card" style="width: 30%; float: left; margin-right: 10px" id="stonk_{{ i }}">
                         <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
                              class="card-img-top"
                              alt="...">
@@ -345,7 +346,6 @@
                     </div>
                 {% endfor %}
             </div>
-
         </div>
         <div style="margin-left: 40%">
             <a href="#" class="btn btn-primary" id="pas">Пропустить</a>
@@ -399,7 +399,12 @@
         socket.on('connect', function () {
             socket.emit('join', {{current_room.id}});
         });
-
+        $('#exit').click(function () {
+            socket.emit('leave', {{current_room.id}});
+        });
+        $('#pas').click(function () {
+            socket.emit('/decision/', {{ current_room.id }}, {{ current_user }})
+        })
         // Обработка входящих сообщений
         socket.on('new_message', function (data) {
             {% for i in range(9) %}

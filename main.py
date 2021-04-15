@@ -186,6 +186,7 @@ def on_join(room):
 def on_leave(room):
     leave_room(room)
     user = current_user.id
+    get_room(room).leave_player(user)
     emit('update_players', to=room)
 
 
@@ -223,8 +224,9 @@ def main():
 
 def get_room(room_id):
     for room in active_rooms:
-        if room.id == room_id:
-            return room
+        if room:
+            if room.id == room_id:
+                return room
     return None
 
 
