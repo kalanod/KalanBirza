@@ -43,15 +43,14 @@ class InGameRoom:
         for player_data in players_string:
             self.players.append(InGamePlayer(player_data, self))
 
-        self.load_to_db()
+        self.save_to_db()
 
-        print(f'load of room with id {self.id} complete')
         print('')
+        print(f'load of room with id {self.id} complete')
         print('loaded stocks:')
         for stock in self.stock_list:
             print(stock)
 
-        print('')
         print('loaded players:')
         for player in self.players:
             print(player)
@@ -68,7 +67,8 @@ class InGameRoom:
         self.cards = []
         self.decisions_queue = []
 
-    def load_to_db(self):
+    def save_to_db(self):
+        print('')
         print(f'saving room {self.id} to bd...')
         # создаем строки на основе данных комнаты и игроков для сохранения в ДБ
         data = ' '.join(list(map(lambda x: x.get_string_for_bd(), self.stock_list)))
@@ -79,10 +79,12 @@ class InGameRoom:
             room.data = data
             room.players = players
             db_sess.commit()
+
             print(f'saving room {self.id} to bd complete')
-            print(f'data: {data}')
-            print(f'players: {players}')
+            print(f'stocks data: {data}')
+            print(f'players data: {players}')
             print(self.players)
+            print('')
 
         else:
             print(f"not find room {self.id}")
@@ -91,17 +93,27 @@ class InGameRoom:
         self.decisions_queue.append(Decision(self.get_player(player_id), code))
 
     def add_player(self, player_id):
-        if self.player_in_room(player_id):
-            self.get_player(player_id).online = True
-
-        else:
+        if not self.player_in_room(player_id):
             self.players.append(InGamePlayer(f'{player_id},{START_BUDGET},', self))
+            self.save_to_db()
 
-        self.load_to_db()
+        self.get_player(player_id).online = True
+
+        print('')
+        print(f'{self.get_player(player_id)} join to {self}')
+        print(f'online players: {self.get_online_players()}')
+        print(f'ingame players: {self.players}')
+        print('')
 
     def leave_player(self, player_id):
         if self.player_in_room(player_id):
             self.get_player(player_id).online = False
+
+        print('')
+        print(f'{self.get_player(player_id)} leave from {self}')
+        print(f'online players: {self.get_online_players()}')
+        print(f'ingame players: {self.players}')
+        print('')
 
     def player_in_room(self, player_id):
         return any([player_id == player.id for player in self.players])
@@ -229,6 +241,13 @@ class InGameRoom:
             elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
                 self.stage = 1
                 make_all_players_unready()
+                self.save_to_db()
+
+            print('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+
+    def __repr__(self):
+        return f'<InGamePlayer> {self.title}'
 
 
 class InGamePlayer:
@@ -285,7 +304,7 @@ class InGamePlayer:
             self.realty.pop(realty[0])
 
     def __repr__(self):
-        return self.nickname
+        return f'<InGamePlayer> {self.nickname}'
 
 
 class Decision:

@@ -19,6 +19,7 @@ from in_game import *
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import os
 import random
+import time
 
 print(os.getcwd())
 
@@ -196,7 +197,6 @@ def main():
     rooms_from_db = db_sess.query(Rooms).all()
     global active_rooms
     for room_from_db in rooms_from_db:
-        print(f'main: {room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players}')
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 
