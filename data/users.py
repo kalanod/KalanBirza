@@ -16,9 +16,10 @@ class User(SqlAlchemyBase, UserMixin, SerializerMixin):
     hashed_password = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     email = sqlalchemy.Column(sqlalchemy.String,
                               index=True, unique=True, nullable=True)
+    friends = sqlalchemy.Column(sqlalchemy.String, nullable=True)
 
     def __repr__(self):
-        return f'<USER> {self.id} {self.nickname} {self.email}'
+        return f'<USER> {self.id} {self.nickname} {self.email} {self.friends}'
 
     def set_password(self, password):
         self.hashed_password = generate_password_hash(password)

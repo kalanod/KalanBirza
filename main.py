@@ -239,5 +239,24 @@ def get_room(room_id):
     return None
 
 
+def add_friend(self_id, friend_id):
+    user = User()
+    db_sess = db_session.create_session()
+    friends = db_sess.query(User).filter(User.id == self_id).split()[-1] + [str(friend_id)]
+    user.friends = ','.join(friends)
+    db_sess.commit()
+    return True
+
+
+def del_friend(self_id, friend_id):
+    user = User()
+    db_sess = db_session.create_session()
+    friends = db_sess.query(User).filter(User.id == self_id).split()[-1]
+    friends.remove(str(friend_id))
+    user.friends = ','.join(friends)
+    db_sess.commit()
+    return True
+
+
 if __name__ == '__main__':
     main()

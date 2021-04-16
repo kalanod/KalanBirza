@@ -20,7 +20,8 @@ class UserResource(Resource):
         return jsonify({'user': user.to_dict(only=('id',
                                                    'nickname',
                                                    'email',
-                                                   'hashed_password'))})
+                                                   'hashed_password',
+                                                   'friends'))})
 
     def delete(self, user_id):
         abort_if_user_not_found(user_id)
@@ -41,7 +42,8 @@ class UserListResource(Resource):
                     [item.to_dict(only=('id',
                                         'nickname',
                                         'email',
-                                        'hashed_password'))
+                                        'hashed_password',
+                                        'friends'))
                      for item in user]
             }
         )
