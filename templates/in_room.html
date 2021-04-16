@@ -273,27 +273,35 @@
             margin-top: 10%;
             margin-left: auto;
             margin-right: auto;
+            display: None;
+        }
 
-
+        #case {
+            width: 50%;
+            height: 60%;
+            margin-top: 10%;
+            margin-left: auto;
+            margin-right: auto;
+            display: None;
         }
     </style>
 </head>
 <body>
 <div class="main">
     <div id="players">
-    <div class="online">
-        {% for player in current_room.players %}
-            {% if player.id != current_user.id %}
-                <a href="#">
-                    <div class="player_card">
-                        <h5 id="player_name">{{ player.nickname }}</h5>
-                        <h5>{{ player.budget }}</h5>
-                        <h5>{{ player.online }}</h5>
-                    </div>
-                </a>
-            {% endif %}
-        {% endfor %}
-    </div>
+        <div class="online">
+            {% for player in current_room.players %}
+                {% if player.id != current_user.id %}
+                    <a href="#">
+                        <div class="player_card">
+                            <h5 id="player_name">{{ player.nickname }}</h5>
+                            <h5>{{ player.budget }}</h5>
+                            <h5>{{ player.online }}</h5>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
         <a href="/">
             <div class="exit" id="exit">выйти</div>
         </a>
@@ -325,13 +333,31 @@
     </div>
     <div id="board">
         <div class="progress" style="float: bottom">
-            <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25" aria-valuemin="0"
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+                 aria-valuemin="0"
                  aria-valuemax="100"></div>
         </div>
         <div class="play_zone">
-            <div class="stonks_for_sale">
+            <div class="stonks_for_sale" id="stonks_for_sale">
                 {% for i in range(3) %}
                     <div class="card" style="width: 30%; float: left; margin-right: 10px" id="stonk_{{ i }}">
+                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                             class="card-img-top"
+                             alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <p class="card-text">Some quick example text to build on the card title and make up the bulk
+                                of
+                                the card's content.</p>
+                            <a href="#" class="btn btn-primary" style="margin-left: auto; margin-right: auto">Go
+                                somewhere</a>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="case" id="case">
+                {% for i in range(2) %}
+                    <div class="card" style="width: 30%; float: left; margin-right: 10px" id="case_{{ i }}">
                         <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
                              class="card-img-top"
                              alt="...">
@@ -399,15 +425,47 @@
         socket.on('connect', function () {
             socket.emit('join', {{current_room.id}});
         });
+
         $('#exit').click(function () {
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
+            socket.emit('make_turn')
             socket.emit('decision',
-                {'room_id': '{{ current_room.id }}',
-                'player_id': '{{ current_user.id }}',
-                'code': '1'})
+                {
+                    'room_id': '{{ current_room.id }}',
+                    'player_id': '{{ current_user.id }}',
+                    'code': '1'
+                })
 
+
+        })
+        socket.on('make_turn', function () {
+
+            var a = 0
+            {% for player in current_room.players %}
+                a++
+            {% endfor %}
+
+            var s = getComputedStyle(document.getElementById('progress-bar')).ariaValuenow;
+
+            console.log(s)
+            document.getElementById('progress-bar').style.ariaValuenow = s;
+
+        })
+        socket.on('update_stonks', function (data) {
+            document.getElementById('case').style.display = 'None';
+            document.getElementById('stonks_for_sale').style.display = 'block';
+            for (var key in data) {
+                console.log(key)
+            }
+        })
+        socket.on('update_case', function (data) {
+            document.getElementById('stonks_for_sale').style.display = 'None';
+            document.getElementById('case').style.display = 'block';
+            for (var key in data) {
+                console.log(key)
+            }
         })
         // Обработка входящих сообщений
         socket.on('new_message', function (data) {

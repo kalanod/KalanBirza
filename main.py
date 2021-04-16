@@ -153,6 +153,45 @@ def in_room(room_id):
     return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
+def update_stonks(room_id, json):
+    # пример передаваемого списка
+    lis = {"название акции": {'count': 'количество числом',
+                              'price': 'цена числом'},
+           "название акции2": {'count': 'количество числом',
+                               'price': 'цена числом'},
+           "название акции3": {'count': 'количество числом',
+                               'price': 'цена числом'}
+           }
+    emit('update_stonks', json, to=room_id)
+
+
+def update_case(room_id, json):
+    # пример передаваемого списка
+    lis = {"название события 1": {'название акции': 'изменение в цене',
+                                  'название акции2': 'изменение в цене',
+                                  'название акции3': 'изменение в цене',
+                                  'название акции4': 'изменение в цене',
+                                  'название акции5': 'изменение в цене',
+                                  'название акции6': 'изменение в цене',
+                                  'название акции7': 'изменение в цене',
+                                  'название акции8': 'изменение в цене'},
+
+           "название события 2": {'название акции': 'изменение в цене',
+                                  'название акции2': 'изменение в цене',
+                                  'название акции3': 'изменение в цене',
+                                  'название акции4': 'изменение в цене',
+                                  'название акции5': 'изменение в цене',
+                                  'название акции6': 'изменение в цене',
+                                  'название акции7': 'изменение в цене',
+                                  'название акции8': 'изменение в цене'}}
+    emit('update_case', json, to=room_id)
+
+
+@socketIO.on('make_turn')
+def make_turn():
+    emit('make_turn')
+
+
 @socketIO.on('decision')
 def make_decision(json):
     room_id = int(json['room_id'])
@@ -195,7 +234,7 @@ def on_join(room):
 @socketIO.on('disconnect')
 def disconnect():
     for room in active_rooms:
-        room.leave_player(  current_user.id)
+        room.leave_player(current_user.id)
         emit('update_players', to=room.id)
 
 
@@ -235,8 +274,8 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
 
 
 def get_room(room_id):
