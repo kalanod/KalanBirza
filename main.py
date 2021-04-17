@@ -157,6 +157,10 @@ def update_stock_cards(room_id, json):
     emit('update_stock_cards', json, to=room_id)
 
 
+def update_stock_table(room_id):
+    emit('update_stock_table', to=room_id)
+
+
 def update_case(room_id, json):
     emit('update_case', json, to=room_id)
 

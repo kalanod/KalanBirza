@@ -474,9 +474,18 @@
             var s = getComputedStyle(document.getElementById('progress-bar')).width;
             console.log(s)
             document.getElementById('progress-bar').style.width = s + '15%';
+        });
 
-        })
-        socket.on('update_stonks', function (data) {
+        socket.on('update_stock_table', function (data) {
+            {% for i in range(9) %}
+                $('#com_' + {{i}}).text('{{ current_room.stock_list[i - 1].short_name }}')
+                $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i - 1].lowest_cost }}')
+                $('#price_' + {{i}}).text('{{ current_room.stock_list[i - 1].cost }}')
+                //console.log('{{ current_room.stock_list[i - 1].short_name }}')
+            {% endfor %}
+        });
+
+        socket.on('update_stock_cards', function (data) {
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
@@ -487,31 +496,19 @@
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
                 //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
                 document.querySelector('#stonk_' + String(fid) + '> div > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
-
-
                 fid++
             }
-        })
+        });
         socket.on('update_case', function (data) {
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
             for (var key in data) {
                 console.log(key)
             }
-        })
+        });
         socket.on('clear_playzone', function (data) {
             document.getElementById('case').style.display = 'None';
             document.getElementById('case').style.display = 'None';
-        })
-        // Обработка входящих сообщений
-        socket.on('new_message', function (data) {
-            {% for i in range(9) %}
-                $('#com_' + {{i}}).text('{{ current_room.stock_list[i - 1].short_name }}')
-                $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i - 1].lowest_cost }}')
-                $('#price_' + {{i}}).text('{{ current_room.stock_list[i - 1].cost }}')
-                //console.log('{{ current_room.stock_list[i - 1].short_name }}')
-            {% endfor %}
-
         });
 
         socket.on('update_players', function () {
@@ -523,12 +520,14 @@
                 {% endif %}
             {% endfor %}
         });
+
         socket.on('remove_players', player => {
             $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
             console.log('aaaaaaaaaaa')
 
         });
+
         socket.on('add_players', player => {
             $('#players').append('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
