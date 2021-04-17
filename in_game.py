@@ -184,9 +184,9 @@ class InGameRoom:
 
         else:
             player.budget -= cost
-            if not stock.id in player.stocks.keys():
+            if not stock in player.stocks.keys():
                 player.stocks[stock.id] = 0
-            player.stocks[stock.id] += quantity
+            player.stocks[stock] += quantity
 
     def share_generator(self):
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
