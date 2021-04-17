@@ -477,9 +477,10 @@
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
             for (var key in data) {
-                fid ++
+
                 console.log(key)
-                document.querySelector('#stonk_' + String(fid) + ' div h5').text = String(fid)
+                document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
+                fid ++
 
             }
         })
