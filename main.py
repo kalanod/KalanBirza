@@ -153,8 +153,12 @@ def in_room(room_id):
     return render_template('in_room.html', current_room=current_room, title="В игре")
 
 
-def update_stonks(room_id, json):
-    emit('update_stonks', json, to=room_id)
+def update_stock_cards(room_id, json):
+    emit('update_stock_cards', json, to=room_id)
+
+
+def update_stock_table(room_id):
+    emit('update_stock_table', to=room_id)
 
 
 def update_case(room_id, json):

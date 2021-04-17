@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stonks, clear_playzone
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table
 
 START_BUDGET = 1000000
 
@@ -303,7 +303,7 @@ class InGameRoom:
                                              "cost": card.cost,
                                              "img": card.stock.company_logo_address}
 
-            update_stonks(self.id, out_json)
+            update_stock_cards(self.id, out_json)
 
         elif self.stage == 1:
             self.stage = 2
@@ -343,6 +343,7 @@ class InGameRoom:
                                     out_json[event['description']][stock.name] = change['value']
 
                 update_case(self.id, out_json)
+                update_stock_table(self.id)
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
