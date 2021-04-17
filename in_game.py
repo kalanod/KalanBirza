@@ -322,7 +322,7 @@ class InGameRoom:
             print('')
 
             make_all_players_unready()
-            with open('./data/events.json') as file:
+            with open('./data/events.json', encoding='utf-8') as file:
                 all_events = json.loads(file.read())['events']
 
                 out_json = {}
@@ -339,8 +339,8 @@ class InGameRoom:
                                 stock.cost += change['value']
                                 if stock.cost < stock.lowest_cost:
                                     stock.cost = stock.lowest_cost
-
-                                out_json[event['description']][stock.name] = change['value']
+                                if change['value'] != 0:
+                                    out_json[event['description']][stock.name] = change['value']
 
                 update_case(self.id, out_json)
 

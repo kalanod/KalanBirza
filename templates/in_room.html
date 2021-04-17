@@ -269,11 +269,12 @@
 
         .stonks_for_sale {
             width: 80%;
-            height: 60%;
+            height: 80%;
             margin-top: 10%;
             margin-left: auto;
             margin-right: auto;
-            display: None;
+            display: none;
+
         }
 
         #case {
@@ -282,7 +283,7 @@
             margin-top: 10%;
             margin-left: auto;
             margin-right: auto;
-            display: None;
+            display: none;
         }
     </style>
 </head>
@@ -358,13 +359,14 @@
             </div>
             <div class="case" id="case">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 30%; float: left; margin-right: 10px" id="case_{{ i }}">
+                    <div class="card" style="width: 45%; height: 150%; float: left; margin-right: 10px"
+                         id="case_{{ i }}">
                         <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
                              class="card-img-top"
                              alt="...">
+                        <h5 class="card-title">Card title</h5>
                         <div class="card-body">
-                            <h5 class="card-title">Card title</h5>
-                            <p class="card-text"> Карта события </p>
+
                         </div>
                     </div>
                 {% endfor %}
@@ -495,8 +497,19 @@
         socket.on('update_case', function (data) {
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
+            var fid = 0
             for (var key in data) {
-                console.log(key)
+                console.log(data)
+                $(document.querySelector('#case_' + String(fid) + ' > div')).empty()
+                //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
+                document.querySelector('#case_' + String(fid) + ' > h5').innerHTML = key
+                for (var value in data[key]) {
+
+                    $(document.querySelector('#case_' + String(fid) + '> div')).append('<h5>' + value + '</h5>')
+
+                }
+
+                fid++
             }
         })
         socket.on('clear_playzone', function (data) {
