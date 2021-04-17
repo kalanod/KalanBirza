@@ -340,7 +340,7 @@
         <div class="play_zone">
             <div class="stonks_for_sale" id="stonks_for_sale">
                 {% for i in range(3) %}
-                    <div class="card" style="width: 30%; height: 100%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px"
                          id="stonk_{{ i }}">
                         <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
                              class="card-img-top"
@@ -349,9 +349,9 @@
                             <h5 class="card-title">Card title</h5>
                             <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
                             <h5 id="count_s" style="margin-left: 15px"> count </h5>
-                            <p class="card-text"> Карта акций </p>
+                            <p class="card-text"> Карта акций 0</p>
                             <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                               style="margin-left: auto; margin-right: auto"> Buy </a>
+                               style="margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
                         </div>
                     </div>
                 {% endfor %}
@@ -485,7 +485,7 @@
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
                 document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
-                document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
+                //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
                 document.querySelector('#stonk_' + String(fid) + '> div > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
 
 
