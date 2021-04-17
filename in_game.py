@@ -34,7 +34,8 @@ class InGameRoom:
                                                   "name": company["name"],
                                                   "short_name": company["short_name"],
                                                   "cost": data_from_bd[company["id"]],
-                                                  "lowest_cost": company["stock_lowest_cost"]}))
+                                                  "lowest_cost": company["stock_lowest_cost"],
+                                                  "img": company["img"]}))
 
                 else:
                     self.stock_list.append(Stock(company))
@@ -299,7 +300,8 @@ class InGameRoom:
             for card in self.stocks_cards:
                 out_json[card.stock.name] = {"quantity": card.quantity,
                                              "price": card.stock.cost,  # стоимость одной акции
-                                             "cost": card.cost}
+                                             "cost": card.cost,
+                                             "img": card.stock.company_logo_address}
 
             update_stonks(self.id, out_json)
 
@@ -437,6 +439,7 @@ class Stock:
             self.short_name = stock_dict["short_name"]
             self.cost = stock_dict["stock_cost"]
             self.lowest_cost = stock_dict["stock_lowest_cost"]
+            self.company_logo_address = stock_dict["img"]
 
         else:
             raise ValueError
