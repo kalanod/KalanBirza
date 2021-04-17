@@ -340,14 +340,18 @@
         <div class="play_zone">
             <div class="stonks_for_sale" id="stonks_for_sale">
                 {% for i in range(3) %}
-                    <div class="card" style="width: 30%; float: left; margin-right: 10px" id="stonk_{{ i }}">
+                    <div class="card" style="width: 30%; height: 100%; float: left; margin-right: 10px"
+                         id="stonk_{{ i }}">
                         <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
                              class="card-img-top"
                              alt="...">
                         <div class="card-body">
                             <h5 class="card-title">Card title</h5>
+                            <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
+                            <h5 id="count_s" style="margin-left: 15px"> count </h5>
                             <p class="card-text"> Карта акций </p>
-                            <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}" style="margin-left: auto; margin-right: auto"> Buy </a>
+                            <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
+                               style="margin-left: auto; margin-right: auto"> Buy </a>
                         </div>
                     </div>
                 {% endfor %}
@@ -477,11 +481,15 @@
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
             for (var key in data) {
-
-                console.log(key)
+                console.log(data[key])
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
-                fid ++
+                document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
+                document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
+                document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
+                document.querySelector('#stonk_' + String(fid) + '> div > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
 
+
+                fid++
             }
         })
         socket.on('update_case', function (data) {
