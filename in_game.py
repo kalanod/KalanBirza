@@ -5,8 +5,9 @@ from data.users import User
 import random
 import json
 
+from main import update_case, update_stonks
+
 START_BUDGET = 1000000
-EVENT_CHANCE = 3  # 1/3 ходов
 
 
 class InGameRoom:
@@ -70,7 +71,7 @@ class InGameRoom:
             3: "Событие"
         }
         self.stage = 0
-        self.cards = []
+        self.stocks_cards = []
         self.decisions_queue = []
 
     def save_to_db(self):
@@ -190,6 +191,7 @@ class InGameRoom:
 
     def decision_handler(self):
         print('')
+        print('')
         print(f'decision_handler of {self} started')
         print('decisions:')
 
@@ -198,7 +200,6 @@ class InGameRoom:
             code = decision.code
             player = decision.player
 
-            print('')
             print(decision)
 
             # игрок готов
@@ -215,7 +216,7 @@ class InGameRoom:
                 if int(decision.data['card_num']) not in [0, 1, 2]:
                     continue
 
-                card = self.cards[int(decision.data['card_num'])]
+                card = self.stocks_cards[int(decision.data['card_num'])]
 
                 if player.budget < card.cost:  # это надо будет показывать на самой карте
                     continue
@@ -286,11 +287,19 @@ class InGameRoom:
             print('')
 
             make_all_players_unready()
-            self.cards = self.share_generator()
+            self.stocks_cards = self.share_generator()
 
             for player in self.players:
                 for realty in player.realty:
                     player.budget += realty.bonus
+
+            out_json = {}
+            for card in self.stocks_cards:
+                out_json[card.stock.name] = {"quantity": card.quantity,
+                                             "price": card.stock.cost,  # стоимость одной акции
+                                             "cost": card.cost}
+
+            update_stonks(self.id, out_json)
 
         elif self.stage == 1:
             self.stage = 2
@@ -298,7 +307,7 @@ class InGameRoom:
             print('')
 
             # аукцион и добавление акций пока пропустим, для теста их получат все, кто купил
-            for card in self.cards:
+            for card in self.stocks_cards:
                 for player in card.players:
                     self.sell_stock_to_player(player, card.stock, card.quantity)
             self.next_stage()
@@ -309,13 +318,16 @@ class InGameRoom:
             print('')
 
             make_all_players_unready()
-            if random.randint(1, EVENT_CHANCE) == 1:  # если событие не каждый ход
-                with open('./data/events.json') as file:
-                    all_events = json.loads(file.read())['events']
-                    event = random.choice(all_events)
+            with open('./data/events.json') as file:
+                all_events = json.loads(file.read())['events']
 
-                    print(f'event: {event}')
+                out_json = {}
+
+                for i in range(2):
+                    event = random.choice(all_events)
+                    print(f'event {i + 1}: {event}')
                     # показываем событие игрокам
+                    out_json[event['description']] = dict()
 
                     for change in event['changes']:
                         for stock in self.stock_list:
@@ -324,8 +336,9 @@ class InGameRoom:
                                 if stock.cost < stock.lowest_cost:
                                     stock.cost = stock.lowest_cost
 
-            else:
-                print(f'event: {None}')
+                                out_json[event['description']][stock.name] = change['value']
+
+                update_case(self.id, out_json)
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
@@ -442,7 +455,6 @@ class Realty:
 
     def __repr__(self):
         return f'<Realty> {self.id} owner: {self.owner}'
-
 
 
 # что происходит?
