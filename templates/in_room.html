@@ -463,16 +463,13 @@
         });
 
         socket.on('make_turn', function () {
-
             var a = 0
             {% for player in current_room.players %}
                 a++
             {% endfor %}
-
-            var s = getComputedStyle(document.getElementById('progress-bar')).ariaValuenow;
-
+            var s = getComputedStyle(document.getElementById('progress-bar')).width;
             console.log(s)
-            document.getElementById('progress-bar').style.ariaValuenow = s;
+            document.getElementById('progress-bar').style.width = s + '15%';
 
         })
         socket.on('update_stonks', function (data) {
