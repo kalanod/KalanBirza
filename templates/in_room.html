@@ -347,7 +347,7 @@
                         <div class="card-body">
                             <h5 class="card-title">Card title</h5>
                             <p class="card-text"> Карта акций </p>
-                            <a href="#" class="btn btn-primary" style="margin-left: auto; margin-right: auto"> Buy </a>
+                            <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}" style="margin-left: auto; margin-right: auto"> Buy </a>
                         </div>
                     </div>
                 {% endfor %}
@@ -430,9 +430,38 @@
                     'player_id': '{{ current_user.id }}',
                     'code': '1'
                 })
+        });
+        $('#card_0').click(function () {
+            socket.emit('make_turn')
+            socket.emit('decision',
+                {
+                    'room_id': '{{ current_room.id }}',
+                    'player_id': '{{ current_user.id }}',
+                    'code': '2',
+                    "card_num": '0'
+                })
+        });
+        $('#card_1').click(function () {
+            socket.emit('make_turn')
+            socket.emit('decision',
+                {
+                    'room_id': '{{ current_room.id }}',
+                    'player_id': '{{ current_user.id }}',
+                    'code': '2',
+                    "card_num": '1'
+                })
+        });
+        $('#card_2').click(function () {
+            socket.emit('make_turn')
+            socket.emit('decision',
+                {
+                    'room_id': '{{ current_room.id }}',
+                    'player_id': '{{ current_user.id }}',
+                    'code': '2',
+                    "card_num": '2'
+                })
+        });
 
-
-        })
         socket.on('make_turn', function () {
 
             var a = 0
@@ -459,6 +488,10 @@
             for (var key in data) {
                 console.log(key)
             }
+        })
+        socket.on('clear_playzone', function (data) {
+            document.getElementById('case').style.display = 'None';
+            document.getElementById('case').style.display = 'None';
         })
         // Обработка входящих сообщений
         socket.on('new_message', function (data) {

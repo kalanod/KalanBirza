@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stonks
+from main import update_case, update_stonks, clear_playzone
 
 START_BUDGET = 1000000
 
@@ -183,6 +183,8 @@ class InGameRoom:
 
         else:
             player.budget -= cost
+            if not stock.id in player.stocks.keys():
+                player.stocks[stock.id] = 0
             player.stocks[stock.id] += quantity
 
     def share_generator(self):
@@ -346,7 +348,7 @@ class InGameRoom:
             print('')
 
             self.save_to_db()
-            self.next_stage()
+            clear_playzone(self.id)
 
     def __repr__(self):
         return f'<InGameRoom> {self.title}'
