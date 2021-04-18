@@ -123,7 +123,12 @@ class InGameRoom:
 
     def leave_player(self, player_id):
         if self.player_in_room(player_id):
-            self.get_player(player_id).online = False
+            if self.stage == -1:
+                self.players.remove(self.get_player(player_id))
+                self.save_to_db()
+
+            else:
+                self.get_player(player_id).online = False
 
         print('')
         print(f'{self.get_player(player_id)} leave from {self}')
@@ -135,7 +140,11 @@ class InGameRoom:
         return any([player_id == player.id for player in self.players])
 
     def player_online(self, player_id):
-        return self.get_player(player_id).online
+        try:
+            return self.get_player(player_id).online
+
+        except Exception:
+            return False
 
     def get_player(self, player_id):
         for player in self.players:
@@ -168,15 +177,6 @@ class InGameRoom:
                 return realty
 
         return None
-
-    def buy_stock_from_player(self, player, stock, quantity):
-        cost = stock.cost * quantity
-        if player.stocks[stock.id] < quantity:
-            return
-
-        else:
-            player.budget += cost
-            player.stocks[stock.id] -= quantity
 
     def sell_stock_to_player(self, player, stock, quantity):  # эта функция потом уйдет в стадию аукциона
         cost = stock.cost * quantity
@@ -234,11 +234,16 @@ class InGameRoom:
 
             # продажа акций
             elif code == 3:
-                if player.stocks[self.get_stock(decision.data['company_id'])] < decision.data['quantity']:
+                stock = self.get_stock(decision.data['company_id'])
+                quantity = decision.data['quantity']
+
+                cost = stock.cost * quantity
+                if player.stocks[stock.id] < quantity:
                     continue
 
-                player.stocks[self.get_stock(decision.data['company_id'])] -= decision.data['quantity']
-                player.budget += self.get_stock(decision.data['company_id']) * decision.data['quantity']
+                else:
+                    player.budget += cost
+                    player.stocks[stock.id] -= quantity
 
             # покупка недвижимости
             elif code == 4:
@@ -293,7 +298,28 @@ class InGameRoom:
         print(f'{self} go to next stage')
         print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
 
-        if self.stage == 0:
+        if self.stage == -1:
+            self.stage = 1
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
+
+            self.make_all_players_unready()
+            self.stocks_cards = self.share_generator()
+
+            for player in self.players:
+                for realty in player.realty:
+                    player.budget += realty.bonus
+
+            out_json = {}
+            for card in self.stocks_cards:
+                out_json[card.stock.name] = {"quantity": card.quantity,
+                                             "price": card.stock.cost,  # стоимость одной акции
+                                             "cost": card.cost,
+                                             "img": card.stock.company_logo_address}
+
+            update_stock_cards(self.id, out_json)
+
+        elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
             print('')
@@ -390,6 +416,8 @@ class InGameRoom:
         print(f'players: {self.players}')
         print(f'stock: {self.stock_list}')
         print('')
+
+        self.save_to_db()
 
     def __repr__(self):
         return f'<InGameRoom> id: {self.id} title: {self.title}'
