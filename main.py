@@ -158,11 +158,13 @@ def update_stock_cards(room_id, json):
 
 
 def update_stock_table(room_id):
-    emit('update_stock_table', to=room_id)
+    data = get_room(room_id)
+    emit('update_stock_table', data, to=room_id)
 
 
 def update_case(room_id, json):
     emit('update_case', json, to=room_id)
+    update_stock_table(room_id)
 
 
 def clear_playzone(room_id):
@@ -260,8 +262,8 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    app.run(host='0.0.0.0', port=port)
-    # app.run(debug=True)
+    # app.run(host='0.0.0.0', port=port)
+    app.run(debug=True)
 
 
 def get_room(room_id):
