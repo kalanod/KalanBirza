@@ -169,6 +169,10 @@ def clear_playzone(room_id):
     emit('clear_playzone', to=room_id)
 
 
+def win(room_id, player):
+    emit('win', player, to=room_id)
+
+
 @socketIO.on('make_turn')
 def make_turn():
     emit('make_turn')

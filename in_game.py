@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stock_cards, clear_playzone, update_stock_table
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win
 
 START_BUDGET = 1000000
 
@@ -66,12 +66,13 @@ class InGameRoom:
         print('')
 
         self.stages = {
-            0: "Подготовка к игре",
+            -1: "Подготовка к игре между играми",
+            0: "Подготовка к игре между ходами",
             1: "Покупка акций и недвижимости ",
             2: "Аукцион",
             3: "Событие"
         }
-        self.stage = 0
+        self.stage = -1
         self.stocks_cards = []
         self.decisions_queue = []
 
@@ -194,7 +195,6 @@ class InGameRoom:
 
     def decision_handler(self):
         print('')
-        print('')
         print(f'decision_handler of {self} started')
         print('decisions:')
 
@@ -234,7 +234,11 @@ class InGameRoom:
 
             # продажа акций
             elif code == 3:
-                pass
+                if player.stocks[self.get_stock(decision.data['company_id'])] < decision.data['quantity']:
+                    continue
+
+                player.stocks[self.get_stock(decision.data['company_id'])] -= decision.data['quantity']
+                player.budget += self.get_stock(decision.data['company_id']) * decision.data['quantity']
 
             # покупка недвижимости
             elif code == 4:
@@ -253,6 +257,11 @@ class InGameRoom:
                     continue
 
                 player.budget -= realty.cost
+
+                if realty.need_for_win:
+                    self.player_win(player)
+                    return None  # завершение работы обработчика
+
                 player.realty.append(realty)
                 realty.owner = player
 
@@ -275,11 +284,11 @@ class InGameRoom:
 
         print('')
 
-    def next_stage(self):
-        def make_all_players_unready():
-            for player in self.players:
-                player.ready = False
+    def make_all_players_unready(self):
+        for player in self.players:
+            player.ready = False
 
+    def next_stage(self):
         print('')
         print(f'{self} go to next stage')
         print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
@@ -289,7 +298,7 @@ class InGameRoom:
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
             print('')
 
-            make_all_players_unready()
+            self.make_all_players_unready()
             self.stocks_cards = self.share_generator()
 
             for player in self.players:
@@ -321,7 +330,7 @@ class InGameRoom:
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
             print('')
 
-            make_all_players_unready()
+            self.make_all_players_unready()
             with open('./data/events.json', encoding='utf-8') as file:
                 all_events = json.loads(file.read())['events']
 
@@ -353,8 +362,37 @@ class InGameRoom:
             self.save_to_db()
             clear_playzone(self.id)
 
+    def player_win(self, player_obj):
+        print('')
+        print(f'clearing all data in {self}')
+        for player in self.players:  # сброс игроков
+            player.ready = False
+            player.budget = START_BUDGET
+
+            start_stocks = dict()
+            for stock in self.stock_list:
+                start_stocks[stock] = 0
+
+            player.stocks = start_stocks
+            player.realty = []
+
+        with open('./data/stock.json') as file:
+            companies = json.loads(file.read())['companies']
+
+        for stock in self.stock_list:  # сброс цен акций
+            stock.cost = companies[stock.id]['cost']
+
+        self.stage = -1
+
+        win(self.id, player_obj)
+        update_stock_table(self.id)
+
+        print(f'players: {self.players}')
+        print(f'stock: {self.stock_list}')
+        print('')
+
     def __repr__(self):
-        return f'<InGameRoom> {self.title}'
+        return f'<InGameRoom> id: {self.id} title: {self.title}'
 
 
 class InGamePlayer:
@@ -410,7 +448,7 @@ class InGamePlayer:
                f'{"|".join(list(map(lambda x: x.id, self.realty)))}'
 
     def __repr__(self):
-        return f'<InGamePlayer> {self.nickname}'
+        return f'<InGamePlayer> id: {self.id} nickname: {self.nickname}'
 
 
 class Decision:
@@ -454,9 +492,11 @@ class Stock:
 
 class Realty:
     def __init__(self, realty_dict):
-        self.id = realty_dict["id"]
-        self.cost = realty_dict["realty_cost"]
-        self.bonus = realty_dict["realty_bonus"]
+        self.id = int(realty_dict["id"])
+        self.need_for_win = bool(realty_dict["need_for_win"])
+        self.name = str(realty_dict["realty_name"])
+        self.cost = int(realty_dict["realty_cost"])
+        self.bonus = int(realty_dict["realty_bonus"])
         self.owner = None  # куплена ли игроком
 
     def __repr__(self):
