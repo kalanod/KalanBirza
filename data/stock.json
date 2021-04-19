@@ -94,9 +94,9 @@
 
             {"id": 8,
               "department_id": 8,
-              "name": "OUnity Games",
-              "short_name": "OUG",
-              "img": "img/OUG.jpg",
+              "name": "ecoLine",
+              "short_name": "ELN",
+              "img": "img/ELN.png",
               "need_for_win": 0,
               "stock_cost": 340,
               "stock_lowest_cost": 34,
