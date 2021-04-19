@@ -135,9 +135,13 @@ def create_room(title, creator_id):
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def connect_to_room(room_id, player_id):
-    # какие-нибудь проверки
-    get_room(room_id).add_player(player_id)
-    return redirect(f'/room/{room_id}')
+    room = get_room(room_id)
+    if room.player_in_room(player_id) or room.stage == -1:
+        room.add_player(player_id)
+        return redirect(f'/room/{room_id}')
+
+    else:
+        return redirect('/')
 
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -169,6 +173,10 @@ def update_case(room_id, json):
 
 def clear_playzone(room_id):
     emit('clear_playzone', to=room_id)
+
+
+def win(room_id, player):
+    emit('win', player, to=room_id)
 
 
 @socketIO.on('make_turn')
