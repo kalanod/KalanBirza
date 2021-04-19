@@ -284,7 +284,7 @@
             margin-top: 10%;
             margin-left: auto;
             margin-right: auto;
-            //display: none;
+        / / display: none;
         }
 
 
@@ -295,15 +295,15 @@
     <div id="players">
         <div class="online">
             {% for player in current_room.players %}
-            {% if player.id != current_user.id %}
-            <a href="#">
-                <div class="player_card">
-                    <h5 id="player_name">{{ player.nickname }}</h5>
-                    <h5>{{ player.budget }}</h5>
-                    <h5>{{ player.online }}</h5>
-                </div>
-            </a>
-            {% endif %}
+                {% if player.id != current_user.id %}
+                    <a href="#">
+                        <div class="player_card">
+                            <h5 id="player_name">{{ player.nickname }}</h5>
+                            <h5>{{ player.budget }}</h5>
+                            <h5>{{ player.online }}</h5>
+                        </div>
+                    </a>
+                {% endif %}
             {% endfor %}
         </div>
         <a href="/">
@@ -322,16 +322,16 @@
             </div>
         </div>
         {% for stock in current_room.stock_list %}
-        <div class="row_price">
-            <a href="#">
-                <div class="price_card">
-                    <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
-                    <div class="l_prise_stonk"><h5 id="l_price_{{ stock.id }}"> {{ stock.lowest_cost }} </h5></div>
-                    <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
-                    <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
-                </div>
-            </a>
-        </div>
+            <div class="row_price">
+                <a href="#">
+                    <div class="price_card">
+                        <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
+                        <div class="l_prise_stonk"><h5 id="l_price_{{ stock.id }}"> {{ stock.lowest_cost }} </h5></div>
+                        <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
+                        <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div>
+                    </div>
+                </a>
+            </div>
         {% endfor %}
 
     </div>
@@ -344,34 +344,34 @@
         <div class="play_zone">
             <div class="stonks_for_sale" id="stonks_for_sale">
                 {% for i in range(3) %}
-                <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px"
-                     id="stonk_{{ i }}">
-                    <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
-                         class="card-img-top"
-                         alt="...">
-                    <div class="card-body">
-                        <h5 class="card-title">Card title</h5>
-                        <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
-                        <h5 id="count_s" style="margin-left: 15px"> count </h5>
-                        <p class="card-text"> Карта акций 0</p>
-                        <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
+                    <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px"
+                         id="stonk_{{ i }}">
+                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                             class="card-img-top"
+                             alt="...">
+                        <div class="card-body">
+                            <h5 class="card-title">Card title</h5>
+                            <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
+                            <h5 id="count_s" style="margin-left: 15px"> count </h5>
+                            <p class="card-text"> Карта акций 0</p>
+                            <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
+                               style="margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
             <div class="case" id="case">
                 {% for i in range(2) %}
-                <div class="card" style="width: 47%; height: 150%; float: left; margin-right: 10px"
-                     id="case_{{ i }}">
-                    <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
-                         class="card-img-top"
-                         alt="..." style="height: 10%">
-                    <h5 class="card-title">Card title</h5>
-                    <div class="card-body">
+                    <div class="card" style="width: 47%; height: 150%; float: left; margin-right: 10px"
+                         id="case_{{ i }}">
+                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                             class="card-img-top"
+                             alt="..." style="height: 10%">
+                        <h5 class="card-title">Card title</h5>
+                        <div class="card-body">
 
+                        </div>
                     </div>
-                </div>
                 {% endfor %}
             </div>
         </div>
@@ -386,12 +386,12 @@
                 <li><a href=#>Недвижимость</a>
                     <ul class="ssubmenuu">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
-                        <li>
-                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
-                            <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px">
-                                название </h6>
-                            <a href="#"> . </a>
-                        </li>
+                            <li>
+                                <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                                <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px">
+                                    название </h6>
+                                <a href="#"> . </a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -402,12 +402,11 @@
                 <li><a href=#>Портфель</a>
                     <ul class="ssubmenuu" id="bag">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
-                        <li>
-                            <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
-                            <h6 style="float: left; margin: 10px">{{
-                                current_room.get_player(current_user.id).stocks[stock] }}</h6>
-                            <a href="#">продать</a>
-                        </li>
+                            <li>
+                                <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
+                                <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
+                                <a href="#">продать</a>
+                            </li>
                         {% endfor %}
                     </ul>
                 </li>
@@ -483,19 +482,16 @@
         socket.on('update_bag', function (data) {
             $('#bag').empty()
             {% for stock in current_room.get_player(current_user.id).stocks %}
-                $(document.querySelector('#case_' + String(fid) + '> div')).append('<li><h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>')
-
-
-                    <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
-                    <a href="#">продать</a>
-                </li>
+                $(document.querySelector('#case_' + String(fid) + '> div')).append('<li><h6 style="fl' +
+                    'oat: left; margin: 10px">{{ stock.short_name }}</h6>< h6style = "float: left; margin: 10px" ><' +
+                    '{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>< a href = "#" > продать</a></li>')
             {% endfor %}
         });
         socket.on('update_stock_table', function (data) {
 
             {% for i in range(9) %}
 
-                console.log({{data.stock_list[i - 1].short_name}})
+
                 $('#com_' + {{i}}).text('{{ current_room.stock_list[i - 1].short_name }}')
                 $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i - 1].lowest_cost }}')
                 $('#price_' + {{i}}).text('{{ current_room.stock_list[i - 1].cost }}')
