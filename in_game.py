@@ -298,6 +298,10 @@ class InGameRoom:
         print(f'{self} go to next stage')
         print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
 
+        update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
+                                      'lowest_cost': self.stock_list[i].lowest_cost,
+                                      'cost': self.stock_list[i].cost} for i in range(9)])
+
         if self.stage == -1:
             self.stage = 1
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
@@ -364,7 +368,7 @@ class InGameRoom:
 
                 for i in range(2):
                     event = random.choice(all_events)
-                    #print(f'event {i + 1}: {event}')
+                    print(f'event {i + 1}: {event}')
                     # показываем событие игрокам
                     out_json[event['description']] = dict()
 
@@ -378,7 +382,6 @@ class InGameRoom:
                                     out_json[event['description']][stock.name] = change['value']
 
                 update_case(self.id, out_json)
-                update_stock_table(self.id)
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
@@ -411,7 +414,9 @@ class InGameRoom:
         self.stage = -1
 
         win(self.id, player_obj)
-        update_stock_table(self.id)
+        update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
+                                      'lowest_cost': self.stock_list[i].lowest_cost,
+                                      'cost': self.stock_list[i].cost} for i in range(9)])
 
         print(f'players: {self.players}')
         print(f'stock: {self.stock_list}')

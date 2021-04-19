@@ -491,12 +491,13 @@
                     '{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>< a href = "#" > продать</a></li>')
             {% endfor %}
         });
+
         socket.on('update_stock_table', function (json) {
             console.log(json)
             {% for i in range(9) %}
-                $('#com_' + {{i}}).text(json[i]['short_name'])
-                $('#l_price_' + {{i}}).text(json[i]['lowest_cost'])
-                $('#price_' + {{i}}).text(json[i]['cost'])
+                $('#com_' + {{ i }}).text(json[{{ i }}]['short_name'])
+                $('#l_price_' + {{ i }}).text(json[{{ i }}]['lowest_cost'])
+                $('#price_' + {{ i }}).text(json[{{ i }}]['cost'])
                 //console.log('{{ current_room.stock_list[i - 1].short_name }}')
             {% endfor %}
         });
@@ -545,7 +546,6 @@
             for (player in json['data'])
                 $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
                     'ame" >' + player["nickname"] + '</h5><h5>' + player["budget"] + '</h5></div></a>')
-            {% endfor %}
         });
 
         socket.on('remove_players', player => {

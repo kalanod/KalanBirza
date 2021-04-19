@@ -58,7 +58,6 @@ def base():
     db_sess = db_session.create_session()
     params = dict()
     params["title"] = "Title"
-    #print(db_sess.query(Rooms).all())
     params["rooms"] = active_rooms
 
     return render_template('index.html', **params)
@@ -161,19 +160,12 @@ def update_stock_cards(room_id, json):
     emit('update_stock_cards', json, to=room_id)
 
 
-def update_stock_table(room_id):
-    current_room = get_room(room_id)
-    json = [{'short_name': current_room.stock_list[i].short_name,
-             'lowest_cost': current_room.stock_list[i].lowest_cost,
-             'cost': current_room.stock_list[i].cost} for i in range(9)]
+def update_stock_table(room_id, json):
     emit('update_stock_table', json, to=room_id)
 
 
 def update_case(room_id, json):
     emit('update_case', json, to=room_id)
-    print(room_id)
-    update_stock_table(room_id)
-
 
 
 def clear_playzone(room_id):
@@ -182,9 +174,6 @@ def clear_playzone(room_id):
 
 def win(room_id, player):
     emit('win', player, to=room_id)
-
-
-
 
 
 @socketIO.on('decision')
@@ -204,7 +193,7 @@ def make_decision(json):
 def detele_room(room_id):
     room_id = int(room_id)
     global active_rooms
-    #print('')
+    print('')
     room = get_room(room_id)
     if room is None:
         print(f'room with id {room_id} not found')
@@ -277,8 +266,6 @@ def main():
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 
-    print(active_rooms)
-    print(get_room(active_rooms[0].id))
     port = int(os.environ.get("PORT", 5000))
     # app.run(host='0.0.0.0', port=port)
     app.run(debug=True)
