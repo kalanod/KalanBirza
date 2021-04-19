@@ -298,9 +298,7 @@ class InGameRoom:
         print(f'{self} go to next stage')
         print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
 
-        update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
-                                      'lowest_cost': self.stock_list[i].lowest_cost,
-                                      'cost': self.stock_list[i].cost} for i in range(9)])
+
 
         if self.stage == -1:
             self.stage = 1
@@ -322,6 +320,7 @@ class InGameRoom:
                                              "img": card.stock.company_logo_address}
 
             update_stock_cards(self.id, out_json)
+
 
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
@@ -390,6 +389,10 @@ class InGameRoom:
 
             self.save_to_db()
             clear_playzone(self.id)
+
+        update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
+                                      'lowest_cost': self.stock_list[i].lowest_cost,
+                                      'cost': self.stock_list[i].cost} for i in range(9)])
 
     def player_win(self, player_obj):
         print('')
