@@ -483,7 +483,6 @@
         socket.on('update_bag', function (data) {
             $('#bag').empty()
             {% for stock in current_room.get_player(current_user.id).stocks %}
-
                 $(document.querySelector('#case_' + String(fid) + '> div')).append('<li><h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>')
 
 
