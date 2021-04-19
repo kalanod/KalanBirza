@@ -337,7 +337,7 @@
     </div>
     <div id="board">
         <div class="progress" style="float: bottom">
-            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="25"
+            <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
         </div>
@@ -422,6 +422,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
+        var progress = 0
         var socket = io();
         socket.on('connect', function () {
             socket.emit('join', {{current_room.id}});
@@ -431,7 +432,7 @@
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
-            socket.emit('make_turn')
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -440,7 +441,7 @@
                 })
         });
         $('#card_0').click(function () {
-            socket.emit('make_turn')
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -450,7 +451,7 @@
                 })
         });
         $('#card_1').click(function () {
-            socket.emit('make_turn')
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -460,7 +461,7 @@
                 })
         });
         $('#card_2').click(function () {
-            socket.emit('make_turn')
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -476,8 +477,12 @@
                 a++
             {% endfor %}
             var s = getComputedStyle(document.getElementById('progress-bar')).width;
-            console.log(s)
-            document.getElementById('progress-bar').style.width = s + '15%';
+            if (progress == 100) {
+                progress = 0
+            } else {
+                progress = progress + 100 / a
+            }
+            document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
         socket.on('update_bag', function (data) {
             $('#bag').empty()
@@ -487,24 +492,23 @@
                     '{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>< a href = "#" > продать</a></li>')
             {% endfor %}
         });
-        socket.on('update_stock_table', function (data) {
-
+        socket.on('update_stock_table', function (json) {
+            console.log(json)
             {% for i in range(9) %}
-
-
-                $('#com_' + {{i}}).text('{{ current_room.stock_list[i - 1].short_name }}')
-                $('#l_price_' + {{i}}).text('{{ current_room.stock_list[i - 1].lowest_cost }}')
-                $('#price_' + {{i}}).text('{{ current_room.stock_list[i - 1].cost }}')
+                $('#com_' + {{i}}).text(json[i]['short_name'])
+                $('#l_price_' + {{i}}).text(json[i]['lowest_cost'])
+                $('#price_' + {{i}}).text(json[i]['cost'])
                 //console.log('{{ current_room.stock_list[i - 1].short_name }}')
             {% endfor %}
         });
 
         socket.on('update_stock_cards', function (data) {
+
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
             for (var key in data) {
-                console.log(data[key])
+               // console.log(data[key])
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
                 document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
@@ -514,11 +518,12 @@
             }
         });
         socket.on('update_case', function (data) {
+
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
             var fid = 0
             for (var key in data) {
-                console.log(data)
+                //console.log(data)
                 $(document.querySelector('#case_' + String(fid) + ' > div')).empty()
                 //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
                 document.querySelector('#case_' + String(fid) + ' > h5').innerHTML = key
@@ -549,14 +554,14 @@
         socket.on('remove_players', player => {
             $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
-            console.log('aaaaaaaaaaa')
+            //console.log('aaaaaaaaaaa')
 
         });
 
         socket.on('add_players', player => {
             $('#players').append('<a href="#"><div class="player_card"><h5 id=' +
                 '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
-            console.log('aaaaaaaaaaa')
+
 
         });
 

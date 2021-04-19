@@ -21,7 +21,7 @@ import os
 import random
 import time
 
-print(os.getcwd())
+#print(os.getcwd())
 
 app = Flask(__name__)
 api = Api(app)
@@ -58,7 +58,7 @@ def base():
     db_sess = db_session.create_session()
     params = dict()
     params["title"] = "Title"
-    print(db_sess.query(Rooms).all())
+    #print(db_sess.query(Rooms).all())
     params["rooms"] = active_rooms
 
     return render_template('index.html', **params)
@@ -162,13 +162,19 @@ def update_stock_cards(room_id, json):
 
 
 def update_stock_table(room_id):
-    data = get_room(room_id)
-    emit('update_stock_table', data, to=room_id)
+    current_room = get_room(room_id)
+    print(current_room, 'current_room')
+    json = [{'short_name': current_room.stock_list[i].short_name,
+             'lowest_cost': current_room.stock_list[i].lowest_cost,
+             'cost': current_room.stock_list[i].cost} for i in range(9)]
+    emit('update_stock_table', json, to=room_id)
 
 
 def update_case(room_id, json):
     emit('update_case', json, to=room_id)
+    print(room_id)
     update_stock_table(room_id)
+
 
 
 def clear_playzone(room_id):
@@ -179,22 +185,19 @@ def win(room_id, player):
     emit('win', player, to=room_id)
 
 
-@socketIO.on('make_turn')
-def make_turn():
-    emit('make_turn')
+
 
 
 @socketIO.on('decision')
 def make_decision(json):
 
-    print('get_decision from server')
-    print(f'json: {json}')
-
+    #nt('get_decision from server')
+    #print(f'json: {json}')
     room_id = int(json['room_id'])
     get_room(room_id).add_decision_to_queue(json)
-
     # пока добавим обработку всех решений в очереди сюда
     get_room(room_id).decision_handler()
+    emit('make_turn', to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
@@ -202,21 +205,21 @@ def make_decision(json):
 def detele_room(room_id):
     room_id = int(room_id)
     global active_rooms
-    print('')
+    #print('')
     room = get_room(room_id)
     if room is None:
         print(f'room with id {room_id} not found')
         return redirect('/')
 
-    print(f'deleting {room}')
-    print(f'rooms before deleting: {active_rooms}')
+    #print(f'deleting {room}')
+    #print(f'rooms before deleting: {active_rooms}')
     active_rooms.remove(room)
     db_sess = db_session.create_session()
     room_from_bd = db_sess.query(Rooms).get(room_id)
     db_sess.delete(room_from_bd)
     db_sess.commit()
-    print(f'rooms before deleting: {active_rooms}')
-    print('')
+    #print(f'rooms before deleting: {active_rooms}')
+    #print('')
 
     return redirect('/')
 
