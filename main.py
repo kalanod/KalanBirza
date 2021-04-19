@@ -163,7 +163,6 @@ def update_stock_cards(room_id, json):
 
 def update_stock_table(room_id):
     current_room = get_room(room_id)
-    print(current_room, 'current_room')
     json = [{'short_name': current_room.stock_list[i].short_name,
              'lowest_cost': current_room.stock_list[i].lowest_cost,
              'cost': current_room.stock_list[i].cost} for i in range(9)]
@@ -191,8 +190,8 @@ def win(room_id, player):
 @socketIO.on('decision')
 def make_decision(json):
 
-    #nt('get_decision from server')
-    #print(f'json: {json}')
+    print('get_decision from server')
+    print(f'json: {json}')
     room_id = int(json['room_id'])
     get_room(room_id).add_decision_to_queue(json)
     # пока добавим обработку всех решений в очереди сюда
@@ -211,15 +210,15 @@ def detele_room(room_id):
         print(f'room with id {room_id} not found')
         return redirect('/')
 
-    #print(f'deleting {room}')
-    #print(f'rooms before deleting: {active_rooms}')
+    print(f'deleting {room}')
+    print(f'rooms before deleting: {active_rooms}')
     active_rooms.remove(room)
     db_sess = db_session.create_session()
     room_from_bd = db_sess.query(Rooms).get(room_id)
     db_sess.delete(room_from_bd)
     db_sess.commit()
-    #print(f'rooms before deleting: {active_rooms}')
-    #print('')
+    print(f'rooms before deleting: {active_rooms}')
+    print('')
 
     return redirect('/')
 
@@ -278,6 +277,8 @@ def main():
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 
+    print(active_rooms)
+    print(get_room(active_rooms[0].id))
     port = int(os.environ.get("PORT", 5000))
     # app.run(host='0.0.0.0', port=port)
     app.run(debug=True)

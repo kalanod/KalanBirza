@@ -49,21 +49,21 @@ class InGameRoom:
         for player_data in players_string:
             self.players.append(InGamePlayer(player_data, self))
 
-        #print('')
-        #print(f'load of room with id {self.id} complete')
-        #print('')
-        #print('loaded stocks:')
+        print('')
+        print(f'load of room with id {self.id} complete')
+        print('')
+        print('loaded stocks:')
         for stock in self.stock_list:
             print(stock)
-        #print('')
-        #print('loaded realty:')
+        print('')
+        print('loaded realty:')
         for realty in self.realty_list:
             print(realty)
-        #print('')
-        #print('loaded players:')
+        print('')
+        print('loaded players:')
         for player in self.players:
             print(player)
-        #print('')
+        print('')
 
         self.stages = {
             -1: "Подготовка к игре между играми",
@@ -77,8 +77,8 @@ class InGameRoom:
         self.decisions_queue = []
 
     def save_to_db(self):
-        #print('')
-        #print(f'saving room {self.id} to bd...')
+        print('')
+        print(f'saving room {self.id} to bd...')
         # создаем строки на основе данных комнаты и игроков для сохранения в ДБ
         data = ' '.join(list(map(lambda x: x.get_string_for_bd(), self.stock_list)))
         players = ' '.join(list(map(lambda x: x.get_string_for_bd(), self.players)))
@@ -89,11 +89,11 @@ class InGameRoom:
             room.players = players
             db_sess.commit()
 
-            #print(f'saving room {self.id} to bd complete')
-            ##print(f'stocks data: {data}')
-            #(f'players data: {players}')
-            #print(self.players)
-            #print('')
+            print(f'saving room {self.id} to bd complete')
+            print(f'stocks data: {data}')
+            print(f'players data: {players}')
+            print(self.players)
+            print('')
 
         else:
             print(f"not find room {self.id}")
@@ -101,11 +101,11 @@ class InGameRoom:
     def add_decision_to_queue(self, json):
         player = self.get_player(int(json['player_id']))
         code = (json['code'])
-        #print('')
-        #print(f'decision added to queue of {self} by {player}')
-        #print(f'code: {code}')
-        #print(f'json: {json}')
-        #print('')
+        print('')
+        print(f'decision added to queue of {self} by {player}')
+        print(f'code: {code}')
+        print(f'json: {json}')
+        print('')
         self.decisions_queue.append(Decision(player, json))
 
     def add_player(self, player_id):
@@ -115,11 +115,11 @@ class InGameRoom:
 
         self.get_player(player_id).online = True
 
-        #print('')
-        #print(f'{self.get_player(player_id)} join to {self}')
-        #print(f'online players: {self.get_online_players()}')
-        #print(f'ingame players: {self.players}')
-        #print('')
+        print('')
+        print(f'{self.get_player(player_id)} join to {self}')
+        print(f'online players: {self.get_online_players()}')
+        print(f'ingame players: {self.players}')
+        print('')
 
     def leave_player(self, player_id):
         if self.player_in_room(player_id):
@@ -130,11 +130,11 @@ class InGameRoom:
             else:
                 self.get_player(player_id).online = False
 
-        #('')
-        #print(f'{self.get_player(player_id)} leave from {self}')
-        #print(f'online players: {self.get_online_players()}')
-        #print(f'ingame players: {self.players}')
-        #print('')
+        print('')
+        print(f'{self.get_player(player_id)} leave from {self}')
+        print(f'online players: {self.get_online_players()}')
+        print(f'ingame players: {self.players}')
+        print('')
 
     def player_in_room(self, player_id):
         return any([player_id == player.id for player in self.players])
@@ -194,16 +194,16 @@ class InGameRoom:
         return conclusion
 
     def decision_handler(self):
-        #print('')
-        #print(f'decision_handler of {self} started')
-        #print('decisions:')
+        print('')
+        print(f'decision_handler of {self} started')
+        print('decisions:')
 
         while len(self.decisions_queue) > 0:
             decision = self.decisions_queue.pop(0)
             code = decision.code
             player = decision.player
 
-            #print(decision)
+            print(decision)
 
             # игрок готов
             if code == 1:
@@ -294,14 +294,14 @@ class InGameRoom:
             player.ready = False
 
     def next_stage(self):
-        #('')
-       # print(f'{self} go to next stage')
-        #print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
+        print('')
+        print(f'{self} go to next stage')
+        print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
 
         if self.stage == -1:
             self.stage = 1
-           # print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
-           #print('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
 
             self.make_all_players_unready()
             self.stocks_cards = self.share_generator()
@@ -321,8 +321,8 @@ class InGameRoom:
 
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
-            #print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
-            #print('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
 
             self.make_all_players_unready()
             self.stocks_cards = self.share_generator()
@@ -342,8 +342,8 @@ class InGameRoom:
 
         elif self.stage == 1:
             self.stage = 2
-            #print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
-            #print('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
 
             # аукцион и добавление акций пока пропустим, для теста их получат все, кто купил
             for card in self.stocks_cards:
@@ -353,8 +353,8 @@ class InGameRoom:
 
         elif self.stage == 2:
             self.stage = 3
-            #print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
-            #print('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
 
             self.make_all_players_unready()
             with open('./data/events.json', encoding='utf-8') as file:
@@ -382,15 +382,15 @@ class InGameRoom:
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
-            #print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
-            #('')
+            print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
+            print('')
 
             self.save_to_db()
             clear_playzone(self.id)
 
     def player_win(self, player_obj):
-        #print('')
-        #print(f'clearing all data in {self}')
+        print('')
+        print(f'clearing all data in {self}')
         for player in self.players:  # сброс игроков
             player.ready = False
             player.budget = START_BUDGET
@@ -413,9 +413,9 @@ class InGameRoom:
         win(self.id, player_obj)
         update_stock_table(self.id)
 
-        #print(f'players: {self.players}')
-        #print(f'stock: {self.stock_list}')
-        #print('')
+        print(f'players: {self.players}')
+        print(f'stock: {self.stock_list}')
+        print('')
 
         self.save_to_db()
 
