@@ -13,7 +13,7 @@
 Свергли Путина:KalanCO+20,Aerospace+30,miChem+20,NiccoDixit+30,shesterochka+20,mining+30,Yeniseimetal forces+20,ecoLine+30,FusCon+20
 Полет на марс:KalanCO+0,Aerospace+100,miChem+20,NiccoDixit+20,shesterochka+0,mining+0,Yeniseimetal forces+0,ecoLine+10,FusCon+10
 Быстрорастущий вид древесины:KalanCO+0,Aerospace+0,miChem+30,NiccoDixit+0,shesterochka+10,mining+0,Yeniseimetal forces+0,ecoLine+100,FusCon+0
-Ледники тают:KalanCO+0,Aerospace+10,miChem+0,NiccoDixit+0,shesterochka+0,mining+0,Yeniseimetal forces+0,ecoLine+20,FusCon+0
+Ледники тают:KalanCO+10,Aerospace+10,miChem+0,NiccoDixit+0,shesterochka+0,mining+0,Yeniseimetal forces+0,ecoLine+20,FusCon+0
 Опять апокалипсис:KalanCO+0,Aerospace+20,miChem+0,NiccoDixit-10,shesterochka-10,mining+0,Yeniseimetal forces+0,ecoLine+10,FusCon+0
 Нашли источник вечной жизни:KalanCO+0,Aerospace+40,miChem+50,NiccoDixit+50,shesterochka+10,mining+0,Yeniseimetal forces+10,ecoLine+40,FusCon+30
 Научились лечить рак:KalanCO+0,Aerospace+20,miChem+20,NiccoDixit+20,shesterochka+0,mining+0,Yeniseimetal forces+0,ecoLine+0,FusCon+0
