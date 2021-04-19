@@ -227,7 +227,13 @@ def detele_room(room_id):
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
-    emit('update_players', to=room)
+    current_room = get_room(room)
+    json = {'data': []}
+    for player in current_room.players:
+        if player.id != current_user.id:
+            json['data'].append(
+                {'nickname': player.nickname, 'budget': player.budget})
+    emit('update_players', json, to=room)
 
 
 @socketIO.on('disconnect')

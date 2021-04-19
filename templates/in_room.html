@@ -284,7 +284,7 @@
             margin-top: 10%;
             margin-left: auto;
             margin-right: auto;
-        / / display: none;
+            display: none;
         }
 
 
@@ -476,7 +476,6 @@
             {% for player in current_room.players %}
                 a++
             {% endfor %}
-            var s = getComputedStyle(document.getElementById('progress-bar')).width;
             if (progress == 100) {
                 progress = 0
             } else {
@@ -508,7 +507,7 @@
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
             for (var key in data) {
-               // console.log(data[key])
+                // console.log(data[key])
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
                 document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
@@ -538,16 +537,14 @@
         });
         socket.on('clear_playzone', function (data) {
             document.getElementById('case').style.display = 'None';
-            document.getElementById('case').style.display = 'None';
+
         });
 
-        socket.on('update_players', function () {
+        socket.on('update_players', function (json) {
             $('#online').empty()
-            {% for player in current_room.players %}
-                {% if player.id != current_user.id %}
-                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
-                        'ame" >{{player.nickname}} </h5><h5>{{player.budget}} </h5></div></a>')
-                {% endif %}
+            for (player in json['data'])
+                $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
+                    'ame" >' + player["nickname"] + '</h5><h5>' + player["budget"] + '</h5></div></a>')
             {% endfor %}
         });
 
