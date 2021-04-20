@@ -479,10 +479,10 @@
             document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
         socket.on('update_bag', function (data) {
-            $('#bag').empty()
         if (data['id'] == {{current_user.id}}){
+            $('#bag').empty()
             for (var stonk in data['data']){
-                $('#bag').append('<li><h6 style="float: left; margin: 10px">' + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['cost'] + '</h6><a href = "#"> продать</a></li>')
+                $('#bag').append('<li><h6 style="float: left; margin: 10px">' + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['stocks'] + '</h6><a href = "#"> продать</a></li>')
 
             }
         }
@@ -491,10 +491,10 @@
         socket.on('update_stock_table', function (json) {
             console.log(json)
             {% for i in range(9) %}
-                $('#com_' + {{ i }}).text(json[{{ i - 1}}]['short_name'])
-                $('#l_price_' + {{ i }}).text(json[{{ i - 1}}]['lowest_cost'])
-                $('#price_' + {{ i }}).text(json[{{ i - 1}}]['cost'])
-                //console.log('{{ current_room.stock_list[i - 1].short_name }}')
+                $('#com_' + {{ i }}).text(json[{{ i }}]['short_name'])
+                $('#l_price_' + {{ i }}).text(json[{{ i}}]['lowest_cost'])
+                $('#price_' + {{ i }}).text(json[{{ i }}]['cost'])
+
             {% endfor %}
         });
 

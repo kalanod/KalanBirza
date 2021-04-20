@@ -189,7 +189,7 @@ def make_decision(json):
     emit('make_turn', players, to=room_id)
     emit('decision_on', to=room_id)
     print(room.get_player(int(json['player_id'])))
-    stonks = {'id': int(json['player_id']), 'data': [{'short_name': i.short_name, 'cost': i.cost} for i in room.get_player(int(json['player_id'])).stocks]}
+    stonks = {'id': int(json['player_id']), 'data': [{'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i in room.get_player(int(json['player_id'])).stocks]}
     print(stonks)
     emit('update_bag', stonks, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
