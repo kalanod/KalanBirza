@@ -194,8 +194,9 @@ def make_decision(json):
         in room.get_player(int(json['player_id'])).stocks]}
     print(stonks)
     emit('update_bag', stonks, to=room_id)
+    update_money(room_id, json['player_id'])
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
-    print('DASSasda')
+
 
 
 @app.route('/delete_room/<room_id>')
@@ -293,6 +294,13 @@ def get_room(room_id):
 def log(room_id):
     data = 'a'
     emit('log', to=room_id)
+
+
+def update_money(room, id):
+    print(get_room(room).players, id)
+    json = {'id': id,
+            'money': get_room(room).get_player(int(id)).budget}
+    emit('update_money', json, to=room)
 
 
 def add_friend(self_id, friend_id):

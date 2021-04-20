@@ -425,7 +425,7 @@
                 </li>
             </ul>
         </div>
-        <div class="me_elem">{{ current_room.get_player(current_user.id).budget }}</div>
+        <div class="me_elem" id="money">{{ current_room.get_player(current_user.id).budget }}</div>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
@@ -483,6 +483,12 @@
                     'code': '2',
                     "card_num": '2'
                 })
+        });
+        socket.on('update_money', function (data) {
+            if (data['id'] == {{ current_user.id }}) {
+                $('#money').text(data['money'])
+            }
+
         });
         socket.on('log', function (data) {
             $('#log').append('<h6 style="margin: 10px">' + data + '</h6>')
