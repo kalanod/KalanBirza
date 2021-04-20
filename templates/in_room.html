@@ -302,6 +302,26 @@
 </head>
 <body>
 <div class="main">
+    <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Игра окончена</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="name_winner">
+                    победил игрок
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary">заного</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div id="players">
         <div id="online">
             {% for player in current_room.players %}
@@ -440,13 +460,17 @@
         socket.on('connect', function () {
             socket.emit('join', {{current_room.id}});
         });
-
+        socket.on('win', function (data) {
+            $('#exampleModalCenter').modal('toggle')
+            $('#name_winner').text('Победил игрок' + data.nickname)
+        });
         $('#exit').click(function () {
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
             console.log({{ current_user.redy }})
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
