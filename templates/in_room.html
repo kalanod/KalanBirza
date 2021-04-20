@@ -353,7 +353,7 @@
                             <h5 class="card-title">Card title</h5>
                             <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
                             <h5 id="count_s" style="margin-left: 15px"> count </h5>
-                            <p class="card-text"> Карта акций 0</p>
+
                             <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
                                style="margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
                         </div>
@@ -362,11 +362,11 @@
             </div>
             <div class="case" id="case">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 47%; height: 150%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 40%; height: 230%; float: left; margin-right: 10px"
                          id="case_{{ i }}">
-                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                        <img src="https://www.conchovalleyhomepage.com/wp-content/uploads/sites/83/2020/05/BREAKING-NEWS-GENERIC-1.jpg"
                              class="card-img-top"
-                             alt="..." style="height: 10%">
+                             alt="..." style="height: 35%">
                         <h5 class="card-title">Card title</h5>
                         <div class="card-body">
 
@@ -523,7 +523,6 @@
             for (var key in data) {
                 //console.log(data)
                 $(document.querySelector('#case_' + String(fid) + ' > div')).empty()
-                //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
                 document.querySelector('#case_' + String(fid) + ' > h5').innerHTML = key
                 for (var value in data[key]) {
                     $(document.querySelector('#case_' + String(fid) + '> div')).append('<h5>' + value + ' ' + data[key][value] + '$</h5>')

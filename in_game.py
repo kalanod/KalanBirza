@@ -298,8 +298,6 @@ class InGameRoom:
         print(f'{self} go to next stage')
         print(f'{self} last stage is {self.stage} stage - {self.stages[self.stage]}')
 
-
-
         if self.stage == -1:
             self.stage = 1
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
@@ -321,7 +319,6 @@ class InGameRoom:
 
             update_stock_cards(self.id, out_json)
 
-
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
@@ -329,6 +326,8 @@ class InGameRoom:
 
             self.make_all_players_unready()
             self.stocks_cards = self.share_generator()
+
+            # КТО ПРОЧИТАЛ ТОТ ЗДОХНЕТ !!!!
 
             for player in self.players:
                 for realty in player.realty:
@@ -363,22 +362,31 @@ class InGameRoom:
             with open('./data/events.json', encoding='utf-8') as file:
                 all_events = json.loads(file.read())['events']
 
-                out_json = {}
+                while True:  # этот дикий костыль нужен для того, чтобы у нас все события влезали на карточки ИЗВИНИТЕ
+                    out_json = {}
 
-                for i in range(2):
-                    event = random.choice(all_events)
-                    print(f'event {i + 1}: {event}')
-                    # показываем событие игрокам
-                    out_json[event['description']] = dict()
+                    for i in range(2):
+                        event = random.choice(all_events)
+                        print(f'event {i + 1}: {event}')
+                        # показываем событие игрокам
+                        out_json[event['description']] = dict()
 
-                    for change in event['changes']:
-                        for stock in self.stock_list:
-                            if stock.department_id == change['department_id']:
-                                stock.cost += change['value']
-                                if stock.cost < stock.lowest_cost:
-                                    stock.cost = stock.lowest_cost
-                                if change['value'] != 0:
-                                    out_json[event['description']][stock.name] = change['value']
+                        for change in event['changes']:
+                            for stock in self.stock_list:
+                                if stock.department_id == change['department_id']:
+                                    stock.cost += change['value']
+                                    if stock.cost < stock.lowest_cost:
+                                        stock.cost = stock.lowest_cost
+                                    if change['value'] != 0:
+                                        if change['value'] < 0:
+                                            out_json[event['description']][stock.name] = str(change['value'])
+
+                                        else:
+                                            out_json[event['description']][stock.name] = f"+{str(change['value'])}"
+
+                    # надеюсь бог простит меня за этот костыль ИЗВИНИТЕ
+                    if all([len(out_json[key]) <= 6 for key in out_json.keys()]):
+                        break
 
                 update_case(self.id, out_json)
 
