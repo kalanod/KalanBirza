@@ -292,7 +292,7 @@ def get_room(room_id):
 
 def log(room_id):
     data = 'a'
-    emit('make_turn', to=room_id)
+    emit('log', to=room_id)
 
 
 def add_friend(self_id, friend_id):
