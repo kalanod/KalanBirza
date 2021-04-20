@@ -189,12 +189,13 @@ def make_decision(json):
     emit('make_turn', players, to=room_id)
     emit('decision_on', to=room_id)
     print(room.get_player(int(json['player_id'])))
-    stonks = {'id': int(json['player_id']), 'data': [{'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i in room.get_player(int(json['player_id'])).stocks]}
+    stonks = {'id': int(json['player_id']), 'data': [
+        {'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i
+        in room.get_player(int(json['player_id'])).stocks]}
     print(stonks)
     emit('update_bag', stonks, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
     print('DASSasda')
-
 
 
 @app.route('/delete_room/<room_id>')
@@ -287,6 +288,11 @@ def get_room(room_id):
             if room.id == room_id:
                 return room
     return None
+
+
+def log(room_id):
+    data = 'a'
+    emit('make_turn', to=room_id)
 
 
 def add_friend(self_id, friend_id):
