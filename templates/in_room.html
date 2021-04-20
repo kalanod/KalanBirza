@@ -346,7 +346,7 @@
                 {% for i in range(3) %}
                     <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px"
                          id="stonk_{{ i }}">
-                        <img src="https://bloggood.ru/wp-content/themes/bloggood/images/RSS-email.png"
+                        <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
                              class="card-img-top"
                              alt="...">
                         <div class="card-body">
@@ -509,7 +509,7 @@
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
                 document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
-                //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
+                document.querySelector('#stonk_' + String(fid) + '> img').src = '' + data[key]['img']
                 document.querySelector('#stonk_' + String(fid) + '> div > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
                 fid++
             }
