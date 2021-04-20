@@ -293,7 +293,7 @@
 <body>
 <div class="main">
     <div id="players">
-        <div class="online">
+        <div id="online">
             {% for player in current_room.players %}
                 {% if player.id != current_user.id %}
                     <a href="#">
@@ -376,7 +376,7 @@
             </div>
         </div>
         <div style="margin-left: 40%">
-            <a href="#" class="btn btn-primary" id="pas">Пропустить</a>
+            <button href="#" class="btn btn-primary" id="pas">Пропустить</button>
         </div>
     </div>
     <div id="me">
@@ -432,7 +432,8 @@
             socket.emit('leave', {{current_room.id}});
         });
         $('#pas').click(function () {
-
+            //document.getElementById("pas").disabled = true;
+            console.log({{ current_user.redy }})
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -441,7 +442,7 @@
                 })
         });
         $('#card_0').click(function () {
-
+            //document.getElementById("pas").disabled = true;
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -451,7 +452,7 @@
                 })
         });
         $('#card_1').click(function () {
-
+            //document.getElementById("pas").disabled = true;
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -461,7 +462,7 @@
                 })
         });
         $('#card_2').click(function () {
-
+            //document.getElementById("pas").disabled = true;
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -471,39 +472,35 @@
                 })
         });
 
-        socket.on('make_turn', function () {
-            var a = 0
-            {% for player in current_room.players %}
-                a++
-            {% endfor %}
-            if (progress == 100) {
-                progress = 0
-            } else {
-                progress = progress + 100 / a
-            }
+        socket.on('make_turn', function (data) {
+            console.log(data)
+            var ar = data[1] / data[0]
+            progress = 100 * ar
             document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
         socket.on('update_bag', function (data) {
             $('#bag').empty()
-            {% for stock in current_room.get_player(current_user.id).stocks %}
-                $(document.querySelector('#case_' + String(fid) + '> div')).append('<li><h6 style="fl' +
-                    'oat: left; margin: 10px">{{ stock.short_name }}</h6>< h6style = "float: left; margin: 10px" ><' +
-                    '{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>< a href = "#" > продать</a></li>')
-            {% endfor %}
+        if (data['id'] == {{current_user.id}}){
+            for (var stonk in data['data']){
+                $('#bag').append('<li><h6 style="float: left; margin: 10px">' + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['cost'] + '</h6><a href = "#"> продать</a></li>')
+
+            }
+        }
         });
 
         socket.on('update_stock_table', function (json) {
             console.log(json)
             {% for i in range(9) %}
-                $('#com_' + {{ i }}).text(json[{{ i }}]['short_name'])
-                $('#l_price_' + {{ i }}).text(json[{{ i }}]['lowest_cost'])
-                $('#price_' + {{ i }}).text(json[{{ i }}]['cost'])
+                $('#com_' + {{ i }}).text(json[{{ i - 1}}]['short_name'])
+                $('#l_price_' + {{ i }}).text(json[{{ i - 1}}]['lowest_cost'])
+                $('#price_' + {{ i }}).text(json[{{ i - 1}}]['cost'])
                 //console.log('{{ current_room.stock_list[i - 1].short_name }}')
             {% endfor %}
         });
 
         socket.on('update_stock_cards', function (data) {
-
+            document.getElementById("pas").disabled = false;
+            progress = 0
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
@@ -518,7 +515,8 @@
             }
         });
         socket.on('update_case', function (data) {
-
+            document.getElementById("pas").disabled = false;
+            progress = 0
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
             var fid = 0
@@ -528,7 +526,6 @@
                 //document.querySelector('#stonk_' + String(fid) + '> img').src = '//:' + data[key]['img']
                 document.querySelector('#case_' + String(fid) + ' > h5').innerHTML = key
                 for (var value in data[key]) {
-
                     $(document.querySelector('#case_' + String(fid) + '> div')).append('<h5>' + value + ' ' + data[key][value] + '$</h5>')
 
                 }
@@ -543,24 +540,14 @@
 
         socket.on('update_players', function (json) {
             $('#online').empty()
-            for (player in json['data'])
-                $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
-                    'ame" >' + player["nickname"] + '</h5><h5>' + player["budget"] + '</h5></div></a>')
+            for (var player in json['data'])
+                if (json['data'][player]) {
+                    console.log(json['data'])
+                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
+                        'ame" >' + json['data'][player]["nickname"] + '</h5><h5>' + json['data'][player]["budget"] + '</h5></div></a>')
+                }
         });
 
-        socket.on('remove_players', player => {
-            $('#players').remove('<a href="#"><div class="player_card"><h5 id=' +
-                '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
-            //console.log('aaaaaaaaaaa')
-
-        });
-
-        socket.on('add_players', player => {
-            $('#players').append('<a href="#"><div class="player_card"><h5 id=' +
-                '"player_name">$(player.nickname)</h5><h5>деньги</h5></div></a>')
-
-
-        });
 
         function refresh_rooms() {
 

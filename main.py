@@ -21,7 +21,7 @@ import os
 import random
 import time
 
-#print(os.getcwd())
+# print(os.getcwd())
 
 app = Flask(__name__)
 api = Api(app)
@@ -178,15 +178,23 @@ def win(room_id, player):
 
 @socketIO.on('decision')
 def make_decision(json):
-
     print('get_decision from server')
     print(f'json: {json}')
     room_id = int(json['room_id'])
-    get_room(room_id).add_decision_to_queue(json)
+    room = get_room(room_id)
+    room.add_decision_to_queue(json)
     # пока добавим обработку всех решений в очереди сюда
-    get_room(room_id).decision_handler()
-    emit('make_turn', to=room_id)
+    room.decision_handler()
+    players = [len(room.players), len([i for i in room.players if i.ready])]
+    emit('make_turn', players, to=room_id)
+    emit('decision_on', to=room_id)
+    print(room.get_player(int(json['player_id'])))
+    stonks = {'id': int(json['player_id']), 'data': [{'short_name': i.short_name, 'cost': i.cost} for i in room.get_player(int(json['player_id'])).stocks]}
+    print(stonks)
+    emit('update_bag', stonks, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
+    print('DASSasda')
+
 
 
 @app.route('/delete_room/<room_id>')
@@ -218,17 +226,24 @@ def on_join(room):
     current_room = get_room(room)
     json = {'data': []}
     for player in current_room.players:
-        if player.id != current_user.id:
-            json['data'].append(
-                {'nickname': player.nickname, 'budget': player.budget})
+        json['data'].append(
+            {'nickname': player.nickname, 'budget': player.budget})
     emit('update_players', json, to=room)
 
 
 @socketIO.on('disconnect')
 def disconnect():
     for room in active_rooms:
+
         room.leave_player(current_user.id)
-        emit('update_players', to=room.id)
+        current_room = room
+        print('rrrrrrrrrom', active_rooms, room)
+        print(current_room)
+        json = {'data': []}
+        for player in current_room.players:
+            json['data'].append(
+                {'nickname': player.nickname, 'budget': player.budget})
+        emit('update_players', json, to=room)
 
 
 @socketIO.on('leave')
@@ -236,7 +251,12 @@ def on_leave(room):
     leave_room(room)
     user = current_user.id
     get_room(room).leave_player(user)
-    emit('update_players', to=room)
+    current_room = get_room(room)
+    json = {'data': []}
+    for player in current_room.players:
+        json['data'].append(
+            {'nickname': player.nickname, 'budget': player.budget})
+    emit('update_players', json, to=room)
 
 
 @socketIO.event
@@ -244,16 +264,6 @@ def add_message(json, room_id):
     get_room(room_id)
     room = '1'
     emit('new_message', json, to=room)
-
-
-@socketIO.on('add_players')
-def add_players(room):
-    emit('update_players', to=room)
-
-
-@socketIO.on('remove_players')
-def remove_players(room):
-    emit('remove_players', to=room)
 
 
 def main():
