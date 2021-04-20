@@ -20,7 +20,7 @@ class InGameRoom:
 
         self.stock_list = []
         self.realty_list = []
-        with open('./data/stock.json') as file:
+        with open('./static/stock.json') as file:
             companies = json.loads(file.read())['companies']
 
             data_from_bd = dict()
@@ -359,7 +359,7 @@ class InGameRoom:
             print('')
 
             self.make_all_players_unready()
-            with open('./data/events.json', encoding='utf-8') as file:
+            with open('./static/events.json', encoding='utf-8') as file:
                 all_events = json.loads(file.read())['events']
 
                 while True:  # этот дикий костыль нужен для того, чтобы у нас все события влезали на карточки ИЗВИНИТЕ

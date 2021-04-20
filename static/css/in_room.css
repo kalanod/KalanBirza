@@ -1,0 +1,276 @@
+.main, body, html {
+            height: 100%;
+            width: 100%;
+            padding: 0;
+            margin: 0;
+        }
+
+        #players {
+            width: 100%;
+            height: 6%;
+            background-color: #98703a;
+            float: left
+        }
+
+        #board {
+            width: 60%;
+            height: 84%;
+            background-color: #2a1440;
+            float: left;
+
+        }
+
+        #price {
+            width: 40%;
+            height: 84%;
+            background-color: #314014;
+            float: right;
+            overflow-y: scroll; /* прокрутка по горизонтали */
+
+        }
+
+        #me {
+            width: 100%;
+            height: 10%;
+            background-color: hotpink;
+            float: left;
+        }
+
+        #menu {
+            width: 40%;
+            height: 20%;
+            float: left;
+            background-color: #f91111;
+        }
+
+        td {
+            width: 10%;
+            height: 17.5%;
+            padding: 5px;
+            margin: 20px;
+            background-color: #c6c6c6;
+
+        }
+
+        tr {
+            padding: 5px;
+            margin: 20px;
+
+        }
+
+        .img_stonk {
+            width: 30%;
+            float: top;
+        }
+
+        table {
+            border: 10px double black;
+            width: 100%;
+            height: 100%;
+            padding: 5px;
+            margin: 5px;
+        }
+
+        .player_card {
+            background-color: #c6c6c6;
+            float: left;
+            width: 13%;
+            height: 85%;
+            margin: 3px;
+            text-align: center;
+            border-radius: 4px;
+        }
+
+        .row_price {
+            height: 40px;
+            min-height: 40px;
+            width: 95%;
+            float: left;
+            padding-top: 5px;
+        }
+
+        .price_card {
+            background-color: #c6c6c6;
+            float: left;
+            width: 100%;
+            height: 100%;
+            margin: 10px;
+            text-align: center;
+        }
+
+        .img_card_stonk {
+            float: top;
+            margin: 0;
+            padding: 0;
+            margin-bottom: 5px;
+            width: 100%;
+            height: 30%;
+        }
+
+        .text_card_stonk {
+            margin: 0;
+            margin-top: 5px;
+            padding: 25px;
+            width: 100%;
+            height: 70%;
+            float: bottom;
+
+        }
+
+        a {
+            text-decoration: none;
+            color: #080808;
+        }
+
+        .title_stonk {
+            float: left;
+            width: 22%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .l_prise_stonk {
+            float: left;
+            width: 22%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .prise_stonk {
+            float: left;
+            width: 22%;
+            text-align: center;
+            margin-top: auto;
+        }
+
+        .exit {
+            margin-right: 15px;
+            width: 160px;
+            height: 30px;
+            background-color: #c6c6c6;
+            float: right;
+            border: 2px solid black;
+            border-radius: 4px;
+            text-align: center;
+        }
+
+        .me_elem {
+            width: 10%;
+            height: 80%;
+            margin: 10px;
+            float: right;
+        }
+
+        ul {
+
+            /* Убираю маркеры у списка*/
+            list-style: none;
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю отступы. */
+            margin: 0px;
+            /* Убираю еще отступы! */
+            padding: 0px;
+        }
+
+        ul:after {
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю выравнивание. */
+            float: none;
+            content: ' ';
+            clear: both;
+        }
+
+        ul.mmenuu > li {
+            /* Задаю выравнивание и позиционирование. */
+            float: left;
+            /* Считаем координаты относительно исходного места*/
+            position: relative;
+        }
+
+        ul.mmenuu > li > a {
+            /* Делаю элементы блочными: */
+            display: block;
+            /* Задаю белый цвет. */
+            color: #fff;
+            /* Задаю отступ 10px. */
+            padding: 10px;
+            /* Убираю форматирование*/
+            text-decoration: none;
+            /* Задаю цвет. */
+            background-color: #da570f;
+        }
+
+        ul.mmenuu > li > a:hover {
+            /* Задаю цвет при наведении. */
+            background-color: #eb9316;
+        }
+
+        ul.ssubmenuu {
+            position: absolute;
+            width: 240px;
+            bottom: 37px;
+            left: 0px;
+            /* Делаю субменю скрытыми. */
+            display: none;
+            /* Цвет — белый. */
+            background-color: white;
+        }
+
+        ul.ssubmenuu > li {
+            /* Блочное расположение элементов*/
+            display: block;
+        }
+
+        ul.ssubmenuu > li > a {
+            /* Делаю элементы блочными. */
+            display: block;
+            /* Убираю форматирование*/
+            text-decoration: none;
+            /* Задаю отступ. */
+            padding: 10px;
+            /* Задаю цвет. */
+            color: #ffffff;
+            /* Еще цвет. */
+            background-color: #da570f;
+        }
+
+        ul.ssubmenuu > li > a:hover {
+            background-color: #eb9316;
+            text-decoration: none
+        }
+
+        ul.mmenuu > li:hover > ul.ssubmenuu {
+            display: block;
+        }
+
+        br {
+            height: 1px
+        }
+
+        .play_zone {
+            height: 55%;
+            width: 100%;
+            background-color: #eb9316;
+
+        }
+
+        .stonks_for_sale {
+            width: 80%;
+            height: 80%;
+            margin-top: 10%;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+
+        }
+
+        #case {
+            width: 80%;
+            height: 60%;
+            margin-top: 10%;
+            margin-left: auto;
+            margin-right: auto;
+            display: none;
+        }
