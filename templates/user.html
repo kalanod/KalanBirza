@@ -1,0 +1,55 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #rectangle{
+            position:absolute;
+            left:400px;
+            top:150px;
+            width:1120px;
+            height:680px;
+            border-radius:15px;
+            background:#696969;
+        }
+        #avatar{
+            position:absolute;
+            left:440px;
+            top:190px;
+            width:250px;
+            height:250px;
+            background:black;
+        }
+        #white{
+            position:absolute;
+            border-radius:15px;
+            background:white;
+            width:500px;
+            height:70px;
+        }
+        #text{
+        position:absolute;
+        font:40pt Arial;
+        font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div id="rectangle"></div>
+    <div id="avatar"></div>
+
+    <div id="white" style="left:440px;top:510px;"></div>
+    <div id="white" style="left:440px;top:600px;"></div>
+    <div id="white" style="left:440px;top:690px;"></div>
+    <div id="white" style="left:710px;top:190px;"></div>
+    <div style="position:absolute;background:#00D23E;width:300px;height:70px;border-radius:15px;left:1160px;top:690px;"></div>
+
+    <div id="text" style="left:445px;top:513px;">Победы:</div>
+    <div id="text" style="left:445px;top:603px;">Поражения:</div>
+    <div id="text" style="left:445px;top:693px;">Всего игр:</div>
+    <div id="text" style="left:715px;top:193px;">{{ current_user.nickname }}</div>
+    <div id="text" style="left:1210px;top:693px;">Друзья</div>
+</body>
