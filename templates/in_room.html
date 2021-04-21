@@ -268,34 +268,13 @@
 </head>
 <body>
 <div class="main">
-    l
-    <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
-         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
-                        <span aria-hidden="true">&times;</span>
-                    </button>
-                </div>
-                <div class="modal-body" id="name_winner">
-                    <label for="message-text" class="col-form-label">Введите количество</label>
-                    <input type="text" class="form-control" id="recipient-name">
-                </div>
 
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary" id="fin_cell">Продать</button>
-                </div>
-            </div>
-        </div>
-    </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle1">Игра окончена</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle">Игра окончена</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -386,27 +365,29 @@
         </div>
         <div class="play_zone">
             <div class="stonks_for_sale" id="stonks_for_sale" style="position: absolute;
-                                                                    width: 80%;
+                                                                     width: 80%;
                                                                      height: 70%;
                                                                      margin-top: 10%;
                                                                      margin-left: 10%;
                                                                      display: none;">
                 {% for i in range(3) %}
                     <div class="card"
-                         style="width: 30%; height: 100%; float: left; margin-right: 10px"
+                         style="width: 30%; height: 100%; float: left; margin-right: 10px; position: relative"
                          id="stonk_{{ i }}">
                         <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
-                             class="card-img-top"
-                             alt="..." style="height: 30%; width: 50%; margin-left: auto; margin-right: auto">
-                        <div class="card-body" style="margin-left: auto; margin-right: auto; height: 70%">
-                            <h5 style="margin-left: auto; margin-right: auto" class="card-title"> Card title </h5>
+                             alt="..." style="width: 100%; margin-left: auto; margin-right: auto; margin-top: calc(2 * width); position: absolute;">
+
+                        <div style="margin-left: 5%; margin-top: 110%; height: 70%; position: absolute;">
+                            <h5> Card title </h5>
                         </div>
-                        <div style="margin-left: auto; margin-right: auto; height: 30%">
-                            <h5 style="margin-left: auto; margin-right: auto" id="price_s"> price </h5>
-                            <h5 style="margin-left: auto; margin-right: auto" id="count_s"> count </h5>
+
+                        <div style="margin-left: 5%; margin-top: 150%; height: 30%; position: absolute;">
+                            <h5 id="price_s"> price </h5>
+                            <h5  id="count_s"> count </h5>
                         </div>
+
                         <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="margin-left: auto; margin-right: auto; margin-bottom: 10px"> Buy </a>
+                           style="margin-left: 3%; margin-top: 205%; position: absolute;"> Buy </a>
 
                     </div>
                 {% endfor %}
@@ -414,13 +395,13 @@
 
 
             <div class="case" id="case" style="position: absolute;
-                                               width: 80%;
+                                               width: 53.333%;
                                                height: 70%;
                                                margin-top: 10%;
-                                               margin-left: 10%;
+                                               margin-left: 23.3335%;
                                                display: none;">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 30%; height: 100%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 45%; height: 100%; float: left; margin-right: 10px"
                          id="case_{{ i }}">
                         <img src="https://www.conchovalleyhomepage.com/wp-content/uploads/sites/83/2020/05/BREAKING-NEWS-GENERIC-1.jpg"
                              class="card-img-top"
@@ -434,8 +415,8 @@
             </div>
 
         </div>
-        <button href="#" class="btn btn-outline-light" id="pas" style="float: left;
-                                                                       margin-top: 25%;
+        <button href="#" class="btn btn-light" id="pas" style="float: left;
+                                                                       margin-top: 25.2%;
                                                                        margin-left: 1.7%;
                                                                        width: 20%;
                                                                        height: 8%;
@@ -445,7 +426,7 @@
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
-                    <ul class="ssubmenuu" id="com">
+                    <ul class="ssubmenuu">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
                             <li>
                                 <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
@@ -569,34 +550,21 @@
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Продажа ' + this.value)
         });
-
         socket.on('update_bag', function (data) {
             if (data['id'] == {{current_user.id}}) {
                 $('#bag').empty()
                 for (var stonk in data['data']) {
                     if (data['data'][stonk]['stocks'] != '0') {
-                        const elem = $('<li class="sell"><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
+                        $('#bag').append('<li class="sell><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
                             + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
                             + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>');
-                        $('#bag').append(elem);
-                        elem.click((e) => {
-                            $('#sell_window').modal('toggle')
-
-                            $('#LongTitle').text("Продать " + e.target.text)
-                            console.log(e.target.tagName);
-                        });
+                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>')
                     }
 
                 }
             }
         });
-        $('#fin_cell').click(function () {
-            count = $('#recipient-name').value
-            title = $('#LongTitle').title
-            console.log(title)
-            //socket.emit('sell', title, count)
-        });
+
         socket.on('update_stock_table', function (json) {
             console.log(json)
             {% for i in range(9) %}

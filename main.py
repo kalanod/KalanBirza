@@ -254,8 +254,6 @@ def disconnect():
 
         room.leave_player(current_user.id)
         current_room = room
-        print('rrrrrrrrrom', active_rooms, room)
-        print(current_room)
         json = {'data': []}
         for player in current_room.players:
             json['data'].append(
@@ -306,8 +304,7 @@ def get_room(room_id):
     return None
 
 
-def log(room_id):
-    data = 'a'
+def log(room_id, data):
     emit('make_turn', to=room_id)
 
 
