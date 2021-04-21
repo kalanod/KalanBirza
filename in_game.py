@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money
 
 START_BUDGET = 1000000
 
@@ -247,6 +247,7 @@ class InGameRoom:
                 else:
                     player.budget += cost
                     player.stocks[stock.id] -= quantity
+                    update_money(self.id, {"id": player.id, "money": player.budget})
 
             # покупка недвижимости
             elif code == 4:
@@ -289,6 +290,8 @@ class InGameRoom:
                 player.budget += realty.cost
                 player.realty.remove(realty)
                 realty.owner = None
+
+                update_money(self.id, {"id": player.id, "money": player.budget})
 
         #print('')
 
@@ -354,6 +357,7 @@ class InGameRoom:
             for card in self.stocks_cards:
                 for player in card.players:
                     self.sell_stock_to_player(player, card.stock, card.quantity)
+                    update_money(self.id, {"id": player.id, "money": player.budget})
             self.next_stage()
 
         elif self.stage == 2:

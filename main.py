@@ -305,7 +305,11 @@ def get_room(room_id):
 
 
 def log(room_id, data):
-    emit('make_turn', to=room_id)
+    emit('log', data, to=room_id)
+
+
+def update_money(room_id, json):
+    emit('update_money', json, to=room_id)
 
 
 def add_friend(self_id, friend_id):
