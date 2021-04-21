@@ -178,22 +178,6 @@ def win(room_id, player):
 
 @socketIO.on('decision')
 def make_decision(json):
-    data = ''
-    if json['code'] == '1':
-        data = 'Игрок готов'
-        log(json['room_id'], data)
-    elif json['code'] == '2':
-        data = f'Выбор карты акций {list(json.keys())[-1]} от 0 до 2 покупка будет происходить во время аукциона'
-        log(json['room_id'], data)
-    elif json['code'] == '3':
-        data = 'Продажа акций'
-        log(json['room_id'], data)
-    elif json['code'] == '4':
-        data = 'Покупка недвижимости'
-        log(json['room_id'], data)
-    elif json['code'] == '5':
-        data = 'Покупка недвижимости'
-        log(json['room_id'], data)
     print('get_decision from server')
     print(f'json: {json}')
     room_id = int(json['room_id'])
@@ -306,8 +290,8 @@ def get_room(room_id):
     return None
 
 
-def log(room_id, event):
-    data = event
+def log(room_id):
+    data = 'a'
     emit('make_turn', to=room_id)
 
 
