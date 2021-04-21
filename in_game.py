@@ -35,6 +35,7 @@ class InGameRoom:
                                                   "short_name": company["short_name"],
                                                   "cost": data_from_bd[company["id"]],
                                                   "lowest_cost": company["stock_lowest_cost"],
+                                                  "start_cost": company["stock_cost"],
                                                   "img": company["img"]}))
 
                 else:
@@ -398,9 +399,25 @@ class InGameRoom:
             self.save_to_db()
             clear_playzone(self.id)
 
-        update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
-                                      'lowest_cost': self.stock_list[i].lowest_cost,
-                                      'cost': self.stock_list[i].cost} for i in range(9)])
+        out_json = []
+        for stock in self.stock_list:
+            change = stock.cost - stock.start_cost
+
+            if change == 0:
+                image = '-'
+
+            elif change < 0:
+                image = 'v'
+
+            else:
+                image = '^'
+
+            out_json.append({'short_name': stock.short_name,
+                             'cost': stock.cost,
+                             'change': change,
+                             'image': image})
+
+        update_stock_table(self.id, out_json)  # картика пока символ
 
     def player_win(self, player_obj):
         print('')
@@ -523,6 +540,12 @@ class Stock:
             self.cost = stock_dict["stock_cost"]
             self.lowest_cost = stock_dict["stock_lowest_cost"]
             self.company_logo_address = stock_dict["img"]
+
+            if 'start_cost' in stock_dict.keys():
+                self.start_cost = stock_dict["start_cost"]
+
+            else:
+                self.start_cost = stock_dict["stock_cost"]
 
         else:
             raise ValueError
