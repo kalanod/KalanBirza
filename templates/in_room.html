@@ -22,33 +22,24 @@
 
         #players {
             width: 100%;
-            height: 6%;
-
+            height: 10%;
+            background-color: #2525252;
             float: left
         }
 
-        #board {
-            width: 60%;
-            height: 84%;
-            display: table-cell;
-            float: left;
-
-        }
 
         #price {
             width: 40%;
-            height: 84%;
+            height: 80%;
             float: right;
-            overflow-y: scroll; /* прокрутка по горизонтали */
-            padding-top: 6%;
-            background-color: #626262;
+            padding-top: 1%;
+            background-color: #3c3f41;
 
         }
 
         #me {
             width: 100%;
             height: 10%;
-
             float: left;
         }
 
@@ -74,11 +65,6 @@
 
         }
 
-        .img_stonk {
-            width: 30%;
-            float: top;
-        }
-
         table {
             border: 10px double black;
             width: 100%;
@@ -88,21 +74,20 @@
         }
 
         .player_card {
-            background-color: #c6c6c6;
+            background-color: #877474;
             float: left;
-            width: 13%;
-            height: 85%;
-            margin: 3px;
+            width: 10%;
+            height: 120%;
+            margin: 5px;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 2px;
         }
 
         .row_price {
-            height: 40px;
-            min-height: 40px;
-            width: 95%;
+            width: 96%;
             float: left;
             padding-top: 5px;
+            margin-left: 2%;
         }
 
         .price_card {
@@ -110,7 +95,7 @@
             float: left;
             width: 100%;
             height: 100%;
-            margin: 10px;
+            margin: 0px;
             text-align: center;
         }
 
@@ -143,6 +128,7 @@
             width: 22%;
             text-align: center;
             margin-top: auto;
+            font-weight: 100;
         }
 
         .l_prise_stonk {
@@ -159,15 +145,11 @@
             margin-top: auto;
         }
 
-        .exit {
-            margin-right: 15px;
-            width: 160px;
-            height: 30px;
-            background-color: #c6c6c6;
+        .img_stonk {
             float: right;
-            border: 2px solid black;
-            border-radius: 4px;
+            width: 22%;
             text-align: center;
+            margin-top: auto;
         }
 
         .me_elem {
@@ -272,25 +254,6 @@
 
         }
 
-        .stonks_for_sale {
-            width: 80%;
-            height: 85%;
-            margin-top: 10%;
-            margin-left: auto;
-            margin-right: auto;
-            display: none;
-
-        }
-
-        #case {
-            width: 80%;
-            height: 60%;
-            margin-top: 10%;
-            margin-left: auto;
-            margin-right: auto;
-            display: none;
-        }
-
         .log {
             width: 95%;
             height: 20%;
@@ -330,45 +293,58 @@
         <div id="online">
             {% for player in current_room.players %}
                 {% if player.id != current_user.id %}
-                    <a href="#">
-                        <div class="player_card">
+                    <div class="player_card">
+                        <img src="https://prodota.ru/forum/uploads/profile/photo-182026.png">
                             <h5 id="player_name">{{ player.nickname }}</h5>
                             <h5>{{ player.budget }}</h5>
                             <h5>{{ player.online }}</h5>
                         </div>
-                    </a>
                 {% endif %}
             {% endfor %}
         </div>
         <a href="/">
-            <div class="exit" id="exit">выйти</div>
+            <div href="/" class="btn btn-outline-light" style="float: right; margin-top: 1.5%; margin-right: 1.7%; width: 10%; height: 50%" id="exit">выйти</div>
         </a>
 
     </div>
     <div id="price">
         <div class="row_price">
-            <div class="price_card">
+            <div class="price_card" style="background-color: transparent;
+                                           border-bottom-width: 1px; /* Толщина линии внизу */
+                                           border-bottom-style: solid; /* Стиль линии внизу */
+                                           border-bottom-color: white;
+                                           height: 35px;
+                                           min-height: 35px;">
+                <font size="5" color="white" face="Arial">
                 <div class="title_stonk"><h5>Компания</h5></div>
                 <div class="prise_stonk"><h5>Цена</h5></div>
                 <div class="l_prise_stonk"><h5>Изменение</h5></div>
-                <div class="inp_stonk"><h5>Коллебание</h5><</div>
+                <div class="inp_stonk"><h5>Колебание</h5></div>
+                </font>
 
             </div>
         </div>
+        <br>
+        <br>
+        <br>
         {% for stock in current_room.stock_list %}
             <div class="row_price">
-                <a href="#">
-                    <div class="price_card">
+                    <div class="price_card" style="background-color: transparent;
+                                                   border-bottom-width: 0px; /* Толщина линии внизу */
+                                                   border-bottom-style: solid; /* Стиль линии внизу */
+                                                   border-bottom-color: white;
+                                                   height: 28px;
+                                                   min-height: 28px;">
+                        <font size="5" color="white" face="Arial">
                         <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
                         <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
                         <div class="l_prise_stonk"><h5
                                 id="change_{{ stock.id }}"> {{ stock.cost - stock.start_cost }} </h5></div>
-                        <div class="prise_stonk"><h5 id="image_{{ stock.id }}">
-                            {{ '-' if stock.cost - stock.start_cost == 0 else 'v' if stock.cost - stock.start_cost < 0 else '^' }} </h5>
+                        <div class="img_stonk"><h5 id="image_{{ stock.id }}">
+                            {{ '-' if stock.cost - stock.start_cost == 0 else '▼' if stock.cost - stock.start_cost < 0 else '▲' }} </h5>
                         </div>
-                        <!-- <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div> -->
+                        </font>
                     </div>
-                </a>
             </div>
         {% endfor %}
         <!-- <div class="log">
@@ -376,20 +352,27 @@
         </div> -->
 
     </div>
-    <div id="board">
-        <div class="progress" style="float: bottom">
+    <div id="board" style="width: 60%;
+                           height: 80%;
+                           display: table-cell;
+                           float: left;
+                           background-color: #2b2b2b;
+                           position: relative">
+        <div class="progress" style="float: bottom; height: 2px; background-color: #2b2b2b">
             <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
         </div>
-        <div style="margin-left: 40%; float: bottom; vertical-align: bottom">
-            <button href="#" class="btn btn-primary" id="pas">Пропустить</button>
-        </div>
         <div class="play_zone">
-            <div class="stonks_for_sale" id="stonks_for_sale">
+            <div class="stonks_for_sale" id="stonks_for_sale" style="position: absolute;
+                                                                    width: 80%;
+                                                                     height: 70%;
+                                                                     margin-top: 10%;
+                                                                     margin-left: 10%;
+                                                                     display: none;">
                 {% for i in range(3) %}
                     <div class="card"
-                         style="width: 30%; height: 100%; float: left; margin-right: 10px; position: relative"
+                         style="width: 30%; height: 100%; float: left; margin-right: 10px"
                          id="stonk_{{ i }}">
                         <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
                              class="card-img-top"
@@ -407,13 +390,20 @@
                     </div>
                 {% endfor %}
             </div>
-            <div class="case" id="case">
+
+
+            <div class="case" id="case" style="position: absolute;
+                                               width: 80%;
+                                               height: 70%;
+                                               margin-top: 10%;
+                                               margin-left: 10%;
+                                               display: none;">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 40%; height: 150%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 30%; height: 100%; float: left; margin-right: 10px"
                          id="case_{{ i }}">
                         <img src="https://www.conchovalleyhomepage.com/wp-content/uploads/sites/83/2020/05/BREAKING-NEWS-GENERIC-1.jpg"
                              class="card-img-top"
-                             alt="..." style="height: 35%">
+                             alt="..." style="width: 100%">
                         <h5 class="card-title">Card title</h5>
                         <div class="card-body">
 
@@ -423,10 +413,14 @@
             </div>
 
         </div>
-
+        <button href="#" class="btn btn-outline-light" id="pas" style="float: left;
+                                                                       margin-top: 25%;
+                                                                       margin-left: 1.7%;
+                                                                       width: 20%;
+                                                                       height: 8%;
+                                                                       position: absolute">Пропустить</button>
     </div>
     <div id="me">
-        <div class="me_elem"></div>
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
@@ -458,7 +452,20 @@
                 </li>
             </ul>
         </div>
-        <div class="me_elem" id="money">{{ current_room.get_player(current_user.id).budget }}</div>
+
+        <font size="5" color="white" face="Arial">
+        <div style="height: 80%;
+                    width: 10%;
+                    margin: 0.7%;
+                    padding: 1%;
+                    float: left;
+                    border-right-width: 1px;
+                    border-right-style: solid;
+                    border-right-color: white;" >
+            <div id="money" style="float: left; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
+            <div style="margin-left: 5%; float: left;"> $ </div>
+        </div>
+        </font>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>

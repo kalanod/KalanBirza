@@ -382,10 +382,10 @@ class InGameRoom:
                                         stock.cost = stock.lowest_cost
                                     if change['value'] != 0:
                                         if change['value'] < 0:
-                                            out_json[event['description']][stock.name] = str(change['value'])
+                                            out_json[event['description']][stock.short_name] = str(change['value'])
 
                                         else:
-                                            out_json[event['description']][stock.name] = f"+{str(change['value'])}"
+                                            out_json[event['description']][stock.short_name] = f"+{str(change['value'])}"
 
                     # надеюсь бог простит меня за этот костыль ИЗВИНИТЕ
                     if all([len(out_json[key]) <= 6 for key in out_json.keys()]):
@@ -409,10 +409,10 @@ class InGameRoom:
                 image = '-'
 
             elif change < 0:
-                image = 'v'
+                image = '▼'
 
             else:
-                image = '^'
+                image = '▲'
 
             out_json.append({'short_name': stock.short_name,
                              'cost': stock.cost,
