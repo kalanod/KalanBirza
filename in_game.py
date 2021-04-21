@@ -25,16 +25,18 @@ class InGameRoom:
 
             data_from_bd = dict()
             for line in data_string.split():
-                data_from_bd[line.split(',')[0]] = float(line.split(',')[1])
+                data_from_bd[int(line.split(',')[0])] = int(line.split(',')[1])
 
+            print(data_from_bd.keys())
             for company in companies:
                 if company["id"] in data_from_bd.keys():
+                    print('ok', data_from_bd[company["id"]])
                     self.stock_list.append(Stock({"id": company["id"],
                                                   "department_id": company["department_id"],
                                                   "name": company["name"],
                                                   "short_name": company["short_name"],
-                                                  "cost": data_from_bd[company["id"]],
-                                                  "lowest_cost": company["stock_lowest_cost"],
+                                                  "stock_cost": data_from_bd[company["id"]],
+                                                  "stock_lowest_cost": company["stock_lowest_cost"],
                                                   "start_cost": company["stock_cost"],
                                                   "img": company["img"]}))
 
