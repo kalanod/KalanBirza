@@ -268,13 +268,34 @@
 </head>
 <body>
 <div class="main">
+    l
+    <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="name_winner">
+                    <label for="message-text" class="col-form-label">Введите количество</label>
+                    <input type="text" class="form-control" id="recipient-name">
+                </div>
 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="fin_cell">Продать</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="exampleModalLongTitle">Игра окончена</h5>
+                    <h5 class="modal-title" id="exampleModalLongTitle1">Игра окончена</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">&times;</span>
                     </button>
@@ -424,7 +445,7 @@
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
-                    <ul class="ssubmenuu">
+                    <ul class="ssubmenuu" id="com">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
                             <li>
                                 <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
@@ -548,21 +569,34 @@
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Продажа ' + this.value)
         });
+
         socket.on('update_bag', function (data) {
             if (data['id'] == {{current_user.id}}) {
                 $('#bag').empty()
                 for (var stonk in data['data']) {
                     if (data['data'][stonk]['stocks'] != '0') {
-                        $('#bag').append('<li class="sell><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
+                        const elem = $('<li class="sell"><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
                             + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
                             + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>')
+                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>');
+                        $('#bag').append(elem);
+                        elem.click((e) => {
+                            $('#sell_window').modal('toggle')
+
+                            $('#LongTitle').text("Продать " + e.target.text)
+                            console.log(e.target.tagName);
+                        });
                     }
 
                 }
             }
         });
-
+        $('#fin_cell').click(function () {
+            count = $('#recipient-name').value
+            title = $('#LongTitle').title
+            console.log(title)
+            //socket.emit('sell', title, count)
+        });
         socket.on('update_stock_table', function (json) {
             console.log(json)
             {% for i in range(9) %}
