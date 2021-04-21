@@ -359,7 +359,7 @@
                         <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
                         <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
                         <div class="l_prise_stonk"><h5 id="change_{{ stock.id }}"> {{ stock.cost - stock.start_cost }} </h5></div>
-                        <div class="prise_stonk"><h5 id="image_{{ stock.id }}"> {{ '-' if stock.cost - stock.start_cost = 0 else 'v' if stock.cost - stock.start_cost < 0 else '^'}} </h5></div>
+                        <div class="prise_stonk"><h5 id="image_{{ stock.id }}"> {{ '-' if stock.cost - stock.start_cost == 0 else 'v' if stock.cost - stock.start_cost < 0 else '^' }} </h5></div>
                         <!-- <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div> -->
                     </div>
                 </a>
