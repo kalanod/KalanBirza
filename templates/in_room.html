@@ -379,18 +379,20 @@
         <div class="play_zone">
             <div class="stonks_for_sale" id="stonks_for_sale">
                 {% for i in range(3) %}
-                    <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 30%; height: 150%; float: left; margin-right: 10px; position: relative"
                          id="stonk_{{ i }}">
                         <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
                              class="card-img-top"
-                             alt="..." style="height: 30%">
-                        <div class="card-body" style="float: bottom; height: 70%">
-                            <h5 class="card-title">Card title</h5>
-                            <h5 style="float: left; margin-right: 15px" id="price_s"> price </h5>
-                            <h5 id="count_s" style="margin-left: 15px"> count </h5>
+                             alt="..." style="width: 100%; position: absolute">
+                        <div class="card-body" style="margin-top: 100%; height: 70%; position: absolute">
+                            <h5 style="margin-left: 0px" class="card-title"> Card title </h5>
+                        </div>
+                        <div style="margin-top: 160%; margin-left: 10%; height: 30%; position: absolute">
+                            <h5 style="margin-left: 0px" id="price_s"> price </h5>
+                            <h5 style="margin-left: 0px" id="count_s"> count </h5>
                         </div>
                         <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
+                           style="margin-top: 200%; height: 8%; width: 80%; margin-left: 10%; position: absolute"> Buy </a>
 
                     </div>
                 {% endfor %}
