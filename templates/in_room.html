@@ -302,6 +302,7 @@
 </head>
 <body>
 <div class="main">
+
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -523,11 +524,21 @@
             progress = 100 * ar
             document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
+        $('.sell').click(function () {
+            console.log('dddddddddddd')
+            $('#exampleModalCenter').modal('toggle')
+            $('#name_winner').text('Продажа ' + this.value)
+        });
         socket.on('update_bag', function (data) {
             if (data['id'] == {{current_user.id}}) {
                 $('#bag').empty()
                 for (var stonk in data['data']) {
-                    $('#bag').append('<li><h6 style="float: left; margin: 10px">' + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >' + data['data'][stonk]['stocks'] + '</h6><a href = "#"> продать</a></li>')
+                    if (data['data'][stonk]['stocks'] != '0') {
+                        $('#bag').append('<li class="sell><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
+                            + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
+                            + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >'
+                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>')
+                    }
 
                 }
             }
