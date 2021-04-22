@@ -228,10 +228,13 @@ def make_decision(json):
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
     print('DASSasda')
 
-socketIO.on('buy_com')
+
+@socketIO.on('buy_com')
 def buy_com(json):
     com = get_room(json['room']).get_player(json['id']).buisness
     emit('update_com', com, to=json['room'])
+
+
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
     room_id = int(room_id)
@@ -295,7 +298,9 @@ def on_leave(room):
 @socketIO.on('sell')
 def on_leave(json):
     print(json)
-    #emit('', to=json['room'])
+    # emit('', to=json['room'])
+
+
 @socketIO.event
 def add_message(json, room_id):
     get_room(room_id)
