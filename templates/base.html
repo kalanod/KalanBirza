@@ -22,13 +22,26 @@
 </head>
 <header>
     <nav class="navbar navbar-light" style="background-color: #3c3f41;">
-            <a class="navbar-brand" href="/" style="color: white; float: left; margin-left: 0px">
+            <div style="height: 100%">
+            <a class="navbar-brand" href="/" style="color: white;
+                                                    float: left;
+                                                    margin-left: 0px;
+                                                    padding-right: 15px;
+                                                    border-right-width: 2px;
+                                                    border-right-style: solid;
+                                                    border-right-color: #2b2b2b;">
                 <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
                 <span style="margin-left: 10px">Каланбиржа</span>
             </a>
+            {% if current_user.is_authenticated %}
+                <a style="color: gray; margin-left: 0px; float: left; margin-top: 2%; font-weight: 300; text-decoration: none;" href="/rooms"> список комнат </a>
+                <a style="color: gray; margin-left: 10px; float: left; margin-top: 2%; font-weight: 300; text-decoration: none;" href="/"> новости </a>
+            {% endif %}
+            </div>
             <form class="form-inline">
             {% if current_user.is_authenticated %}
                 <a style="color: white; margin-right: 15px"> {{ current_user.nickname }}</a>
+                <!-- <a class="btn btn-outline-light" style="margin-right: 10px" href="/rooms">играть</a> -->
                 <a class="btn btn-outline-light" style="" id="ex" href="/logout">выйти</a>
             {% else %}
                 <a class="btn btn-outline-light" href="/register" style="margin-right: 10px">Зарегистрироваться</a>

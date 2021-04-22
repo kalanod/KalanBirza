@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% for news in news_list %}
+    {% if news %}
+    <div>
+        <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 50%; margin-left: 25%; margin-top: 10px">
+            <div class="card-header" style="color: white">
+                <h5 style="float: left; font-weight: 300"> {{ news['header'] }} </h5>
+            </div>
+            <img src="{{ news['image_address'] }}" alt="..." style="width: 100%">
+            <div class="card-body" style="color: white">
+                <h5 style="float: left; font-weight: 100"> {{ news['text'] }} </h5>
+            </div>
+            <div class="card-footer" style="color: white">
+                <h5 style="float: left; font-weight: 100; color: gray;"> -{{ news['creator']['nickname'] }} </h5>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+
+{% endblock %}

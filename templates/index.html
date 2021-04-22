@@ -36,7 +36,7 @@
         {% for room in rooms %}
             {% if room %}
             <div>
-                <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: -10px">
+                <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
                     <div class="card-header" style="color: white">
                     <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
                         {% if room.stage == -1 %}
@@ -55,7 +55,6 @@
                     </div>
                 </div>
             </div>
-            <br>
             {% endif %}
         {% endfor %}
     {% endif %}
