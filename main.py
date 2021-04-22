@@ -57,14 +57,23 @@ def method_not_allowed(error):
     return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/rooms', methods=['GET', 'POST'])
 def base():
+    params = dict()
+    params["title"] = "Список комнат"
+    params["rooms"] = active_rooms
+    return render_template('index.html', **params)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def news():
     db_sess = db_session.create_session()
     params = dict()
-    params["title"] = "Title"
-    params["rooms"] = active_rooms
+    params["title"] = "Новости"
+    params["news_list"] = reversed(db_sess.query(News).all())
+    print(params["news_list"])
 
-    return render_template('index.html', **params)
+    return render_template('news.html', **params)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -134,7 +143,7 @@ def create_room(title, creator_id):
     active_rooms.append(InGameRoom(id, title))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -145,14 +154,14 @@ def connect_to_room(room_id, player_id):
         return redirect(f'/room/{room_id}')
 
     else:
-        return redirect('/')
+        return redirect('/rooms')
 
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def leave_from_room(room_id, player_id):
     # какие-нибудь проверки
     get_room(room_id).leave_player(player_id)
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
@@ -227,7 +236,7 @@ def detele_room(room_id):
     room = get_room(room_id)
     if room is None:
         print(f'room with id {room_id} not found')
-        return redirect('/')
+        return redirect('/rooms')
 
     print(f'deleting {room}')
     print(f'rooms before deleting: {active_rooms}')
@@ -239,7 +248,7 @@ def detele_room(room_id):
     print(f'rooms before deleting: {active_rooms}')
     print('')
 
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @socketIO.on('join')

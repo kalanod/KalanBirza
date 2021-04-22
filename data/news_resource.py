@@ -19,6 +19,7 @@ class NewsResource(Resource):
         news = session.query(News).get(news_id)
         return jsonify({'news': news.to_dict(only=('id',
                                                    'creator_id',
+                                                   'header',
                                                    'text',
                                                    'image_address'))})
 
@@ -40,6 +41,7 @@ class NewsListResource(Resource):
                 'news':
                     [item.to_dict(only=('id',
                                         'creator_id',
+                                        'header',
                                         'text',
                                         'image_address'))
                      for item in news]
@@ -51,6 +53,7 @@ class NewsListResource(Resource):
         session = db_session.create_session()
         news = News(
             creator_id=args['creator_id'],
+            header=args['header'],
             text=args['text'],
             image_address=args['image_address']
         )

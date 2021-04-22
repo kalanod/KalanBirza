@@ -1,64 +1,24 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-
-<div class="bd-example">
-  <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog" role="document">
-      <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41;">
-        <div class="modal-header">
-
-          <h4 class="modal-title" id="exampleModalLabel" style="color: white; font-weight: 300">Новая комната</h4>
-
-        </div>
-        <div class="modal-body">
-          <form>
-            <div class="form-group">
-              <label for="room_name" class="form-control-label" style="color: white; font-weight: 200">Название:</label>
-              <input type="text" class="form-control" id="room_name">
+    {% for news in news_list %}
+    {% if news %}
+    <div>
+        <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 50%; margin-left: 25%; margin-top: 10px">
+            <div class="card-header" style="color: white">
+                <h5 style="float: left; font-weight: 300"> {{ news['header'] }} </h5>
             </div>
-          </form>
+            <img src="{{ news['image_address'] }}" alt="..." style="width: 100%">
+            <div class="card-body" style="color: white">
+                <h5 style="float: left; font-weight: 100"> {{ news['text'] }} </h5>
+            </div>
+            <div class="card-footer" style="color: white">
+                <h5 style="float: left; font-weight: 100; color: gray;"> -{{ news['creator']['nickname'] }} </h5>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-          <button type="button" class="btn btn-primary" id="create_room">Создать</button>
-        </div>
-      </div>
     </div>
-  </div>
-</div>
-
-    {% if current_user.is_authenticated %}
-        <button style="margin-left: 90%; margin-top: 10px; margin-right: 10px"  type="button" class="btn btn-primary" data-toggle="modal" data-target="#exampleModal">Создать комнату</button>
-        <br>
-        <br>
-        {% for room in rooms %}
-            {% if room %}
-            <div>
-                <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: -10px">
-                    <div class="card-header" style="color: white">
-                    <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
-                        {% if room.stage == -1 %}
-                            <h5 style="float: right; font-weight: 100"> открыта </h5>
-                        {% else %}
-                            <h5 style="float: right; font-weight: 100"> в игре </h5>
-                        {% endif %}
-                    </div>
-                    <span class="card-header" style="color: white">
-                        <h5 style="float: left; font-weight: 100">игроки: {{ room.players|map(attribute="nickname", default="Anonymous")|join(', ') }}</h5>
-                        <h5 style="float: right; font-weight: 100">в сети: {{ room.get_online_players()|length }}</h5>
-                    </span>
-                    <div class="card-body">
-                        <a href="{{'/connect_to_room/' + room.id|string + '/' + current_user.id|string}}" class="btn btn-primary">Присоединится</a>
-                        <a class="btn btn-outline-light" id="{{ room.id }}" style="color: white; margin-left: 2px">удалить комнату</a>
-                    </div>
-                </div>
-            </div>
-            <br>
-            {% endif %}
-        {% endfor %}
     {% endif %}
+    {% endfor %}
 
 
 {% endblock %}

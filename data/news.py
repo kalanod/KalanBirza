@@ -12,9 +12,11 @@ class News(SqlAlchemyBase, SerializerMixin):
 
     id = sqlalchemy.Column(sqlalchemy.Integer,
                            primary_key=True, autoincrement=True)
-    creator_id = sqlalchemy.Column(sqlalchemy.Integer, nullable=True)
+    creator_id = sqlalchemy.Column(sqlalchemy.Integer, sqlalchemy.ForeignKey("users.id"))
+    header = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     image_address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
+    creator = orm.relation('User', primaryjoin="User.id == News.creator_id")
 
     def __repr__(self):
         return f'<News> id: {self.id} creator: {self.creator_id}'
