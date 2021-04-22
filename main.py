@@ -15,6 +15,8 @@ from data.users import User
 from data import users_resource
 from data.rooms import Rooms
 from data import rooms_resource
+from data.news import News
+from data import news_resource
 from in_game import *
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import os
@@ -34,6 +36,8 @@ api.add_resource(users_resource.UserListResource, '/api/users')
 api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
+api.add_resource(news_resource.NewsListResource, '/api/news')
+api.add_resource(news_resource.NewsResource, '/api/news/<int:news_id>')
 active_rooms = []  # список со всеми комнатами
 
 
