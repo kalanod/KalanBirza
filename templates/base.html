@@ -10,31 +10,35 @@
     <title> {{ title }} </title>
     <style>
         body {
-            background-color: #e9e9e9
+            background-color: #2b2b2b;
         }
 
         html, body, main{
             margin: 0;
-            height: 100%;
+            height: 55%;
         }
     </style>
 
 </head>
-<body>
 <header>
-    <nav class="navbar navbar-light bg-light">
-        <a class="navbar-brand" href="/">Каланбиржа</a>
-        {% if current_user.is_authenticated %}
-            <a style="margin-left: 80%; margin-right: 10px"> {{ current_user.nickname }}</a>
-            <a class="navbar-brand" id="ex" href="/logout">выйти</a>
-        {% else %}
-            <p>
-                <a class="btn btn-primary" href="/register">Зарегистрироваться</a>
-                <a class="btn btn-success" href="/login">Войти</a>
-            </p>
-        {% endif %}
+    <nav class="navbar navbar-light" style="background-color: #3c3f41;">
+            <a class="navbar-brand" href="/" style="color: white; float: left; margin-left: 0px">
+                <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
+                <span style="margin-left: 10px">Каланбиржа</span>
+            </a>
+            <form class="form-inline">
+            {% if current_user.is_authenticated %}
+                <a style="color: white; margin-right: 15px"> {{ current_user.nickname }}</a>
+                <a class="btn btn-outline-light" style="" id="ex" href="/logout">выйти</a>
+            {% else %}
+                <a class="btn btn-outline-light" href="/register" style="margin-right: 10px">Зарегистрироваться</a>
+                <a class="btn btn-outline-light" href="/login">Войти</a>
+            {% endif %}
+            </form>
     </nav>
 </header>
+
+<!-- <img src="https://i.ibb.co/WBbGHq3/logo.png" style="width: 40%; margin-left: 30%; margin-top: 5%; opacity: 0.1; z-index: 5;"> -->
 <!-- Container -->
 <main role="main">
     {% block content %}

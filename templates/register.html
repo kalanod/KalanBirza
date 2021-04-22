@@ -1,16 +1,18 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1 style="margin-left: 42%">Регистрация</h1>
+    <h1 style="margin-left: 42%; color: white; margin-top: 5%; font-weight: 200;">Регистрация</h1>
     <div style="padding: 10px;
-     background-color: #dbdbdb;
-     width: 320px;
-     margin-left: auto;
-     margin-right: auto;">
+                background-color: #3c3f41;
+                width: 320px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 1px solid #474747;
+                border-radius: 3px;">
 
         <form action="" method="post">
             {{ form.hidden_tag() }}
-            <p>
+            <p style="color: white; font-weight: 100;">
                 {{ form.email.label }}<br>
                 {{ form.email(class="form-control", type="email", style='width: 300px') }}<br>
                 {% for error in form.email.errors %}
@@ -19,7 +21,7 @@
                     </p>
                 {% endfor %}
             </p>
-            <p>
+            <p style="color: white; font-weight: 100;">
                 {{ form.password.label }}<br>
                 {{ form.password(class="form-control", type="password", style='width: 300px') }}<br>
                 {% for error in form.password.errors %}
@@ -28,7 +30,7 @@
                     </p>
                 {% endfor %}
             </p>
-            <p>
+            <p style="color: white; font-weight: 100;">
                 {{ form.password_again.label }}<br>
                 {{ form.password_again(class="form-control", type="password", style='width: 300px') }}<br>
                 {% for error in form.password_again.errors %}
@@ -37,7 +39,7 @@
                     </p>
                 {% endfor %}
             </p>
-            <p>
+            <p style="color: white; font-weight: 100;">
                 {{ form.nickname.label }}<br>
                 {{ form.nickname(class="form-control", style='width: 300px') }}<br>
                 {% for error in form.nickname.errors %}
@@ -46,7 +48,9 @@
                     </p>
                 {% endfor %}
             </p>
-            <p>{{ form.submit(type="submit", class="btn btn-primary", style="margin-left: 100px") }}</p>
+            <p style="color: white; font-weight: 100;">
+                {{ form.submit(type="submit", class="btn btn-primary", style="margin-left: 100px") }}
+            </p>
             {{ message }}
         </form>
     </div>

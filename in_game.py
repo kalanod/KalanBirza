@@ -114,7 +114,6 @@ class InGameRoom:
     def add_player(self, player_id):
         if not self.player_in_room(player_id):
             self.players.append(InGamePlayer(f'{player_id},{START_BUDGET},,', self))
-            self.save_to_db()
 
         self.get_player(player_id).online = True
 
@@ -396,13 +395,13 @@ class InGameRoom:
                         break
 
                 update_case(self.id, out_json)
+                self.save_to_db()
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
             print('')
 
-            self.save_to_db()
             clear_playzone(self.id)
 
         out_json = []
