@@ -594,6 +594,7 @@
                             f_count = st.slice(index2 + 20, -13)
                             $('#c_price').text("Введите число, максимум: " + f_count)
                             socket.emit('sell', {
+                                'code': '3',
                                 'id': {{current_user.id}},
                                 'title': f_title,
                                 'count': f_count,
