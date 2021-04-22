@@ -113,6 +113,7 @@ def reqister():
 
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
+    print('creating room', title, creator_id)
     db_sess = db_session.create_session()
     id = random.randint(1, 2 ** 32)
     room = Rooms(
