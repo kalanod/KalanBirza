@@ -633,7 +633,7 @@
         });
 
         socket.on('update_stock_cards', function (data) {
-            document.getElementById("pas").disabled = false;
+            //document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
@@ -649,7 +649,7 @@
             }
         });
         socket.on('update_case', function (data) {
-            document.getElementById("pas").disabled = false;
+            //document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
