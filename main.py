@@ -275,6 +275,10 @@ def on_leave(room):
     emit('update_players', json, to=room)
 
 
+@socketIO.on('sell')
+def on_leave(json):
+    print(json)
+    #emit('', to=json['room'])
 @socketIO.event
 def add_message(json, room_id):
     get_room(room_id)

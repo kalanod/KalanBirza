@@ -23,7 +23,6 @@
         #players {
             width: 100%;
             height: 10%;
-            background-color: #2525252;
             float: left
         }
 
@@ -197,12 +196,15 @@
             /* Убираю форматирование*/
             text-decoration: none;
             /* Задаю цвет. */
-            background-color: #da570f;
+            background-color: #525252;
+            border: 2px solid white;
+            border-radius: 3px;
         }
 
         ul.mmenuu > li > a:hover {
             /* Задаю цвет при наведении. */
-            background-color: #eb9316;
+            background-color: #ffffff;
+            color: #000000;
         }
 
         ul.ssubmenuu {
@@ -231,16 +233,18 @@
             /* Задаю цвет. */
             color: #ffffff;
             /* Еще цвет. */
-            background-color: #da570f;
+            background-color: #2b2b2b;
         }
 
         ul.ssubmenuu > li > a:hover {
-            background-color: #eb9316;
+            background-color: #d7d7d7;
+            color: #000000;
             text-decoration: none
         }
 
         ul.mmenuu > li:hover > ul.ssubmenuu {
             display: block;
+            color: #000000;
         }
 
         br {
@@ -269,26 +273,26 @@
 <body>
 <div class="main">
     <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
-          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
-         <div class="modal-dialog modal-dialog-centered" role="document">
-             <div class="modal-content">
-                 <div class="modal-header">
-                     <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
-                         <span aria-hidden="true">&times;</span>
-                     </button>
-                 </div>
-                 <div class="modal-body" id="sell_stock_input">
-                     <label for="message-text" class="col-form-label">Введите количество</label>
-                     <input type="text" class="form-control" id="recipient-name">
-                 </div>
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="sell_stock_input">
+                    <label for="message-text" class="col-form-label" id="c_price">Введите количество</label>
+                    <input type="text" class="form-control" id="recipient-name">
+                </div>
 
-                 <div class="modal-footer">
-                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                     <button type="button" class="btn btn-primary" id="fin_cell">Продать</button>
-                 </div>
-             </div>
-         </div>
-     </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" id="fin_cell">Продать</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -315,15 +319,17 @@
                 {% if player.id != current_user.id %}
                     <div class="player_card">
                         <img src="https://prodota.ru/forum/uploads/profile/photo-182026.png">
-                            <h5 id="player_name">{{ player.nickname }}</h5>
-                            <h5>{{ player.budget }}</h5>
-                            <h5>{{ player.online }}</h5>
-                        </div>
+                        <h5 id="player_name">{{ player.nickname }}</h5>
+                        <h5>{{ player.budget }}</h5>
+                        <h5>{{ player.online }}</h5>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
         <a href="/">
-            <div href="/" class="btn btn-outline-light" style="float: right; margin-top: 1.5%; margin-right: 1.7%; width: 10%; height: 50%" id="exit">выйти</div>
+            <div href="/" class="btn btn-outline-light"
+                 style="float: right; margin-top: 1.5%; margin-right: 1.7%; width: 10%; height: 50%" id="exit">выйти
+            </div>
         </a>
 
     </div>
@@ -336,10 +342,10 @@
                                            height: 35px;
                                            min-height: 35px;">
                 <font size="5" color="white" face="Arial">
-                <div class="title_stonk"><h5>Компания</h5></div>
-                <div class="prise_stonk"><h5>Цена</h5></div>
-                <div class="l_prise_stonk"><h5>Изменение</h5></div>
-                <div class="inp_stonk"><h5>Колебание</h5></div>
+                    <div class="title_stonk"><h5>Компания</h5></div>
+                    <div class="prise_stonk"><h5>Цена</h5></div>
+                    <div class="l_prise_stonk"><h5>Изменение</h5></div>
+                    <div class="inp_stonk"><h5>Колебание</h5></div>
                 </font>
 
             </div>
@@ -349,13 +355,13 @@
         <br>
         {% for stock in current_room.stock_list %}
             <div class="row_price" style="width: 100%; margin-left: 0px;">
-                    <div class="price_card" style="background-color: transparent;
+                <div class="price_card" style="background-color: transparent;
                                                    border-bottom-width: 2px; /* Толщина линии внизу */
                                                    border-bottom-style: solid; /* Стиль линии внизу */
                                                    border-bottom-color: #2b2b2b;
                                                    height: 28px;
                                                    min-height: 28px;">
-                        <font size="5" color="white" face="Arial">
+                    <font size="5" color="white" face="Arial">
                         <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
                         <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
                         <div class="l_prise_stonk"><h5
@@ -363,8 +369,8 @@
                         <div class="img_stonk"><h5 id="image_{{ stock.id }}">
                             {{ '-' if stock.cost - stock.start_cost == 0 else '▼' if stock.cost - stock.start_cost < 0 else '▲' }} </h5>
                         </div>
-                        </font>
-                    </div>
+                    </font>
+                </div>
             </div>
         {% endfor %}
         <!-- <div class="log">
@@ -395,7 +401,8 @@
                          style="width: 30%; height: 100%; float: left; margin-right: 10px; position: relative"
                          id="stonk_{{ i }}">
                         <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
-                             alt="..." style="width: 100%; margin-left: auto; margin-right: auto; margin-top: calc(2 * width); position: absolute;">
+                             alt="..."
+                             style="width: 100%; margin-left: auto; margin-right: auto; margin-top: calc(2 * width); position: absolute;">
 
                         <div style="margin-left: 5%; margin-top: 110%; height: 70%; position: absolute;">
                             <h5> Card title </h5>
@@ -403,7 +410,7 @@
 
                         <div style="margin-left: 5%; margin-top: 150%; height: 30%; position: absolute;">
                             <h5 id="price_s"> price </h5>
-                            <h5  id="count_s"> count </h5>
+                            <h5 id="count_s"> count </h5>
                         </div>
 
                         <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
@@ -440,7 +447,8 @@
                                                                        margin-left: 1.1%;
                                                                        width: 20%;
                                                                        height: 8%;
-                                                                       position: absolute">Пропустить</button>
+                                                                       position: absolute">Пропустить
+        </button>
     </div>
     <div id="me">
         <div class="me_elem">
@@ -476,17 +484,18 @@
         </div>
 
         <font size="5" color="white" face="Arial">
-        <div style="height: 80%;
+            <div style="height: 80%;
                     width: 10%;
                     margin: 0.7%;
                     padding: 1%;
-                    float: left;
+                    float: right;
                     border-right-width: 1px;
                     border-right-style: solid;
-                    border-right-color: white;" >
-            <div id="money" style="float: left; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
-            <div style="margin-left: 5%; float: left;"> $ </div>
-        </div>
+                    border-right-color: white;">
+                <div id="money"
+                     style="float: left; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
+                <div style="margin-left: 5%; float: left;"> $</div>
+            </div>
         </font>
     </div>
 </div>
@@ -577,15 +586,26 @@
                     if (data['data'][stonk]['stocks'] != '0') {
                         const elem = $('<li class="sell"><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
                             + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >'
+                            + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px; padding-top: 0px">'
                             + data['data'][stonk]['stocks'] + '</h6> продать</a></li>');
                         $('#bag').append(elem);
-                         elem.click((e) => {
-                             $('#sell_window').modal('toggle')
+                        elem.click((e) => {
+                            $('#sell_window').modal('toggle')
+                            let st = e.target.innerHTML
+                            index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
+                            index2 = st.indexOf('; padding-top: 0px')
+                            f_title = st.slice(38, index1)
+                            $('#LongTitle').text("Продать " + f_title)
+                            f_count = st.slice(index2 + 20, -13)
+                            $('#c_price').text("Введите число, максимум: " + f_count)
+                            socket.emit('sell', {
+                                'id': {{current_user.id}},
+                                'title': f_title,
+                                'count': f_count,
+                                'room': {{current_room.id}}
+                            })
 
-                             $('#LongTitle').text("Продать " + e.target.text)
-                             console.log(e.target.tagName);
-                         });
+                        });
                     }
 
                 }
@@ -593,11 +613,11 @@
         });
 
         $('#fin_cell').click(function () {
-             count = $('#recipient-name').value
-             title = $('#LongTitle').title
-             console.log(title)
-             //socket.emit('sell', title, count)
-         });
+            count = $('#recipient-name').value
+            title = $('#LongTitle').title
+            console.log(title)
+            //socket.emit('sell', title, count)
+        });
 
         socket.on('update_stock_table', function (json) {
             console.log(json)
