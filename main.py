@@ -224,10 +224,14 @@ def make_decision(json):
         in room.get_player(int(json['player_id'])).stocks]}
     print(stonks)
     emit('update_bag', stonks, to=room_id)
+
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
     print('DASSasda')
 
-
+socketIO.on('buy_com')
+def buy_com(json):
+    com = get_room(json['room']).get_player(json['id']).buisness
+    emit('update_com', com, to=json['room'])
 @app.route('/delete_room/<room_id>')
 def detele_room(room_id):
     room_id = int(room_id)

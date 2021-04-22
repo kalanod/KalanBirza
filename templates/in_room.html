@@ -442,20 +442,16 @@
             </div>
 
         </div>
-        <div style=" margin-right: auto; margin-top: 30%;
-                                                                       margin-left: auto;
-                                                                       width: 20%;
-                                                                       height: 8%;
-                                                                       ">
-            <button href="#" class="btn btn-light" id="pas">Пропустить
-            </button>
+        <div style=" margin-right: auto; margin-top: 30%; margin-left: auto; width: 20%; height: 8%">
+            <button class="btn btn-light" id="pas">Пропустить</button>
         </div>
     </div>
     <div id="me">
+    <div class="me_elem"> </div>
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
-                    <ul class="ssubmenuu">
+                    <ul class="ssubmenuu" id="com">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
                             <li>
                                 <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
@@ -494,7 +490,7 @@
                     border-right-style: solid;
                     border-right-color: white;">
                 <div id="money"
-                     style="float: left; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
+                     style="float: right; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
                 <div style="margin-left: 5%; float: left;"> $</div>
             </div>
         </font>
@@ -522,7 +518,6 @@
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
             console.log({{ current_user.redy }})
-
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -613,7 +608,38 @@
                 }
             }
         });
+        socket.on('update_com', function (data) {
+            if (data['id'] == {{current_user.id}}) {
+                $('#com').empty()
+                for (var com in data['data']) {
+                    if (data['data'][com] == '1') {
+                        const elem = $('<li><a href="#"><h6 style="float: left; margin: 10px">'
+                            + com + '</h6><h6 style="float: left; margin: 10px"> Куплено </h6></a> </li>');
+                        $('#com').append(elem);
 
+                    }
+                    else {
+                        const elem = $('<li><a href="#"><h6 style="float: left; margin: 10px">'
+                            + com + '</h6><h6 style="float: left; margin: 10px"> Купить </h6></a> </li>');
+                        $('#com').append(elem);
+                        elem.click((e) => {
+                            let st = e.target.innerHTML
+                            index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
+                            f_title = st.slice(index1, -17)
+                            socket.emit('buy_com', {
+                                'code': '4',
+                                'id': {{current_user.id}},
+                                'title': f_title,
+                                'room': {{current_room.id}}
+                            })
+
+                        });
+                    }
+                    }
+
+                }
+            }
+        });
         $('#fin_cell').click(function () {
             count = $('#recipient-name').value
             title = $('#LongTitle').title
