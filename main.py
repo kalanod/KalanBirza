@@ -309,7 +309,7 @@ def main():
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 
-    # port = int(os.environ.get("PORT", 5000))
+    port = int(os.environ.get("PORT", 5000))
     app.run(host='0.0.0.0', port=port)
     app.run(debug=True)
 
