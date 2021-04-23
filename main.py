@@ -192,6 +192,8 @@ def win(room_id, player):
 
 @socketIO.on('decision')
 def make_decision(json):
+    print('get_decision from server')
+    print(f'json: {json}')
     data = ''
     if json['code'] == '1':
         data = 'Игрок готов'
@@ -308,8 +310,8 @@ def on_leave(room):
 
 
 @socketIO.on('sell')
-def on_leave(json):
-    print(json)
+def sell(json):
+    make_decision(json)
     # emit('', to=json['room'])
 
 
