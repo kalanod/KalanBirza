@@ -517,7 +517,7 @@
         });
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
-            console.log({{ current_user.redy }})
+            console.log({{ current_user.ready }})
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -638,8 +638,7 @@
                     }
 
                 }
-            }
-        });
+            });
         $('#fin_cell').click(function () {
             count = $('#recipient-name').value
             title = $('#LongTitle').title
