@@ -403,7 +403,7 @@ class InGameRoom:
                                             out_json[event['description']][stock.short_name] = f"+{str(change['value'])}"
 
                     # надеюсь бог простит меня за этот костыль ИЗВИНИТЕ
-                    if all([len(out_json[key]) <= 6 for key in out_json.keys()]):
+                    if all([len(out_json[key]) <= 4 for key in out_json.keys()]):
                         break
 
                 update_case(self.id, out_json)

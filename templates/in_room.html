@@ -67,7 +67,7 @@
         }
 
         .player_card {
-            background-color: #877474;
+            background-color: #525252;
             float: left;
             width: 10%;
             height: 120%;
@@ -319,25 +319,27 @@
                 {% if player.id != current_user.id %}
                     <div class="player_card">
                         <img src="https://prodota.ru/forum/uploads/profile/photo-182026.png">
-                        <h5 id="player_name">{{ player.nickname }}</h5>
+                        <h5 id="player_name" style="color: white">{{ player.nickname }}</h5>
+                        <img src="https://bcs.balticscaffold.com/uploads/placeholder-profile-sq.jpg" style="height: 100%">
                         <h5>{{ player.budget }}</h5>
-                        <h5>{{ player.online }}</h5>
                     </div>
                 {% endif %}
             {% endfor %}
         </div>
         <a href="/rooms">
             <div href="/rooms" class="btn btn-outline-light"
-                 style="float: right; margin-top: 1.5%; margin-right: 1.7%; width: 10%; height: 50%" id="exit">выйти
+                 style="float: right; margin-top: 1%; margin-right: 1%; width: 10%; height: 50%" id="exit">выйти
             </div>
         </a>
 
     </div>
-    <div id="price">
+    <div id="price" style="border-bottom-width: 2px;
+                           border-bottom-style: solid;
+                           border-bottom-color: #2b2b2b;">
         <div class="row_price">
             <div class="price_card" style="background-color: transparent;
-                                           border-bottom-width: 1px; /* Толщина линии внизу */
-                                           border-bottom-style: solid; /* Стиль линии внизу */
+                                           border-bottom-width: 1px;
+                                           border-bottom-style: solid;
                                            border-bottom-color: white;
                                            height: 35px;
                                            min-height: 35px;">
@@ -394,27 +396,27 @@
                                                                      width: 80%;
                                                                      height: 70%;
                                                                      margin-top: 10%;
-                                                                     margin-left: 10%;
+                                                                     margin-left: 13%;
                                                                      display: none;">
                 {% for i in range(3) %}
                     <div class="card"
-                         style="width: 30%; height: 70%; float: left; margin-right: 10px; position: relative"
+                         style="width: 30%; height: 80%; float: left; margin-right: 10px; position: relative"
                          id="stonk_{{ i }}">
                         <div style="width: 60%; height: 40%; margin-left: auto; margin-right: auto">
                             <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
-                                 alt="..." style="height: auto; width: 90%; margin-left: auto; margin-right: auto">
+                                 alt="..." style="height: auto; width: 100%; margin-left: auto; margin-right: auto">
                         </div>
-                        <div style="height: 30%; margin-left: auto; margin-right: auto">
+                        <div style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">
                             <h5> Card title </h5>
                         </div>
 
-                        <div style="height: 30%; margin-left: auto; margin-right: auto">
+                        <div style="height: 30%; margin-left: auto; margin-right: auto; margin-top: 10%">
                             <h5 id="price_s"> price </h5>
                             <h5 id="count_s"> count </h5>
                         </div>
 
                         <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="; margin-left: auto; margin-right: auto; float: bottom"> Buy </a>
+                           style="; margin-left: auto; margin-right: auto; float: bottom; margin-bottom: 5%"> Buy </a>
 
                     </div>
                 {% endfor %}
@@ -425,15 +427,15 @@
                                                width: 53.333%;
                                                height: 70%;
                                                margin-top: 10%;
-                                               margin-left: 23.3335%;
+                                               margin-left: 25%;
                                                display: none;">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 45%; height: 70%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 45%; height: 80%; float: left; margin-right: 10px"
                          id="case_{{ i }}">
-                        <img src="https://www.conchovalleyhomepage.com/wp-content/uploads/sites/83/2020/05/BREAKING-NEWS-GENERIC-1.jpg"
+                        <img src="https://image.shutterstock.com/image-vector/breaking-news-headline-minimalistic-logo-260nw-1050217031.jpg"
                              class="card-img-top"
                              alt="..." style="width: 100%">
-                        <h5 class="card-title">Card title</h5>
+                        <h5 class="card-title" style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">Card title</h5>
                         <div class="card-body">
 
                         </div>
@@ -442,9 +444,12 @@
             </div>
 
         </div>
-        <div style=" margin-right: auto; margin-top: 30%; margin-left: auto; width: 20%; height: 8%; z-index: 999">
-            <button class="btn btn-light" id="pas">Пропустить</button>
-        </div>
+            <button class="btn btn-secondary" id="pas" style="float: left;
+                                                          margin-right: 10%;
+                                                          margin-top: 37%;
+                                                          margin-left: 10%;
+                                                          width: 80%; height: 8%;
+                                                          z-index: 999">Далее</button>
     </div>
     <div id="me">
     <div class="me_elem"> </div>
@@ -706,8 +711,7 @@
             for (var player in json['data'])
                 if (json['data'][player]) {
                     console.log(json['data'])
-                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
-                        'ame" >' + json['data'][player]["nickname"] + '</h5><h5>' + json['data'][player]["budget"] + '</h5></div></a>')
+                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
                 }
         });
 
