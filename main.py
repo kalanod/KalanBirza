@@ -88,7 +88,12 @@ def devs():
                            {"nickname": "Прошак Валерий",
                             "dev": ["написал 10 строчек кода"],
                             "link_text": "VK",
-                            "link": "https://vk.com/vproshak"}]
+                            "link": "https://vk.com/vproshak"},
+                           {"nickname": "Андрей Трофимов",
+                            "dev": ["Фронтенд", "Обмен данными с сервером"],
+                            "link_text": "VK",
+                            "link": "https://vk.com/kalanod"}
+                           ]
     print(params["devs_list"])
 
     return render_template('devs.html', **params)
