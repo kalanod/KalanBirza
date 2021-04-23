@@ -598,10 +598,10 @@
                             $('#c_price').text("Введите число, максимум: " + f_count)
                             socket.emit('sell', {
                                 'code': '3',
-                                'id': {{current_user.id}},
-                                'title': f_title,
-                                'count': f_count,
-                                'room': {{current_room.id}}
+                                'player_id': {{current_user.id}},
+                                'company_id': f_title,
+                                'quantity': f_count,
+                                'room_id': {{current_room.id}}
                             })
 
                         });
@@ -634,7 +634,7 @@
                             socket.emit('decision', {
                                 'code': '4',
                                 'player_id': {{current_user.id}},
-                                'title': st,
+                                'company_id': st,
                                 'room_id': {{current_room.id}}
                             })
 

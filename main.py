@@ -232,7 +232,7 @@ def make_decision(json):
 
     # Это просто обновление недвижимости
     com = {}
-    for i in get_room(json['room_id']).realty_list:
+    for i in room.realty_list:
         if i.owner:
             com[i.name] = i.owner.id
         else:
@@ -241,7 +241,6 @@ def make_decision(json):
     emit('update_com', com1, to=room_id)
 
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
-
 
 
 @app.route('/delete_room/<room_id>')
