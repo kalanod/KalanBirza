@@ -442,7 +442,7 @@
             </div>
 
         </div>
-        <div style=" margin-right: auto; margin-top: 30%; margin-left: auto; width: 20%; height: 8%">
+        <div style=" margin-right: auto; margin-top: 30%; margin-left: auto; width: 20%; height: 8%; z-index: 999">
             <button class="btn btn-light" id="pas">Пропустить</button>
         </div>
     </div>
@@ -580,19 +580,21 @@
                 $('#bag').empty()
                 for (var stonk in data['data']) {
                     if (data['data'][stonk]['stocks'] != '0') {
-                        const elem = $('<li class="sell"><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
-                            + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px; padding-top: 0px">'
-                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>');
+                        const elem = $('<li class="sell"><a href = "#" class="sell">'
+                            + data['data'][stonk]['short_name'] + ' '
+                            + data['data'][stonk]['cost'] + ' | '
+                            + data['data'][stonk]['stocks'] + ' продать</a></li>');
                         $('#bag').append(elem);
                         elem.click((e) => {
                             $('#sell_window').modal('toggle')
                             let st = e.target.innerHTML
-                            index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
-                            index2 = st.indexOf('; padding-top: 0px')
-                            f_title = st.slice(38, index1)
+                            console.log(st)
+                            index1 = st.indexOf(' ')
+                            index2 = st.indexOf('|')
+                            index3 = st.indexOf('продать')
+                            f_title = st.slice(0, index1)
                             $('#LongTitle').text("Продать " + f_title)
-                            f_count = st.slice(index2 + 20, -13)
+                            f_count = st.slice(index2 + 1, index3)
                             $('#c_price').text("Введите число, максимум: " + f_count)
                             socket.emit('sell', {
                                 'code': '3',
@@ -611,26 +613,29 @@
         socket.on('update_com', function (data) {
             if (data['id'] == {{current_user.id}}) {
                 $('#com').empty()
+                console.log(data)
                 for (var com in data['data']) {
-                    if (data['data'][com] == '1') {
-                        const elem = $('<li><a href="#"><h6 style="float: left; margin: 10px">'
-                            + com + '</h6><h6 style="float: left; margin: 10px"> Куплено </h6></a> </li>');
+                    if (data['data'][com] == {{ current_user.id }}) {
+                        const elem = $('<li><a href="#">'
+                            + com + ' Куплено</a> </li>');
                         $('#com').append(elem);
 
                     }
                     else {
-                        const elem = $('<li><a href="#"><h6 style="float: left; margin: 10px">'
-                            + com + '</h6><h6 style="float: left; margin: 10px"> Купить </h6></a> </li>');
+                        const elem = $('<li><a href = "#"">'
+                            + com + '</a></li>');
                         $('#com').append(elem);
                         elem.click((e) => {
                             let st = e.target.innerHTML
                             index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
-                            f_title = st.slice(index1, -17)
-                            socket.emit('buy_com', {
+                            index2 = st.indexOf('; padding: 0p')
+                            f_title = st.slice(index2, index1)
+                            console.log('dasd' + st)
+                            socket.emit('decision', {
                                 'code': '4',
-                                'id': {{current_user.id}},
-                                'title': f_title,
-                                'room': {{current_room.id}}
+                                'player_id': {{current_user.id}},
+                                'title': st,
+                                'room_id': {{current_room.id}}
                             })
 
                         });
@@ -638,7 +643,6 @@
                     }
 
                 }
-            }
         });
         $('#fin_cell').click(function () {
             count = $('#recipient-name').value

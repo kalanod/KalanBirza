@@ -205,11 +205,14 @@ def make_decision(json):
     elif json['code'] == '4':
         data = 'Покупка недвижимости'
         log(json['room_id'], data)
+        for _, i in enumerate(get_room(json['room_id']).realty_list):
+            if i.name == json['title']:
+                idd = _ + 1
+                json['company_id'] = idd
     elif json['code'] == '5':
         data = 'Покупка недвижимости'
         log(json['room_id'], data)
-    print('get_decision from server')
-    print(f'json: {json}')
+
     room_id = int(json['room_id'])
     room = get_room(room_id)
     room.add_decision_to_queue(json)
@@ -218,21 +221,25 @@ def make_decision(json):
     players = [len(room.players), len([i for i in room.players if i.ready])]
     emit('make_turn', players, to=room_id)
     emit('decision_on', to=room_id)
-    print(room.get_player(int(json['player_id'])))
+
     stonks = {'id': int(json['player_id']), 'data': [
         {'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i
         in room.get_player(int(json['player_id'])).stocks]}
-    print(stonks)
+
     emit('update_bag', stonks, to=room_id)
 
+    # Это просто обновление недвижимости
+    com = {}
+    for i in get_room(json['room_id']).realty_list:
+        if i.owner:
+            com[i.name] = i.owner.id
+        else:
+            com[i.name] = None
+    com1 = {'id': current_user.id, 'data': com}
+    emit('update_com', com1, to=room_id)
+
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
-    print('DASSasda')
 
-
-@socketIO.on('buy_com')
-def buy_com(json):
-    com = get_room(json['room']).get_player(json['id']).buisness
-    emit('update_com', com, to=json['room'])
 
 
 @app.route('/delete_room/<room_id>')
@@ -267,6 +274,11 @@ def on_join(room):
         json['data'].append(
             {'nickname': player.nickname, 'budget': player.budget})
     emit('update_players', json, to=room)
+    com = {}
+    for i in get_room(room).realty_list:
+        com[i.name] = i.owner
+    com1 = {'id': current_user.id, 'data': com}
+    emit('update_com', com1, to=room)
 
 
 @socketIO.on('disconnect')
