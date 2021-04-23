@@ -257,7 +257,12 @@ def make_decision(json):
             com[i.name] = None
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room_id)
-
+    current_room = room
+    json = {'data': []}
+    for player in room.players:
+        json['data'].append(
+            {'nickname': player.nickname, 'budget': player.budget})
+    emit('update_players', json, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
@@ -298,7 +303,14 @@ def on_join(room):
         com[i.name] = i.owner
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room)
-
+    print('ddsdsddsdsdsdsdsdsdsdsdsdsdsddssdsdsdsdsdsdsdsdsdsdsdssd')
+    stonks = {'id': current_user.id, 'data': [
+        {'short_name': i.short_name, 'cost': i.cost, 'stocks': get_room(room).get_player(current_user.id).stocks[i]} for i
+        in get_room(room).get_player(current_user.id).stocks]}
+    emit('update_bag', stonks, to=room)
+    players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
+    emit('make_turn', players, to=room)
+    update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
 
 @socketIO.on('disconnect')
 def disconnect():
@@ -328,6 +340,7 @@ def on_leave(room):
 
 @socketIO.on('sell')
 def sell(json):
+    print(json, 'gop gop gop gop')
     make_decision(json)
     # emit('', to=json['room'])
 

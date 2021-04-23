@@ -276,8 +276,8 @@
                     </button>
                 </div>
                 <div class="modal-body" id="sell_stock_input">
-                    <label for="message-text" class="col-form-label" id="c_price">Введите количество</label>
-                    <input type="text" class="form-control" id="recipient-name">
+                    <label for="message-text" class="col-form-label" id="c_price">Введите количество
+                        <input type="text" class="form-control" id="recipient-name"></label>
                 </div>
 
                 <div class="modal-footer">
@@ -320,7 +320,8 @@
                     <div class="player_card">
                         <img src="https://prodota.ru/forum/uploads/profile/photo-182026.png">
                         <h5 id="player_name" style="color: white">{{ player.nickname }}</h5>
-                        <img src="https://bcs.balticscaffold.com/uploads/placeholder-profile-sq.jpg" style="height: 100%">
+                        <img src="https://bcs.balticscaffold.com/uploads/placeholder-profile-sq.jpg"
+                             style="height: 100%">
                         <h5>{{ player.budget }}</h5>
                     </div>
                 {% endif %}
@@ -435,7 +436,8 @@
                         <img src="https://image.shutterstock.com/image-vector/breaking-news-headline-minimalistic-logo-260nw-1050217031.jpg"
                              class="card-img-top"
                              alt="..." style="width: 100%">
-                        <h5 class="card-title" style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">Card title</h5>
+                        <h5 class="card-title"
+                            style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">Card title</h5>
                         <div class="card-body">
 
                         </div>
@@ -444,15 +446,16 @@
             </div>
 
         </div>
-            <button class="btn btn-secondary" id="pas" style="float: left;
+        <button class="btn btn-secondary" id="pas" style="float: left;
                                                           margin-right: 10%;
-                                                          margin-top: 37%;
+                                                          margin-top: 30%;
                                                           margin-left: 10%;
                                                           width: 80%; height: 8%;
-                                                          z-index: 999">Далее</button>
+                                                          z-index: 999">Далее
+        </button>
     </div>
     <div id="me">
-    <div class="me_elem"> </div>
+        <div class="me_elem"></div>
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
@@ -496,7 +499,7 @@
                     border-right-color: white;">
                 <div id="money"
                      style="float: right; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
-                <div style="margin-left: 5%; float: left;"> $</div>
+                <div style="margin-left: 5%; float: right;"> $</div>
             </div>
         </font>
     </div>
@@ -581,6 +584,7 @@
             $('#name_winner').text('Продажа ' + this.value)
         });
         socket.on('update_bag', function (data) {
+            console.log('updated', data)
             if (data['id'] == {{current_user.id}}) {
                 $('#bag').empty()
                 for (var stonk in data['data']) {
@@ -593,7 +597,6 @@
                         elem.click((e) => {
                             $('#sell_window').modal('toggle')
                             let st = e.target.innerHTML
-                            console.log(st)
                             index1 = st.indexOf(' ')
                             index2 = st.indexOf('|')
                             index3 = st.indexOf('продать')
@@ -601,6 +604,8 @@
                             $('#LongTitle').text("Продать " + f_title)
                             f_count = st.slice(index2 + 1, index3)
                             $('#c_price').text("Введите число, максимум: " + f_count)
+                            var count2 = $('#recipient-name').value
+                            console.log(count2)
                             socket.emit('sell', {
                                 'code': '3',
                                 'player_id': {{current_user.id}},
@@ -625,8 +630,7 @@
                             + com + ' Куплено</a> </li>');
                         $('#com').append(elem);
 
-                    }
-                    else {
+                    } else {
                         const elem = $('<li><a href = "#"">'
                             + com + '</a></li>');
                         $('#com').append(elem);
@@ -645,9 +649,9 @@
 
                         });
                     }
-                    }
-
                 }
+
+            }
         });
         $('#fin_cell').click(function () {
             count = $('#recipient-name').value
@@ -708,11 +712,14 @@
 
         socket.on('update_players', function (json) {
             $('#online').empty()
-            for (var player in json['data'])
-                if (json['data'][player]) {
-                    console.log(json['data'])
-                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
-                }
+            console.log(json['data'] +'datadatd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+            for (var player in json['data']) {
+
+                $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
+
+            }
+
+
         });
 
 
