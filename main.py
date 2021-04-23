@@ -90,7 +90,7 @@ def devs():
                             "link_text": "VK",
                             "link": "https://vk.com/vproshak"},
                            {"nickname": "Андрей Трофимов",
-                            "dev": ["Фронтенд", "Обмен данными с сервером"],
+                            "dev": ["фронтенд", "обмен данными с сервером"],
                             "link_text": "VK",
                             "link": "https://vk.com/kalanod"}
                            ]

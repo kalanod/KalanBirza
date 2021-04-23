@@ -269,7 +269,7 @@
     <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content">
+            <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
                 <div class="modal-header">
                     <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
                     <span aria-hidden="true">&times;</span>
@@ -460,10 +460,10 @@
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
                     <ul class="ssubmenuu" id="com">
-                        {% for stock in current_room.get_player(current_user.id).stocks %}
+                        {% for realty in current_room.get_player(current_user.id).realty %}
                             <li>
-                                <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
-                                <h6 title="бонус например +1000$ за ход" style="float: left; margin: 10px">
+                                <h6 style="float: left; margin: 10px">{{ realty.name }}</h6>
+                                <h6 style="float: left; margin: 10px">
                                     название </h6>
                                 <a href="#"> . </a>
                             </li>
@@ -620,12 +620,12 @@
 
                 for (var com in data['data']) {
                     if (data['data'][com] == {{ current_user.id }}) {
-                        const elem = $('<li><a href="#">'
+                        const elem = $('<li title="test"><a href="#" title="test">'
                             + com + ' Куплено</a> </li>');
                         $('#com').append(elem);
 
                     } else {
-                        const elem = $('<li><a href = "#"">'
+                        const elem = $('<li title="test"><a href = "#" title="test">'
                             + com + '</a></li>');
                         $('#com').append(elem);
                         elem.click((e) => {
