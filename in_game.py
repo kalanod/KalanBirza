@@ -173,6 +173,13 @@ class InGameRoom:
 
         return None
 
+    def get_stock_from_short_name(self, stock_short_name):
+        for stock in self.stock_list:
+            if stock.short_name == stock_short_name:
+                return stock
+
+        return None
+
     def get_realty(self, realty_id):
         for realty in self.realty_list:
             if realty.id == realty_id:
@@ -188,7 +195,7 @@ class InGameRoom:
         else:
             player.budget -= cost
             if not stock in player.stocks.keys():
-                player.stocks[stock.id] = 0
+                player.stocks[stock] = 0
             player.stocks[stock] += quantity
 
     def share_generator(self):
@@ -234,18 +241,23 @@ class InGameRoom:
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
 
-            # продажа акций
+            # продажа акций можно краткое название, но лучше не надо
             elif code == 3:
-                stock = self.get_stock(decision.data['company_id'])
-                quantity = decision.data['quantity']
+                if not decision.data['company_id'].isdigit():
+                    stock = self.get_stock_from_short_name(decision.data['company_id'])
+
+                else:
+                    stock = self.get_stock(decision.data['company_id'])
+
+                quantity = int(decision.data['quantity'])
 
                 cost = stock.cost * quantity
-                if player.stocks[stock.id] < quantity:
+                if player.stocks[stock] < quantity:
                     continue
 
                 else:
                     player.budget += cost
-                    player.stocks[stock.id] -= quantity
+                    player.stocks[stock] -= quantity
                     update_money(self.id, {"id": player.id, "money": player.budget})
 
             # покупка недвижимости

@@ -282,7 +282,7 @@
 
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
-                    <button type="button" class="btn btn-primary" id="fin_cell">Продать</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="fin_cell">Продать</button>
                 </div>
             </div>
         </div>
@@ -469,11 +469,13 @@
                 <li><a href=#>Портфель</a>
                     <ul class="ssubmenuu" id="bag">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
+                        {% if current_room.get_player(current_user.id).stocks[stock] %}
                             <li>
                                 <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
                                 <h6 style="float: left; margin: 10px">{{ current_room.get_player(current_user.id).stocks[stock] }}</h6>
                                 <a href="#">продать</a>
                             </li>
+                        {% endif %}
                         {% endfor %}
                     </ul>
                 </li>
@@ -596,10 +598,10 @@
                             $('#c_price').text("Введите число, максимум: " + f_count)
                             socket.emit('sell', {
                                 'code': '3',
-                                'id': {{current_user.id}},
-                                'title': f_title,
-                                'count': f_count,
-                                'room': {{current_room.id}}
+                                'player_id': {{current_user.id}},
+                                'company_id': f_title,
+                                'quantity': f_count,
+                                'room_id': {{current_room.id}}
                             })
 
                         });
