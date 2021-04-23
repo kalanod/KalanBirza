@@ -243,6 +243,7 @@ class InGameRoom:
 
             # продажа акций можно краткое название, но лучше не надо
             elif code == 3:
+                print('\n\n\nn\n\n\n\n\n\n\n\n\n\n' + decision.data['company_id'])
                 if not decision.data['company_id'].isdigit():
                     stock = self.get_stock_from_short_name(decision.data['company_id'])
 
