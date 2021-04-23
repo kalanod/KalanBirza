@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block content %}
+<h2 style="float: left; font-weight: 200; margin: 1%; color: silver;"> Разработчики: </h2>
+    {% for devs in devs_list %}
+    {% if devs %}
+    <div>
+        <div class="card" style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
+            <div class="card-header" style="color: white">
+                <h5 style="float: left; font-weight: 300"> {{ devs['nickname'] }} </h5>
+            </div>
+            <div class="card-body" style="color: white">
+                {% for line in devs['dev'] %}
+                    <h5 style="font-weight: 100"> - {{ line }} </h5>
+                {% endfor %}
+            </div>
+            <div class="card-footer" style="color: white">
+                <a class="btn btn-outline-secondary" href="{{ devs['link'] }}" style="color: white; margin-left: 0px" target="_blank"> {{ devs['link_text'] }} </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+    {% endfor %}
+
+
+{% endblock %}

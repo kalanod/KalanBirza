@@ -78,15 +78,14 @@ def news():
 
 @app.route('/devs', methods=['GET', 'POST'])
 def devs():
-    db_sess = db_session.create_session()
     params = dict()
     params["title"] = "Разработчики"
-    params["dev_list"] = [{"nickname": "Михаил Буянов",
-                           "dev": ["дизайн ИЗВИНИТЕ",
+    params["devs_list"] = [{"nickname": "Михаил Буянов",
+                           "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
                                    "бэкенд"],
                            "link_text": "VK",
-                           "link": ""}]
-    print(params["dev_list"])
+                           "link": "https://vk.com/deep_dark_fantasies_vana"}]
+    print(params["devs_list"])
 
     return render_template('devs.html', **params)
 
