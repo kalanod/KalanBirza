@@ -1,15 +1,17 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h1 style="margin-left: 42%">Авторизация</h1>
+<h1 style="margin-left: 42%; color: white; margin-top: 5%; font-weight: 200;">Авторизация</h1>
     <div style="padding: 10px;
-     background-color: #dbdbdb;
-     width: 320px;
-     margin-left: auto;
-     margin-right: auto;">
+                background-color: #3c3f41;
+                width: 320px;
+                margin-left: auto;
+                margin-right: auto;
+                border: 1px solid #474747;
+                border-radius: 3px;">
 <form action="" method="post" novalidate>
     {{ form.hidden_tag() }}
-    <p>
+    <p style="color: white; font-weight: 100;">
         {{ form.email.label }}<br>
         {{ form.email(class="form-control") }}<br>
         {% for error in form.email.errors %}
@@ -18,7 +20,7 @@
     </div>
     {% endfor %}
     </p>
-    <p>
+    <p style="color: white; font-weight: 100;">
         {{ form.password.label }}<br>
         {{ form.password(class="form-control", type="password") }}<br>
         {% for error in form.password.errors %}
@@ -27,7 +29,7 @@
     </div>
     {% endfor %}
     </p>
-    <p>{{ form.remember_me() }} {{ form.remember_me.label }}</p>
+    <p style="color: white; font-weight: 100;">{{ form.remember_me() }} {{ form.remember_me.label }}</p>
     <p>{{ form.submit(type="submit", class="btn btn-primary", style="margin-left: 115px") }}</p>
 </form>
     </div>

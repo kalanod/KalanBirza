@@ -15,6 +15,8 @@ from data.users import User
 from data import users_resource
 from data.rooms import Rooms
 from data import rooms_resource
+from data.news import News
+from data import news_resource
 from in_game import *
 from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import os
@@ -34,6 +36,8 @@ api.add_resource(users_resource.UserListResource, '/api/users')
 api.add_resource(users_resource.UserResource, '/api/users/<int:users_id>')
 api.add_resource(rooms_resource.RoomsListResource, '/api/rooms')
 api.add_resource(rooms_resource.RoomsResource, '/api/rooms/<int:rooms_id>')
+api.add_resource(news_resource.NewsListResource, '/api/news')
+api.add_resource(news_resource.NewsResource, '/api/news/<int:news_id>')
 active_rooms = []  # список со всеми комнатами
 
 
@@ -53,14 +57,37 @@ def method_not_allowed(error):
     return make_response(jsonify({'error': 'Method Not Allowed - 405'}), 405)
 
 
-@app.route('/', methods=['GET', 'POST'])
+@app.route('/rooms', methods=['GET', 'POST'])
 def base():
+    params = dict()
+    params["title"] = "Список комнат"
+    params["rooms"] = active_rooms
+    return render_template('index.html', **params)
+
+
+@app.route('/', methods=['GET', 'POST'])
+def news():
     db_sess = db_session.create_session()
     params = dict()
-    params["title"] = "Title"
-    params["rooms"] = active_rooms
+    params["title"] = "Новости"
+    params["news_list"] = reversed(db_sess.query(News).all())
+    print(params["news_list"])
 
-    return render_template('index.html', **params)
+    return render_template('news.html', **params)
+
+
+@app.route('/devs', methods=['GET', 'POST'])
+def devs():
+    params = dict()
+    params["title"] = "Разработчики"
+    params["devs_list"] = [{"nickname": "Михаил Буянов",
+                           "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
+                                   "бэкенд"],
+                           "link_text": "VK",
+                           "link": "https://vk.com/deep_dark_fantasies_vana"}]
+    print(params["devs_list"])
+
+    return render_template('devs.html', **params)
 
 
 @app.route('/login', methods=['GET', 'POST'])
@@ -113,6 +140,7 @@ def reqister():
 
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
+    print('creating room', title, creator_id)
     db_sess = db_session.create_session()
     id = random.randint(1, 2 ** 32)
     room = Rooms(
@@ -129,7 +157,7 @@ def create_room(title, creator_id):
     active_rooms.append(InGameRoom(id, title))
     # return redirect('/')
     # нам надо на главную страницу, а не результат
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @app.route('/connect_to_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -140,14 +168,14 @@ def connect_to_room(room_id, player_id):
         return redirect(f'/room/{room_id}')
 
     else:
-        return redirect('/')
+        return redirect('/rooms')
 
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def leave_from_room(room_id, player_id):
     # какие-нибудь проверки
     get_room(room_id).leave_player(player_id)
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
@@ -180,6 +208,27 @@ def win(room_id, player):
 def make_decision(json):
     print('get_decision from server')
     print(f'json: {json}')
+    data = ''
+    if json['code'] == '1':
+        data = 'Игрок готов'
+        log(json['room_id'], data)
+    elif json['code'] == '2':
+        data = f'Выбор карты акций {list(json.keys())[-1]} от 0 до 2 покупка будет происходить во время аукциона'
+        log(json['room_id'], data)
+    elif json['code'] == '3':
+        data = 'Продажа акций'
+        log(json['room_id'], data)
+    elif json['code'] == '4':
+        data = 'Покупка недвижимости'
+        log(json['room_id'], data)
+        for _, i in enumerate(get_room(json['room_id']).realty_list):
+            if i.name == json['title']:
+                idd = _ + 1
+                json['company_id'] = idd
+    elif json['code'] == '5':
+        data = 'Покупка недвижимости'
+        log(json['room_id'], data)
+
     room_id = int(json['room_id'])
     room = get_room(room_id)
     room.add_decision_to_queue(json)
@@ -188,15 +237,24 @@ def make_decision(json):
     players = [len(room.players), len([i for i in room.players if i.ready])]
     emit('make_turn', players, to=room_id)
     emit('decision_on', to=room_id)
-    print(room.get_player(int(json['player_id'])))
+
     stonks = {'id': int(json['player_id']), 'data': [
         {'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i
         in room.get_player(int(json['player_id'])).stocks]}
-    print(stonks)
-    emit('update_bag', stonks, to=room_id)
-    update_money(room_id, json['player_id'])
-    # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
+    emit('update_bag', stonks, to=room_id)
+
+    # Это просто обновление недвижимости
+    com = {}
+    for i in room.realty_list:
+        if i.owner:
+            com[i.name] = i.owner.id
+        else:
+            com[i.name] = None
+    com1 = {'id': current_user.id, 'data': com}
+    emit('update_com', com1, to=room_id)
+
+    # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
 @app.route('/delete_room/<room_id>')
@@ -207,7 +265,7 @@ def detele_room(room_id):
     room = get_room(room_id)
     if room is None:
         print(f'room with id {room_id} not found')
-        return redirect('/')
+        return redirect('/rooms')
 
     print(f'deleting {room}')
     print(f'rooms before deleting: {active_rooms}')
@@ -219,7 +277,7 @@ def detele_room(room_id):
     print(f'rooms before deleting: {active_rooms}')
     print('')
 
-    return redirect('/')
+    return redirect('/rooms')
 
 
 @socketIO.on('join')
@@ -231,6 +289,11 @@ def on_join(room):
         json['data'].append(
             {'nickname': player.nickname, 'budget': player.budget})
     emit('update_players', json, to=room)
+    com = {}
+    for i in get_room(room).realty_list:
+        com[i.name] = i.owner
+    com1 = {'id': current_user.id, 'data': com}
+    emit('update_com', com1, to=room)
 
 
 @socketIO.on('disconnect')
@@ -239,8 +302,6 @@ def disconnect():
 
         room.leave_player(current_user.id)
         current_room = room
-        print('rrrrrrrrrom', active_rooms, room)
-        print(current_room)
         json = {'data': []}
         for player in current_room.players:
             json['data'].append(
@@ -261,6 +322,12 @@ def on_leave(room):
     emit('update_players', json, to=room)
 
 
+@socketIO.on('sell')
+def sell(json):
+    make_decision(json)
+    # emit('', to=json['room'])
+
+
 @socketIO.event
 def add_message(json, room_id):
     get_room(room_id)
@@ -279,8 +346,8 @@ def main():
         active_rooms.append(new_room)
 
     port = int(os.environ.get("PORT", 5000))
-    # app.run(host='0.0.0.0', port=port)
-    app.run(debug=True)
+    app.run(host='0.0.0.0', port=port)
+    # app.run(debug=True)
 
 
 def get_room(room_id):
@@ -291,16 +358,12 @@ def get_room(room_id):
     return None
 
 
-def log(room_id):
-    data = 'a'
-    emit('log', to=room_id)
+def log(room_id, data):
+    emit('log', data, to=room_id)
 
 
-def update_money(room, id):
-    print(get_room(room).players, id)
-    json = {'id': id,
-            'money': get_room(room).get_player(int(id)).budget}
-    emit('update_money', json, to=room)
+def update_money(room_id, json):
+    emit('update_money', json, to=room_id)
 
 
 def add_friend(self_id, friend_id):

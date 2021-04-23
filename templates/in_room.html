@@ -20,35 +20,19 @@
             background-color: #525252;
         }
 
-        #players {
-            width: 100%;
-            height: 6%;
-
-            float: left
-        }
-
-        #board {
-            width: 60%;
-            height: 84%;
-            display: table-cell;
-            float: left;
-
-        }
 
         #price {
             width: 40%;
-            height: 84%;
+            height: 80%;
             float: right;
-            overflow-y: scroll; /* прокрутка по горизонтали */
-            padding-top: 6%;
-            background-color: #626262;
+            padding-top: 1%;
+            background-color: #3c3f41;
 
         }
 
         #me {
             width: 100%;
             height: 10%;
-
             float: left;
         }
 
@@ -74,11 +58,6 @@
 
         }
 
-        .img_stonk {
-            width: 30%;
-            float: top;
-        }
-
         table {
             border: 10px double black;
             width: 100%;
@@ -88,21 +67,20 @@
         }
 
         .player_card {
-            background-color: #c6c6c6;
+            background-color: #525252;
             float: left;
-            width: 13%;
-            height: 85%;
-            margin: 3px;
+            width: 10%;
+            height: 120%;
+            margin: 5px;
             text-align: center;
-            border-radius: 4px;
+            border-radius: 2px;
         }
 
         .row_price {
-            height: 40px;
-            min-height: 40px;
-            width: 95%;
+            width: 96%;
             float: left;
             padding-top: 5px;
+            margin-left: 2%;
         }
 
         .price_card {
@@ -110,7 +88,7 @@
             float: left;
             width: 100%;
             height: 100%;
-            margin: 10px;
+            margin: 0px;
             text-align: center;
         }
 
@@ -143,6 +121,7 @@
             width: 22%;
             text-align: center;
             margin-top: auto;
+            font-weight: 100;
         }
 
         .l_prise_stonk {
@@ -159,15 +138,11 @@
             margin-top: auto;
         }
 
-        .exit {
-            margin-right: 15px;
-            width: 160px;
-            height: 30px;
-            background-color: #c6c6c6;
+        .img_stonk {
             float: right;
-            border: 2px solid black;
-            border-radius: 4px;
+            width: 22%;
             text-align: center;
+            margin-top: auto;
         }
 
         .me_elem {
@@ -215,12 +190,15 @@
             /* Убираю форматирование*/
             text-decoration: none;
             /* Задаю цвет. */
-            background-color: #da570f;
+            background-color: #525252;
+            border: 2px solid white;
+            border-radius: 3px;
         }
 
         ul.mmenuu > li > a:hover {
             /* Задаю цвет при наведении. */
-            background-color: #eb9316;
+            background-color: #ffffff;
+            color: #000000;
         }
 
         ul.ssubmenuu {
@@ -249,16 +227,18 @@
             /* Задаю цвет. */
             color: #ffffff;
             /* Еще цвет. */
-            background-color: #da570f;
+            background-color: #2b2b2b;
         }
 
         ul.ssubmenuu > li > a:hover {
-            background-color: #eb9316;
+            background-color: #d7d7d7;
+            color: #000000;
             text-decoration: none
         }
 
         ul.mmenuu > li:hover > ul.ssubmenuu {
             display: block;
+            color: #000000;
         }
 
         br {
@@ -266,29 +246,10 @@
         }
 
         .play_zone {
-            height: 55%;
+            height: 40%;
             width: 100%;
 
 
-        }
-
-        .stonks_for_sale {
-            width: 80%;
-            height: 85%;
-            margin-top: 10%;
-            margin-left: auto;
-            margin-right: auto;
-            display: none;
-
-        }
-
-        #case {
-            width: 80%;
-            height: 60%;
-            margin-top: 10%;
-            margin-left: auto;
-            margin-right: auto;
-            display: none;
         }
 
         .log {
@@ -305,7 +266,27 @@
 </head>
 <body>
 <div class="main">
+    <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
+                    <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body" id="sell_stock_input">
+                    <label for="message-text" class="col-form-label" id="c_price">Введите количество</label>
+                    <input type="text" class="form-control" id="recipient-name">
+                </div>
 
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="fin_cell">Продать</button>
+                </div>
+            </div>
+        </div>
+    </div>
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
@@ -326,49 +307,72 @@
             </div>
         </div>
     </div>
-    <div id="players">
+    <div id="players" style="border-bottom-width: 2px;
+                             border-bottom-style: solid;
+                             border-bottom-color: #2b2b2b;
+                             width: 100%;
+                             height: 10%;
+                             float: left;
+                             background-color: #3c3f41;">
         <div id="online">
             {% for player in current_room.players %}
                 {% if player.id != current_user.id %}
-                    <a href="#">
-                        <div class="player_card">
-                            <h5 id="player_name">{{ player.nickname }}</h5>
-                            <h5>{{ player.budget }}</h5>
-                            <h5>{{ player.online }}</h5>
-                        </div>
-                    </a>
+                    <div class="player_card">
+                        <img src="https://prodota.ru/forum/uploads/profile/photo-182026.png">
+                        <h5 id="player_name" style="color: white">{{ player.nickname }}</h5>
+                        <img src="https://bcs.balticscaffold.com/uploads/placeholder-profile-sq.jpg" style="height: 100%">
+                        <h5>{{ player.budget }}</h5>
+                    </div>
                 {% endif %}
             {% endfor %}
         </div>
-        <a href="/">
-            <div class="exit" id="exit">выйти</div>
+        <a href="/rooms">
+            <div href="/rooms" class="btn btn-outline-light"
+                 style="float: right; margin-top: 1%; margin-right: 1%; width: 10%; height: 50%" id="exit">выйти
+            </div>
         </a>
 
     </div>
-    <div id="price">
+    <div id="price" style="border-bottom-width: 2px;
+                           border-bottom-style: solid;
+                           border-bottom-color: #2b2b2b;">
         <div class="row_price">
-            <div class="price_card">
-                <div class="title_stonk"><h5>Компания</h5></div>
-                <div class="prise_stonk"><h5>Цена</h5></div>
-                <div class="l_prise_stonk"><h5>Изменение</h5></div>
-                <div class="inp_stonk"><h5>Коллебание</h5><</div>
+            <div class="price_card" style="background-color: transparent;
+                                           border-bottom-width: 1px;
+                                           border-bottom-style: solid;
+                                           border-bottom-color: white;
+                                           height: 35px;
+                                           min-height: 35px;">
+                <font size="5" color="white" face="Arial">
+                    <div class="title_stonk"><h5>Компания</h5></div>
+                    <div class="prise_stonk"><h5>Цена</h5></div>
+                    <div class="l_prise_stonk"><h5>Изменение</h5></div>
+                    <div class="inp_stonk"><h5>Колебание</h5></div>
+                </font>
 
             </div>
         </div>
+        <br>
+        <br>
+        <br>
         {% for stock in current_room.stock_list %}
-            <div class="row_price">
-                <a href="#">
-                    <div class="price_card">
+            <div class="row_price" style="width: 100%; margin-left: 0px;">
+                <div class="price_card" style="background-color: transparent;
+                                                   border-bottom-width: 2px; /* Толщина линии внизу */
+                                                   border-bottom-style: solid; /* Стиль линии внизу */
+                                                   border-bottom-color: #2b2b2b;
+                                                   height: 28px;
+                                                   min-height: 28px;">
+                    <font size="5" color="white" face="Arial">
                         <div class="title_stonk"><h5 id="com_{{ stock.id }}"> {{ stock.short_name }} </h5></div>
                         <div class="prise_stonk"><h5 id="price_{{ stock.id }}"> {{ stock.cost }} </h5></div>
                         <div class="l_prise_stonk"><h5
                                 id="change_{{ stock.id }}"> {{ stock.cost - stock.start_cost }} </h5></div>
-                        <div class="prise_stonk"><h5 id="image_{{ stock.id }}">
-                            {{ '-' if stock.cost - stock.start_cost == 0 else 'v' if stock.cost - stock.start_cost < 0 else '^' }} </h5>
+                        <div class="img_stonk"><h5 id="image_{{ stock.id }}">
+                            {{ '-' if stock.cost - stock.start_cost == 0 else '▼' if stock.cost - stock.start_cost < 0 else '▲' }} </h5>
                         </div>
-                        <!-- <div class="inp_stonk"><input type="range" class="form-range" id="Range0" disabled></div> -->
-                    </div>
-                </a>
+                    </font>
+                </div>
             </div>
         {% endfor %}
         <!-- <div class="log">
@@ -376,45 +380,62 @@
         </div> -->
 
     </div>
-    <div id="board">
-        <div class="progress" style="float: bottom">
+    <div id="board" style="width: 60%;
+                           height: 80%;
+                           display: table-cell;
+                           float: left;
+                           background-color: #2b2b2b;
+                           position: relative">
+        <div class="progress" style="float: bottom; height: 2px; background-color: #2b2b2b">
             <div id="progress-bar" class="progress-bar" role="progressbar" style="width: 0%" aria-valuenow="25"
                  aria-valuemin="0"
                  aria-valuemax="100"></div>
         </div>
-        <div style="margin-left: 40%; float: bottom; vertical-align: bottom">
-            <button href="#" class="btn btn-primary" id="pas">Пропустить</button>
-        </div>
         <div class="play_zone">
-            <div class="stonks_for_sale" id="stonks_for_sale">
+            <div class="stonks_for_sale" id="stonks_for_sale" style="position: absolute;
+                                                                     width: 80%;
+                                                                     height: 70%;
+                                                                     margin-top: 10%;
+                                                                     margin-left: 13%;
+                                                                     display: none;">
                 {% for i in range(3) %}
                     <div class="card"
-                         style="width: 30%; height: 100%; float: left; margin-right: 10px; position: relative"
+                         style="width: 30%; height: 80%; float: left; margin-right: 10px; position: relative"
                          id="stonk_{{ i }}">
-                        <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
-                             class="card-img-top"
-                             alt="..." style="height: 30%; width: 50%; margin-left: auto; margin-right: auto">
-                        <div class="card-body" style="margin-left: auto; margin-right: auto; height: 70%">
-                            <h5 style="margin-left: auto; margin-right: auto" class="card-title"> Card title </h5>
+                        <div style="width: 60%; height: 40%; margin-left: auto; margin-right: auto">
+                            <img src="https://brandslogos.com/wp-content/uploads/images/large/mckinsey-company-logo.png"
+                                 alt="..." style="height: auto; width: 100%; margin-left: auto; margin-right: auto">
                         </div>
-                        <div style="margin-left: auto; margin-right: auto; height: 30%">
-                            <h5 style="margin-left: auto; margin-right: auto" id="price_s"> price </h5>
-                            <h5 style="margin-left: auto; margin-right: auto" id="count_s"> count </h5>
+                        <div style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">
+                            <h5> Card title </h5>
                         </div>
+
+                        <div style="height: 30%; margin-left: auto; margin-right: auto; margin-top: 10%">
+                            <h5 id="price_s"> price </h5>
+                            <h5 id="count_s"> count </h5>
+                        </div>
+
                         <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="margin-left: auto; margin-right: auto; margin-bottom: 10px"> Buy </a>
+                           style="; margin-left: auto; margin-right: auto; float: bottom; margin-bottom: 5%"> Buy </a>
 
                     </div>
                 {% endfor %}
             </div>
-            <div class="case" id="case">
+
+
+            <div class="case" id="case" style="position: absolute;
+                                               width: 53.333%;
+                                               height: 70%;
+                                               margin-top: 10%;
+                                               margin-left: 25%;
+                                               display: none;">
                 {% for i in range(2) %}
-                    <div class="card" style="width: 40%; height: 150%; float: left; margin-right: 10px"
+                    <div class="card" style="width: 45%; height: 80%; float: left; margin-right: 10px"
                          id="case_{{ i }}">
-                        <img src="https://www.conchovalleyhomepage.com/wp-content/uploads/sites/83/2020/05/BREAKING-NEWS-GENERIC-1.jpg"
+                        <img src="https://image.shutterstock.com/image-vector/breaking-news-headline-minimalistic-logo-260nw-1050217031.jpg"
                              class="card-img-top"
-                             alt="..." style="height: 35%">
-                        <h5 class="card-title">Card title</h5>
+                             alt="..." style="width: 100%">
+                        <h5 class="card-title" style="width: 92%; margin-left: auto; margin-right: auto; margin-top: 10%">Card title</h5>
                         <div class="card-body">
 
                         </div>
@@ -423,14 +444,19 @@
             </div>
 
         </div>
-
+            <button class="btn btn-secondary" id="pas" style="float: left;
+                                                          margin-right: 10%;
+                                                          margin-top: 37%;
+                                                          margin-left: 10%;
+                                                          width: 80%; height: 8%;
+                                                          z-index: 999">Далее</button>
     </div>
     <div id="me">
-        <div class="me_elem"></div>
+    <div class="me_elem"> </div>
         <div class="me_elem">
             <ul class="mmenuu">
                 <li><a href=#>Недвижимость</a>
-                    <ul class="ssubmenuu">
+                    <ul class="ssubmenuu" id="com">
                         {% for stock in current_room.get_player(current_user.id).stocks %}
                             <li>
                                 <h6 style="float: left; margin: 10px">{{ stock.short_name }}</h6>
@@ -458,7 +484,21 @@
                 </li>
             </ul>
         </div>
-        <div class="me_elem" id="money">{{ current_room.get_player(current_user.id).budget }}</div>
+
+        <font size="5" color="white" face="Arial">
+            <div style="height: 80%;
+                    width: 10%;
+                    margin: 0.7%;
+                    padding: 1%;
+                    float: left;
+                    border-right-width: 1px;
+                    border-right-style: solid;
+                    border-right-color: white;">
+                <div id="money"
+                     style="float: right; font-weight: Thin;">{{ current_room.get_player(current_user.id).budget }}</div>
+                <div style="margin-left: 5%; float: left;"> $</div>
+            </div>
+        </font>
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
@@ -483,7 +523,6 @@
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
             console.log({{ current_user.redy }})
-
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -546,14 +585,75 @@
                 $('#bag').empty()
                 for (var stonk in data['data']) {
                     if (data['data'][stonk]['stocks'] != '0') {
-                        $('#bag').append('<li class="sell><a href = "#" class="sell"><h6 style="float: left; margin: 10px">'
-                            + data['data'][stonk]['short_name'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['cost'] + '</h6><h6 style = "float: left; margin: 10px" >'
-                            + data['data'][stonk]['stocks'] + '</h6> продать</a></li>')
+                        const elem = $('<li class="sell"><a href = "#" class="sell">'
+                            + data['data'][stonk]['short_name'] + ' '
+                            + data['data'][stonk]['cost'] + ' | '
+                            + data['data'][stonk]['stocks'] + ' продать</a></li>');
+                        $('#bag').append(elem);
+                        elem.click((e) => {
+                            $('#sell_window').modal('toggle')
+                            let st = e.target.innerHTML
+                            console.log(st)
+                            index1 = st.indexOf(' ')
+                            index2 = st.indexOf('|')
+                            index3 = st.indexOf('продать')
+                            f_title = st.slice(0, index1)
+                            $('#LongTitle').text("Продать " + f_title)
+                            f_count = st.slice(index2 + 1, index3)
+                            $('#c_price').text("Введите число, максимум: " + f_count)
+                            socket.emit('sell', {
+                                'code': '3',
+                                'player_id': {{current_user.id}},
+                                'company_id': f_title,
+                                'quantity': f_count,
+                                'room_id': {{current_room.id}}
+                            })
+
+                        });
                     }
 
                 }
             }
+        });
+        socket.on('update_com', function (data) {
+            if (data['id'] == {{current_user.id}}) {
+                $('#com').empty()
+                console.log(data)
+                for (var com in data['data']) {
+                    if (data['data'][com] == {{ current_user.id }}) {
+                        const elem = $('<li><a href="#">'
+                            + com + ' Куплено</a> </li>');
+                        $('#com').append(elem);
+
+                    }
+                    else {
+                        const elem = $('<li><a href = "#"">'
+                            + com + '</a></li>');
+                        $('#com').append(elem);
+                        elem.click((e) => {
+                            let st = e.target.innerHTML
+                            index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
+                            index2 = st.indexOf('; padding: 0p')
+                            f_title = st.slice(index2, index1)
+                            console.log('dasd' + st)
+                            socket.emit('decision', {
+                                'code': '4',
+                                'player_id': {{current_user.id}},
+                                'company_id': st,
+                                'room_id': {{current_room.id}}
+                            })
+
+                        });
+                    }
+                    }
+
+                }
+        });
+        $('#fin_cell').click(function () {
+            count = $('#recipient-name').value
+            title = $('#LongTitle').title
+            console.log(title)
+            //socket.emit('sell', title, count)
         });
 
         socket.on('update_stock_table', function (json) {
@@ -568,7 +668,7 @@
         });
 
         socket.on('update_stock_cards', function (data) {
-            document.getElementById("pas").disabled = false;
+            //document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
@@ -578,13 +678,13 @@
                 document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
                 document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
                 document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
-                document.querySelector('#stonk_' + String(fid) + '> img').src = '' + data[key]['img']
+                document.querySelector('#stonk_' + String(fid) + '> div > img').src = '' + data[key]['img']
                 document.querySelector('#stonk_' + String(fid) + ' > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
                 fid++
             }
         });
         socket.on('update_case', function (data) {
-            document.getElementById("pas").disabled = false;
+            //document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
@@ -611,8 +711,7 @@
             for (var player in json['data'])
                 if (json['data'][player]) {
                     console.log(json['data'])
-                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_n' +
-                        'ame" >' + json['data'][player]["nickname"] + '</h5><h5>' + json['data'][player]["budget"] + '</h5></div></a>')
+                    $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
                 }
         });
 

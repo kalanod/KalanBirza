@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money
 
 START_BUDGET = 1000000
 
@@ -114,7 +114,6 @@ class InGameRoom:
     def add_player(self, player_id):
         if not self.player_in_room(player_id):
             self.players.append(InGamePlayer(f'{player_id},{START_BUDGET},,', self))
-            self.save_to_db()
 
         self.get_player(player_id).online = True
 
@@ -174,6 +173,13 @@ class InGameRoom:
 
         return None
 
+    def get_stock_from_short_name(self, stock_short_name):
+        for stock in self.stock_list:
+            if stock.short_name == stock_short_name:
+                return stock
+
+        return None
+
     def get_realty(self, realty_id):
         for realty in self.realty_list:
             if realty.id == realty_id:
@@ -189,7 +195,7 @@ class InGameRoom:
         else:
             player.budget -= cost
             if not stock in player.stocks.keys():
-                player.stocks[stock.id] = 0
+                player.stocks[stock] = 0
             player.stocks[stock] += quantity
 
     def share_generator(self):
@@ -235,18 +241,24 @@ class InGameRoom:
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
 
-            # продажа акций
+            # продажа акций можно краткое название, но лучше не надо
             elif code == 3:
-                stock = self.get_stock(decision.data['company_id'])
-                quantity = decision.data['quantity']
+                if not decision.data['company_id'].isdigit():
+                    stock = self.get_stock_from_short_name(decision.data['company_id'])
+
+                else:
+                    stock = self.get_stock(decision.data['company_id'])
+
+                quantity = int(decision.data['quantity'])
 
                 cost = stock.cost * quantity
-                if player.stocks[stock.id] < quantity:
+                if player.stocks[stock] < quantity:
                     continue
 
                 else:
                     player.budget += cost
-                    player.stocks[stock.id] -= quantity
+                    player.stocks[stock] -= quantity
+                    update_money(self.id, {"id": player.id, "money": player.budget})
 
             # покупка недвижимости
             elif code == 4:
@@ -289,6 +301,8 @@ class InGameRoom:
                 player.budget += realty.cost
                 player.realty.remove(realty)
                 realty.owner = None
+
+                update_money(self.id, {"id": player.id, "money": player.budget})
 
         #print('')
 
@@ -354,6 +368,7 @@ class InGameRoom:
             for card in self.stocks_cards:
                 for player in card.players:
                     self.sell_stock_to_player(player, card.stock, card.quantity)
+                    update_money(self.id, {"id": player.id, "money": player.budget})
             self.next_stage()
 
         elif self.stage == 2:
@@ -382,23 +397,23 @@ class InGameRoom:
                                         stock.cost = stock.lowest_cost
                                     if change['value'] != 0:
                                         if change['value'] < 0:
-                                            out_json[event['description']][stock.name] = str(change['value'])
+                                            out_json[event['description']][stock.short_name] = str(change['value'])
 
                                         else:
-                                            out_json[event['description']][stock.name] = f"+{str(change['value'])}"
+                                            out_json[event['description']][stock.short_name] = f"+{str(change['value'])}"
 
                     # надеюсь бог простит меня за этот костыль ИЗВИНИТЕ
-                    if all([len(out_json[key]) <= 6 for key in out_json.keys()]):
+                    if all([len(out_json[key]) <= 4 for key in out_json.keys()]):
                         break
 
                 update_case(self.id, out_json)
+                self.save_to_db()
 
         elif self.stage == 3:  # после события, когда все нажмут ок, мы опять переходим к покупке акций по карточкам
             self.stage = 0
             print(f'{self} go to {self.stage} stage - {self.stages[self.stage]}')
             print('')
 
-            self.save_to_db()
             clear_playzone(self.id)
 
         out_json = []
@@ -409,10 +424,10 @@ class InGameRoom:
                 image = '-'
 
             elif change < 0:
-                image = 'v'
+                image = '▼'
 
             else:
-                image = '^'
+                image = '▲'
 
             out_json.append({'short_name': stock.short_name,
                              'cost': stock.cost,
