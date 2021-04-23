@@ -84,7 +84,11 @@ def devs():
                            "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
                                    "бэкенд"],
                            "link_text": "VK",
-                           "link": "https://vk.com/deep_dark_fantasies_vana"}]
+                           "link": "https://vk.com/deep_dark_fantasies_vana"},
+                           {"nickname": "Прошак Валерий",
+                            "dev": ["написал 10 строчек кода"],
+                            "link_text": "VK",
+                            "link": "https://vk.com/vproshak"}]
     print(params["devs_list"])
 
     return render_template('devs.html', **params)
