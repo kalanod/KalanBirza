@@ -76,6 +76,21 @@ def news():
     return render_template('news.html', **params)
 
 
+@app.route('/devs', methods=['GET', 'POST'])
+def devs():
+    db_sess = db_session.create_session()
+    params = dict()
+    params["title"] = "Разработчики"
+    params["dev_list"] = [{"nickname": "Михаил Буянов",
+                           "dev": ["дизайн ИЗВИНИТЕ",
+                                   "бэкенд"],
+                           "link_text": "VK",
+                           "link": ""}]
+    print(params["dev_list"])
+
+    return render_template('devs.html', **params)
+
+
 @app.route('/login', methods=['GET', 'POST'])
 def login():
     form = LoginForm()
