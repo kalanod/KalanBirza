@@ -276,8 +276,8 @@
                     </button>
                 </div>
                 <div class="modal-body" id="sell_stock_input">
-                    <label for="message-text" class="col-form-label" id="c_price">Введите количество
-                        <input type="text" class="form-control" id="recipient-name"></label>
+                    <label for="message-text" class="col-form-label" id="c_price">Введите количество</label>
+                        <input type="text" class="form-control" id="recipient-name">
                 </div>
 
                 <div class="modal-footer">
@@ -525,7 +525,7 @@
         });
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
-            console.log({{ current_user.redy }})
+
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -573,18 +573,18 @@
             $('#log').append('<h6 style="margin: 10px">' + data + '</h6>')
         });
         socket.on('make_turn', function (data) {
-            console.log(data)
+
             var ar = data[1] / data[0]
             progress = 100 * ar
             document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
         $('.sell').click(function () {
-            console.log('dddddddddddd')
+
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Продажа ' + this.value)
         });
         socket.on('update_bag', function (data) {
-            console.log('updated', data)
+
             if (data['id'] == {{current_user.id}}) {
                 $('#bag').empty()
                 for (var stonk in data['data']) {
@@ -605,14 +605,8 @@
                             f_count = st.slice(index2 + 1, index3)
                             $('#c_price').text("Введите число, максимум: " + f_count)
                             var count2 = $('#recipient-name').value
-                            console.log(count2)
-                            socket.emit('sell', {
-                                'code': '3',
-                                'player_id': {{current_user.id}},
-                                'company_id': f_title,
-                                'quantity': f_count,
-                                'room_id': {{current_room.id}}
-                            })
+
+
 
                         });
                     }
@@ -623,7 +617,7 @@
         socket.on('update_com', function (data) {
             if (data['id'] == {{current_user.id}}) {
                 $('#com').empty()
-                console.log(data)
+
                 for (var com in data['data']) {
                     if (data['data'][com] == {{ current_user.id }}) {
                         const elem = $('<li><a href="#">'
@@ -639,13 +633,6 @@
                             index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
                             index2 = st.indexOf('; padding: 0p')
                             f_title = st.slice(index2, index1)
-                            console.log('dasd' + st)
-                            socket.emit('decision', {
-                                'code': '4',
-                                'player_id': {{current_user.id}},
-                                'company_id': st,
-                                'room_id': {{current_room.id}}
-                            })
 
                         });
                     }
@@ -654,9 +641,19 @@
             }
         });
         $('#fin_cell').click(function () {
-            count = $('#recipient-name').value
-            title = $('#LongTitle').title
-            console.log(title)
+
+            count = $('#recipient-name').val()
+            title = $('#LongTitle').text()
+            index1 = title.indexOf(' ')
+            title = title.slice(index1 + 1, -1)
+            console.log(title, count)
+            socket.emit('sell', {
+                                'code': '3',
+                                'player_id': {{current_user.id}},
+                                'company_id': title,
+                                'quantity': count,
+                                'room_id': {{current_room.id}}
+                            })
             //socket.emit('sell', title, count)
         });
 
@@ -712,7 +709,7 @@
 
         socket.on('update_players', function (json) {
             $('#online').empty()
-            console.log(json['data'] +'datadatd!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!')
+
             for (var player in json['data']) {
 
                 $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
