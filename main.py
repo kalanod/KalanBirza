@@ -92,7 +92,11 @@ def devs():
                            {"nickname": "Андрей Трофимов",
                             "dev": ["фронтенд", "обмен данными с сервером"],
                             "link_text": "VK",
-                            "link": "https://vk.com/kalanod"}
+                            "link": "https://vk.com/kalanod"},
+                           {"nickname": "Влад Ревякин",
+                            "dev": ["написал события", "отдыхал"],
+                            "link_text": "VK",
+                            "link": "https://vk.com/id515647622"}
                            ]
     print(params["devs_list"])
 
