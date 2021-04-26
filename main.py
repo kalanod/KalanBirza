@@ -281,8 +281,17 @@ def detele_room(room_id):
     global active_rooms
     print('')
     room = get_room(room_id)
+
     if room is None:
         print(f'room with id {room_id} not found')
+        return redirect('/rooms')
+
+    if room.stage != -1:
+        print(f'room with id {room_id} in game')
+        return redirect('/rooms')
+
+    if room.players:
+        print(f'room with id {room_id} not empty')
         return redirect('/rooms')
 
     print(f'deleting {room}')
