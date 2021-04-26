@@ -321,7 +321,6 @@ def on_join(room):
         com[i.name] = i.owner
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room)
-    print('ddsdsddsdsdsdsdsdsdsdsdsdsdsddssdsdsdsdsdsdsdsdsdsdsdssd')
     stonks = {'id': current_user.id, 'data': [
         {'short_name': i.short_name, 'cost': i.cost, 'stocks': get_room(room).get_player(current_user.id).stocks[i]} for i
         in get_room(room).get_player(current_user.id).stocks]}
@@ -329,6 +328,7 @@ def on_join(room):
     players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
     emit('make_turn', players, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
+
 
 @socketIO.on('disconnect')
 def disconnect():
