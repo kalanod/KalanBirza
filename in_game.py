@@ -263,7 +263,19 @@ class InGameRoom:
 
             # покупка недвижимости
             elif code == 4:
-                realty = self.get_realty(decision.data['company_id'])
+                if decision.data['company_id']:
+                    realty = self.get_realty(decision.data['company_id'])
+
+                elif decision.data['title']:
+                    title = decision.data['title']
+                    realty = None
+                    for realty_in_list in self.realty_list:
+                        if realty_in_list.name == title:
+                            realty = realty_in_list
+                            break
+
+                else:
+                    continue
 
                 if realty is None:
                     continue
@@ -279,7 +291,7 @@ class InGameRoom:
 
                 player.budget -= realty.cost
 
-                if realty.need_for_win:
+                if realty.need_for_win == 1:
                     self.player_win(player)
                     return None  # завершение работы обработчика
 
@@ -440,6 +452,10 @@ class InGameRoom:
     def player_win(self, player_obj):
         print('')
         print(f'clearing all data in {self}')
+
+        for realty in self.realty_list:  # сброс недвижимости
+            realty.owner = None
+
         for player in self.players:  # сброс игроков
             player.ready = False
             player.budget = START_BUDGET
@@ -451,11 +467,12 @@ class InGameRoom:
             player.stocks = start_stocks
             player.realty = []
 
-        with open('./data/stock.json') as file:
+        with open('./static/stock.json') as file:
             companies = json.loads(file.read())['companies']
+            print('companies:', companies)
 
         for stock in self.stock_list:  # сброс цен акций
-            stock.cost = companies[stock.id]['cost']
+            stock.cost = companies[stock.id - 1]['stock_cost']
 
         self.stage = -1
 

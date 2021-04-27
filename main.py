@@ -345,6 +345,7 @@ def disconnect():
 
 @socketIO.on('leave')
 def on_leave(room):
+    print(room, 'leave socket')
     leave_room(room)
     user = current_user.id
     get_room(room).leave_player(user)
@@ -358,9 +359,14 @@ def on_leave(room):
 
 @socketIO.on('sell')
 def sell(json):
-    print(json, 'gop gop gop gop')
+    print(json, 'sell socket')
     make_decision(json)
     # emit('', to=json['room'])
+
+
+@socketIO.on('test')
+def sell():
+    print('test socket')
 
 
 @socketIO.event

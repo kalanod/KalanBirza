@@ -462,10 +462,7 @@
                     <ul class="ssubmenuu" id="com">
                         {% for realty in current_room.get_player(current_user.id).realty %}
                             <li>
-                                <h6 style="float: left; margin: 10px">{{ realty.name }}</h6>
-                                <h6 style="float: left; margin: 10px">
-                                    название </h6>
-                                <a href="#"> . </a>
+                                <h6 style="color: white"> ошибка загрузки </h6>
                             </li>
                         {% endfor %}
                     </ul>
@@ -620,12 +617,12 @@
 
                 for (var com in data['data']) {
                     if (data['data'][com] == {{ current_user.id }}) {
-                        const elem = $('<li title="test"><a href="#" title="test">'
+                        const elem = $('<li title="test"><a href="#">'
                             + com + ' Куплено</a> </li>');
                         $('#com').append(elem);
 
                     } else {
-                        const elem = $('<li title="test"><a href = "#" title="test">'
+                        const elem = $('<li title="test" class="buy_bag"><a href = "#" class="buy_bag">'
                             + com + '</a></li>');
                         $('#com').append(elem);
                         elem.click((e) => {
@@ -633,7 +630,13 @@
                             index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
                             index2 = st.indexOf('; padding: 0p')
                             f_title = st.slice(index2, index1)
-
+                            socket.emit('decision', {
+                                'code': '4',
+                                'player_id': {{current_user.id}},
+                                'company_id': '',
+                                'title': st,
+                                'room_id': {{current_room.id}}
+                            })
                         });
                     }
                 }
