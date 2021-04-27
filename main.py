@@ -213,8 +213,8 @@ def clear_playzone(room_id):
     emit('clear_playzone', to=room_id)
 
 
-def win(room_id, player):
-    emit('win', player, to=room_id)
+def win(room_id, json):
+    emit('win', json, to=room_id)
 
 
 @socketIO.on('decision')

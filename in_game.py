@@ -243,7 +243,6 @@ class InGameRoom:
 
             # продажа акций можно краткое название, но лучше не надо
             elif code == 3:
-                print('\n\n\nn\n\n\n\n\n\n\n\n\n\n' + decision.data['company_id'])
                 if not decision.data['company_id'].isdigit():
                     stock = self.get_stock_from_short_name(decision.data['company_id'])
 
@@ -261,7 +260,7 @@ class InGameRoom:
                     player.stocks[stock] -= quantity
                     update_money(self.id, {"id": player.id, "money": player.budget})
 
-            # покупка недвижимости
+            # покупка недвижимости можно краткое название, но лучше не надо
             elif code == 4:
                 if decision.data['company_id']:
                     realty = self.get_realty(decision.data['company_id'])
@@ -289,9 +288,13 @@ class InGameRoom:
                 if realty in player.realty:
                     continue
 
+                if self.get_stock(realty.id) in player.stocks and player.stocks[self.get_stock(realty.id)] < realty.realty_stock_quantity:
+                    continue
+
                 player.budget -= realty.cost
 
-                if realty.need_for_win == 1:
+                if realty.need_for_win:
+                    print(realty.need_for_win)
                     self.player_win(player)
                     return None  # завершение работы обработчика
 
@@ -476,7 +479,8 @@ class InGameRoom:
 
         self.stage = -1
 
-        win(self.id, player_obj)
+        win(self.id, {'nickname': player_obj.nickname,
+                      'id': player_obj.id})
         update_stock_table(self.id, [{'short_name': self.stock_list[i].short_name,
                                       'lowest_cost': self.stock_list[i].lowest_cost,
                                       'cost': self.stock_list[i].cost} for i in range(9)])
@@ -598,6 +602,7 @@ class Realty:
         self.need_for_win = bool(realty_dict["need_for_win"])
         self.name = str(realty_dict["realty_name"])
         self.cost = int(realty_dict["realty_cost"])
+        self.realty_stock_quantity = int(realty_dict["realty_stock_quantity"])
         self.bonus = int(realty_dict["realty_bonus"])
         self.owner = None  # куплена ли игроком
 
