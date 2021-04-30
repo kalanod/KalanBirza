@@ -251,6 +251,9 @@ class InGameRoom:
 
                 quantity = int(decision.data['quantity'])
 
+                if quantity <= 0:
+                    continue
+
                 cost = stock.cost * quantity
                 if player.stocks[stock] < quantity:
                     continue
