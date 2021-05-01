@@ -777,10 +777,9 @@
         });
 
         socket.on('update_stock_cards', function (data) {
-            //document.getElementById("pas").disabled = false;
-            progress = 0
-            document.getElementById('case').style.display = 'None';
-            var a = document.getElementById('stonks_for_sale').style.display = 'block';
+            // document.getElementById("pas").disabled = false;
+            // progress = 0
+            // var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
 
             for (var key in data) {
@@ -801,10 +800,17 @@
                     document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
                     document.querySelector('#stonk_' + String(fid) + '> div > img').src = '' + data[key]['img']
                     document.querySelector('#stonk_' + String(fid) + ' > button').innerHTML = 'купить ' + data[key]['cost'] + '$'
+                    document.querySelector('#stonk_' + String(fid) + ' > button').disabled = false
                     fid++
 
                 }
             }
+        });
+        socket.on('show_stock_cards', function (data) {
+            //document.getElementById("pas").disabled = false;
+            progress = 0
+            document.getElementById('stonks_for_sale').style.display = 'block';
+            document.getElementById('case').style.display = 'None';
         });
         socket.on('update_case', function (data) {
             //document.getElementById("pas").disabled = false;
@@ -825,8 +831,8 @@
             }
         });
         socket.on('clear_playzone', function (data) {
+            document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'None';
-
         });
 
         socket.on('update_players', function (json) {

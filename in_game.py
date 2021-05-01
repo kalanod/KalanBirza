@@ -5,7 +5,7 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money, show_stock_cards
 
 START_BUDGET = 1000000
 
@@ -379,6 +379,7 @@ class InGameRoom:
                                              "img": card.stock.company_logo_address,
                                              "free": owner}
             update_stock_cards(self.id, out_json)
+            show_stock_cards(self.id)
 
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
@@ -409,6 +410,7 @@ class InGameRoom:
                                              "free": card.players}
 
             update_stock_cards(self.id, out_json)
+            show_stock_cards(self.id)
 
         elif self.stage == 1:
             self.stage = 2

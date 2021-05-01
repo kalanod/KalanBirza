@@ -198,9 +198,14 @@ def in_room(room_id):
 
 
 def update_stock_cards(room_id, json):
-    print('sss')
+    print('updating stock cards...')
     print(json)
     emit('update_stock_cards', json, to=room_id)
+
+
+def show_stock_cards(room_id):
+    print('showing stock cards...')
+    emit('show_stock_cards', [], to=room_id)
 
 
 def update_stock_table(room_id, json):
