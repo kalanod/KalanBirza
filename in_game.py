@@ -240,6 +240,19 @@ class InGameRoom:
                 player.ready = True
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
+                out_json = {}
+                for card in self.stocks_cards:
+                    owner = card.players
+                    if owner:
+                        owner = 1
+                    else:
+                        owner = 0
+                    out_json[card.stock.name] = {"quantity": card.quantity,
+                                                 "price": card.stock.cost,  # стоимость одной акции
+                                                 "cost": card.cost,
+                                                 "img": card.stock.company_logo_address,
+                                                 "free": owner}
+                update_stock_cards(self.id, out_json)
 
             # продажа акций можно краткое название, но лучше не надо
             elif code == 3:
@@ -263,12 +276,15 @@ class InGameRoom:
                     player.stocks[stock] -= quantity
                     update_money(self.id, {"id": player.id, "money": player.budget})
 
+
+
             # покупка недвижимости можно краткое название, но лучше не надо
             elif code == 4:
                 if decision.data['company_id']:
                     realty = self.get_realty(decision.data['company_id'])
 
                 elif decision.data['title']:
+
                     title = decision.data['title']
                     realty = None
                     for realty_in_list in self.realty_list:
@@ -291,7 +307,8 @@ class InGameRoom:
                 if realty in player.realty:
                     continue
 
-                if self.get_stock(realty.id) in player.stocks and player.stocks[self.get_stock(realty.id)] < realty.realty_stock_quantity:
+                if self.get_stock(realty.id) in player.stocks and player.stocks[
+                    self.get_stock(realty.id)] < realty.realty_stock_quantity:
                     continue
 
                 player.budget -= realty.cost
@@ -303,6 +320,7 @@ class InGameRoom:
 
                 player.realty.append(realty)
                 realty.owner = player
+
 
             # продажа недвижимости
             elif code == 5:
@@ -323,7 +341,7 @@ class InGameRoom:
 
                 update_money(self.id, {"id": player.id, "money": player.budget})
 
-        #print('')
+        # print('')
 
     def make_all_players_unready(self):
         for player in self.players:
@@ -347,12 +365,19 @@ class InGameRoom:
                     player.budget += realty.bonus
 
             out_json = {}
+            for card in range(len(self.stocks_cards)):
+                self.stocks_cards[card].players = []
             for card in self.stocks_cards:
+                owner = card.players
+                if owner:
+                    owner = 1
+                else:
+                    owner = 0
                 out_json[card.stock.name] = {"quantity": card.quantity,
                                              "price": card.stock.cost,  # стоимость одной акции
                                              "cost": card.cost,
-                                             "img": card.stock.company_logo_address}
-
+                                             "img": card.stock.company_logo_address,
+                                             "free": owner}
             update_stock_cards(self.id, out_json)
 
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
@@ -368,13 +393,20 @@ class InGameRoom:
             for player in self.players:
                 for realty in player.realty:
                     player.budget += realty.bonus
-
+            for card in range(len(self.stocks_cards)):
+                self.stocks_cards[card].players = []
             out_json = {}
             for card in self.stocks_cards:
+                owner = card.players
+                if owner:
+                    owner = 1
+                else:
+                    owner = 0
                 out_json[card.stock.name] = {"quantity": card.quantity,
                                              "price": card.stock.cost,  # стоимость одной акции
                                              "cost": card.cost,
-                                             "img": card.stock.company_logo_address}
+                                             "img": card.stock.company_logo_address,
+                                             "free": card.players}
 
             update_stock_cards(self.id, out_json)
 
@@ -419,7 +451,8 @@ class InGameRoom:
                                             out_json[event['description']][stock.short_name] = str(change['value'])
 
                                         else:
-                                            out_json[event['description']][stock.short_name] = f"+{str(change['value'])}"
+                                            out_json[event['description']][
+                                                stock.short_name] = f"+{str(change['value'])}"
 
                     # надеюсь бог простит меня за этот костыль ИЗВИНИТЕ
                     if all([len(out_json[key]) <= 4 for key in out_json.keys()]):
@@ -641,4 +674,3 @@ class Auction:
             check_file.close()
         else:
             print('Нужно запустить аукцион')
-

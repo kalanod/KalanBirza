@@ -81,10 +81,10 @@ def devs():
     params = dict()
     params["title"] = "Разработчики"
     params["devs_list"] = [{"nickname": "Михаил Буянов",
-                           "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
-                                   "бэкенд"],
-                           "link_text": "VK",
-                           "link": "https://vk.com/deep_dark_fantasies_vana"},
+                            "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
+                                    "бэкенд"],
+                            "link_text": "VK",
+                            "link": "https://vk.com/deep_dark_fantasies_vana"},
                            {"nickname": "Прошак Валерий",
                             "dev": ["написал 10 строчек кода"],
                             "link_text": "VK",
@@ -198,6 +198,8 @@ def in_room(room_id):
 
 
 def update_stock_cards(room_id, json):
+    print('sss')
+    print(json)
     emit('update_stock_cards', json, to=room_id)
 
 
@@ -322,7 +324,8 @@ def on_join(room):
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room)
     stonks = {'id': current_user.id, 'data': [
-        {'short_name': i.short_name, 'cost': i.cost, 'stocks': get_room(room).get_player(current_user.id).stocks[i]} for i
+        {'short_name': i.short_name, 'cost': i.cost, 'stocks': get_room(room).get_player(current_user.id).stocks[i]} for
+        i
         in get_room(room).get_player(current_user.id).stocks]}
     emit('update_bag', stonks, to=room)
     players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
@@ -374,6 +377,29 @@ def add_message(json, room_id):
     get_room(room_id)
     room = '1'
     emit('new_message', json, to=room)
+
+
+@socketIO.on('get_com_buy')
+def get_com_buy(json):
+    room = json['room_id']
+    id = json['player_id']
+    title = json['title']
+    com = ''
+    for i in get_room(room).realty_list:
+         if i.name == title:
+             com = i
+    json = {
+        'player_id': id,
+        'room_id': room,
+        'title': title,
+        'des': 'des',
+        'bonus': com.bonus,
+        'cost': com.cost,
+        'owner': com.owner,
+        'count': com.realty_stock_quantity
+    }
+
+    emit('get_com_buy', json, to=room)
 
 
 def main():

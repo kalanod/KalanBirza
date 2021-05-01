@@ -266,18 +266,74 @@
 </head>
 <body>
 <div class="main">
+    <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 5">
+
+        <div class="toast-container position-absolute top-0 end-0 p-3">
+
+            <!-- Затем положите тосты внутрь -->
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded me-2" alt="...">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small class="text-muted">just now</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+                <div class="toast-body">
+                    Видно? Именно так.
+                </div>
+            </div>
+
+            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded me-2" alt="...">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small class="text-muted">2 секунды назад</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+                <div class="toast-body">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="buy_window" tabindex="-1" role="dialog"
+         aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered" role="document">
+            <div class="modal-content"
+                 style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="com_title">название</h5>
+                </div>
+                <div class="modal-body" id="sell_stock_input">
+                    <label for="message-text" class="col-form-label" id="com_des">описоние</label>
+                    <br>
+                    <label for="message-text" class="col-form-label" id="com_bonus">дохлд</label>
+                    <br>
+                    <label for="message-text" class="col-form-label" id="com_owner">влоделец</label>
+                    <br>
+                    <label for="message-text" class="col-form-label" id="com_price">цена</label>
+                    <br>
+                    <label for="message-text" class="col-form-label" id="com_count">цена</label>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" class="btn btn-primary" data-dismiss="modal" id="fin_buy">Купить</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade" id="sell_window" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
+            <div class="modal-content"
+                 style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
                 <div class="modal-header">
                     <h5 class="modal-title" id="LongTitle">Игра окончена</h5>
-                    <span aria-hidden="true">&times;</span>
-                    </button>
                 </div>
                 <div class="modal-body" id="sell_stock_input">
                     <label for="message-text" class="col-form-label" id="c_price">Введите количество</label>
-                        <input type="text" class="form-control" id="recipient-name">
+                    <input type="text" class="form-control" id="recipient-name">
                 </div>
 
                 <div class="modal-footer">
@@ -290,7 +346,8 @@
     <div class="modal fade" id="exampleModalCenter" tabindex="-1" role="dialog"
          aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered" role="document">
-            <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
+            <div class="modal-content"
+                 style="border: 1px solid #474747; background-color: #3c3f41; color: white; font-weight: 300">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLongTitle">Игра окончена</h5>
                     <button type="button" class="close" data-dismiss="modal" aria-label="Close">
@@ -415,8 +472,8 @@
                             <h5 id="count_s"> count </h5>
                         </div>
 
-                        <a href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
-                           style="; margin-left: auto; margin-right: auto; float: bottom; margin-bottom: 5%"> Buy </a>
+                        <button href="#" class="btn btn-primary" id="{{ 'card_' + i|string }}"
+                           style="; margin-left: auto; margin-right: auto; float: bottom; margin-bottom: 5%"> Buy </button>
 
                     </div>
                 {% endfor %}
@@ -507,6 +564,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
+        var toastElList = [].slice.call(document.querySelectorAll('.toast'))
+        var toastList = toastElList.map(function (toastEl) {
+            return new bootstrap.Toast(toastEl)
+
+        })
         var progress = 0
         var socket = io();
         socket.on('connect', function () {
@@ -603,7 +665,6 @@
                             var count2 = $('#recipient-name').value
 
 
-
                         });
                     }
 
@@ -611,56 +672,101 @@
             }
         });
         socket.on('update_com', function (data) {
-            if (data['id'] == {{current_user.id}}) {
-                $('#com').empty()
+                if (data['id'] == {{current_user.id}}) {
+                    $('#com').empty()
+                    for (var com in data['data']) {
+                        //console.log('log' + data['data'][com])
+                        if (data['data'][com]) {
+                            if (data['data'][com] == {{ current_user.id }}) {
+                                const elem = $('<li title="test" style="background-color: #314014"><a href="#">'
+                                    + com + '</a> </li>');
+                                $('#com').append(elem);
 
-                for (var com in data['data']) {
-                    if (data['data'][com] == {{ current_user.id }}) {
-                        const elem = $('<li title="test"><a href="#">'
-                            + com + ' Куплено</a> </li>');
-                        $('#com').append(elem);
+                            } else {
+                                const elem = $('<li title="test" style="background-color: #98703a"><a href="#">'
+                                    + com + '</a> </li>');
+                                $('#com').append(elem);
 
-                    } else {
-                        const elem = $('<li title="test" class="buy_bag"><a href = "#" class="buy_bag">'
-                            + com + '</a></li>');
-                        $('#com').append(elem);
-                        elem.click((e) => {
-                            let st = e.target.innerHTML
-                            index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
-                            index2 = st.indexOf('; padding: 0p')
-                            f_title = st.slice(index2, index1)
-                            socket.emit('decision', {
-                                'code': '4',
-                                'player_id': {{current_user.id}},
-                                'company_id': '',
-                                'title': st,
-                                'room_id': {{current_room.id}}
-                            })
-                        });
+                            }
+                        } else {
+                            const elem = $('<li title="test" class="buy_bag"><a href = "#" class="buy_bag">'
+                                + com + '</a></li>');
+                            $('#com').append(elem);
+                            elem.click((e) => {
+
+                                let st = e.target.innerHTML
+                                index1 = st.indexOf('</h6><h6 style="float: left; margin: 10px">')
+                                index2 = st.indexOf('; padding: 0p')
+                                f_title = st.slice(index2, index1)
+
+                                socket.emit('get_com_buy', {
+                                    'player_id': {{current_user.id}},
+                                    'title': st,
+                                    'room_id': {{current_room.id}}
+                                })
+                            });
+                        }
                     }
-                }
 
+                }
+            }
+        );
+        socket.on('exception', function (json) {
+                if (json['player_id'] == {{current_user.id}}) {
+                    $('#except_window').modal('toggle')
+                }
+            }
+        );
+        socket.on('get_com_buy', function (json) {
+
+            if (json['player_id'] == {{current_user.id}}) {
+                $('#buy_window').modal('toggle')
+                $('#com_title').text('купить ' + json['title'])
+                $('#com_bonus').text('доход каждый ход: ' + json['bonus'])
+                $('#com_owner').text('владелец: ' + json['owner'])
+                $('#com_price').text('цена: ' + json['cost'])
+                $('#com_count').text('необходимо акций: ' + json['count'])
+                if (json['owner']) {
+                    $('#fin_buy').hide()
+                }
             }
         });
+
         $('#fin_cell').click(function () {
 
             count = $('#recipient-name').val()
             title = $('#LongTitle').text()
             index1 = title.indexOf(' ')
             title = title.slice(index1 + 1)
-            console.log(title, count)
+            //console.log(title, count)
             socket.emit('sell', {
-                                'code': '3',
-                                'player_id': {{current_user.id}},
-                                'company_id': title,
-                                'quantity': count,
-                                'room_id': {{current_room.id}}
-                            })
+                'code': '3',
+                'player_id': {{current_user.id}},
+                'company_id': title,
+                'quantity': count,
+                'room_id': {{current_room.id}}
+            })
+            //socket.emit('sell', title, count)
+        });
+
+        $('#fin_buy').click(function () {
+
+            title = $('#com_title').text()
+            index1 = title.indexOf(' ')
+            title = title.slice(index1 + 1)
+            //console.log(title)
+            socket.emit('decision', {
+                'code': 4,
+                'player_id': {{current_user.id}},
+                'company_id': '',
+                'title': title,
+                'room_id': {{current_room.id}}
+            })
             //socket.emit('sell', title, count)
         });
 
         socket.on('update_stock_table', function (json) {
-            console.log(json)
+            //ole.log(json)
             {% for i in range(9) %}
                 $('#com_' + {{ i + 1 }}).text(json[{{ i }}]['short_name'])
                 $('#price_' + {{ i + 1 }}).text(json[{{ i }}]['cost'])
@@ -676,14 +782,28 @@
             document.getElementById('case').style.display = 'None';
             var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
+
             for (var key in data) {
-                // console.log(data[key])
-                document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
-                document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
-                document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
-                document.querySelector('#stonk_' + String(fid) + '> div > img').src = '' + data[key]['img']
-                document.querySelector('#stonk_' + String(fid) + ' > a').innerHTML = 'купить ' + data[key]['cost'] + '$'
-                fid++
+                console.log('data' + data[key]['free'])
+                // console.log()
+                if (data[key]['free'] == 1) {
+                    document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
+                    document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
+                    document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
+                    document.querySelector('#stonk_' + String(fid) + '> div > img').src = '' + data[key]['img']
+                    document.querySelector('#stonk_' + String(fid) + ' > button').innerHTML = 'Продано'
+                    document.querySelector('#stonk_' + String(fid) + ' > button').disabled = true
+                    fid++
+                }
+                else {
+                    document.querySelector('#stonk_' + String(fid) + '> div > h5').innerHTML = key
+                    document.querySelector('#stonk_' + String(fid) + '> div > #price_s').innerHTML = data[key]['price'] + '$'
+                    document.querySelector('#stonk_' + String(fid) + '> div > #count_s').innerHTML = data[key]['quantity'] + 'шт'
+                    document.querySelector('#stonk_' + String(fid) + '> div > img').src = '' + data[key]['img']
+                    document.querySelector('#stonk_' + String(fid) + ' > button').innerHTML = 'купить ' + data[key]['cost'] + '$'
+                    fid++
+
+                }
             }
         });
         socket.on('update_case', function (data) {
