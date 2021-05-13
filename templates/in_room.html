@@ -265,13 +265,17 @@
     </style>
 </head>
 <body>
+	
+	
+<button id="b111">aaa</button>
+
 <div class="main">
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: 5">
 
         <div class="toast-container position-absolute top-0 end-0 p-3">
 
             <!-- Затем положите тосты внутрь -->
-            <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast" id="tt2" role="alert" aria-live="assertive" aria-atomic="true">
                 <div class="toast-header">
                     <img src="..." class="rounded me-2" alt="...">
                     <strong class="me-auto">Bootstrap</strong>
@@ -564,6 +568,16 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 <script>
     $(document).ready(function () {
+	    
+	    
+	    $('#b111').click(function() {
+		    
+		    $('#tt2').toast('show');
+		    
+	    });
+	    
+	    
+	    
         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
         var toastList = toastElList.map(function (toastEl) {
             return new bootstrap.Toast(toastEl)
