@@ -571,8 +571,16 @@
 	    
 	    
 	    $('#b111').click(function() {
-		    
-		    $('#tt2').toast('show');
+		    $('.toast-container').append('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded me-2" alt="...">
+                    <strong class="me-auto">Bootstrap</strong>
+                    <small class="text-muted">2 секунды назад</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button>
+                </div>
+                <div class="toast-body">
+                </div>
+            </div>')
 		    
 	    });
 	    
