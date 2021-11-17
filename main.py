@@ -1,6 +1,5 @@
 from flask import Flask, redirect, render_template
 from flask_login import LoginManager, logout_user, login_required
-
 from flask_restful import reqparse, abort, Api, Resource
 from flask import Flask, render_template, redirect, request
 from forms.register import RegisterForm
@@ -9,7 +8,6 @@ from flask import make_response
 from flask import jsonify
 from requests import get, post
 from flask_login import login_user, logout_user, current_user
-
 from data import db_session
 from data.users import User
 from data import users_resource
@@ -63,6 +61,11 @@ def base():
     params["title"] = "Список комнат"
     params["rooms"] = active_rooms
     return render_template('index.html', **params)
+
+
+@app.route('/home', methods=['GET', 'POST'])
+def home():
+    return render_template('home.html')
 
 
 @app.route('/', methods=['GET', 'POST'])
@@ -391,8 +394,8 @@ def get_com_buy(json):
     title = json['title']
     com = ''
     for i in get_room(room).realty_list:
-         if i.name == title:
-             com = i
+        if i.name == title:
+            com = i
     json = {
         'player_id': id,
         'room_id': room,
@@ -408,7 +411,7 @@ def get_com_buy(json):
 
 
 def main():
-    db_session.global_init("db/project_db.db")
+    db_session.global_init("C:/Users/yaidf/PycharmProjects/KalanBirza/db/project_db.db")
     db_sess = db_session.create_session()
 
     rooms_from_db = db_sess.query(Rooms).all()
