@@ -70,13 +70,7 @@ def home():
 
 @app.route('/', methods=['GET', 'POST'])
 def news():
-    db_sess = db_session.create_session()
-    params = dict()
-    params["title"] = "Новости"
-    params["news_list"] = reversed(db_sess.query(News).all())
-    print(params["news_list"])
-
-    return render_template('news.html', **params)
+    return render_template('home.html')
 
 
 @app.route('/devs', methods=['GET', 'POST'])
