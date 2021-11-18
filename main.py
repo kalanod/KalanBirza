@@ -412,7 +412,7 @@ def get_com_buy(json):
 
 
 def main():
-    db_session.global_init("C:/Users/yaidf/PycharmProjects/KalanBirza/db/project_db.db")
+    db_session.global_init("db/project_db.db")
     db_sess = db_session.create_session()
 
     rooms_from_db = db_sess.query(Rooms).all()
