@@ -2,16 +2,17 @@
 
 {% block content %}
     <div id="text">
-        <div class="join2">
-            <H1 STYLE="color: white; position: relative; font-size: 520%">
+        <div class="join2"><a href="register.html" style="text-decoration: none;">
+            <H1 STYLE="color: white; position: relative; font-size: 520%; text-decoration: none;">
                 Присоединяйся
-            </H1>
+            </H1></a>
         </div>
-        <H1 STYLE="color: white; position: relative; font-size: 520%;margin-top: 34%; z-index: 2">
+        <H1 STYLE="color: white; position: relative; font-size: 520%;margin-top: 34%; text-decoration: none;">
             прямо сейчас
         </H1>
 
-        <H3 STYLE="color: #b8b8b8; position: center; padding-top: 5%">
+        <H3 STYLE="color: #b8b8b8; position: center; padding-top: 5%;
+            margin-top: 50px;">
             Зови друзей учавствовать в увлекательных торгах акциями, покупке недвижимости и достижению богадства!
         </H3>
     </div>
@@ -48,12 +49,16 @@
     </div>
     <style>
         .cards_block {
-            width: 100%;
+            width: 280%;
             height: 100%;
-            background-color: blue;
+            margin-left: -90%;
+            margin-right: -90%;
+            background-color: #808080;
             margin-top: 40%;
             display: block;
             position: absolute;
+            -webkit-border-radius: 100% 100% 0 0;
+            -moz-border-radius: 2000px 0 0 0;
         }
 
         html, body {
@@ -86,19 +91,20 @@
 
         .join2:hover {
             background-color: #00D23E;
-            z-index: 1;
+
             transition: background-color .4s;
             position: absolute;
             cursor: pointer;
         }
 
         #text {
+            text-decoration: none;
             width: 42%;
             height: 100%;
             margin-right: 4%;
             margin-left: 4%;
             float: left;
-            z-index: 5;
+
             display: block;
             position: absolute;
         }

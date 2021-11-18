@@ -13,7 +13,7 @@
             background-color: #2b2b2b;
         }
 
-        html, body, main{
+        html, body, main {
             margin: 0;
             height: 55%;
         }
@@ -25,24 +25,41 @@
                top: 0;
                 z-index: 2;">
     <nav class="navbar navbar-light" style="background-color: #3c3f41;">
-            <div style="height: 100%">
-            <a class="navbar-brand" href="/rooms" style="color: white;
+        <div style="height: 100%">
+            {% if current_user.is_authenticated %}
+                <a class="navbar-brand" href="/rooms" style="color: white;
                                                     float: left;
                                                     margin-left: 0px;
                                                     padding-right: 15px;
                                                     border-right-width: 2px;
                                                     border-right-style: solid;
                                                     border-right-color: #2b2b2b;">
-                <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                <span style="margin-left: 10px">Каланбиржа</span>
-            </a>
-            {% if current_user.is_authenticated %}
-                <a style="color: gray; margin-left: 0px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/rooms"> список комнат </a>
-                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/"> новости </a>
-                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/devs"> разработчики </a>
+                    <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top"
+                         alt="">
+                    <span style="margin-left: 10px">Каланбиржа</span>
+                </a>
+                <a style="color: gray; margin-left: 0px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;"
+                   href="/rooms"> список комнат </a>
             {% endif %}
-            </div>
-            <form class="form-inline">
+            {% if not current_user.is_authenticated %}
+                <a class="navbar-brand" href="/home" style="color: white;
+                                                    float: left;
+                                                    margin-left: 0px;
+                                                    padding-right: 15px;
+                                                    border-right-width: 2px;
+                                                    border-right-style: solid;
+                                                    border-right-color: #2b2b2b;">
+                    <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top"
+                         alt="">
+                    <span style="margin-left: 10px">Каланбиржа</span>
+                </a>
+            {% endif %}
+            <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;"
+               href="/"> новости </a>
+            <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;"
+               href="/devs"> разработчики </a>
+        </div>
+        <form class="form-inline">
             {% if current_user.is_authenticated %}
                 <a style="color: white; margin-right: 15px"> {{ current_user.nickname }}</a>
                 <!-- <a class="btn btn-outline-light" style="margin-right: 10px" href="/rooms">играть</a> -->
@@ -51,7 +68,7 @@
                 <a class="btn btn-outline-light" href="/register" style="margin-right: 10px">Зарегистрироваться</a>
                 <a class="btn btn-outline-light" href="/login">Войти</a>
             {% endif %}
-            </form>
+        </form>
     </nav>
 </header>
 
@@ -70,7 +87,7 @@
     $(document).ready(function () {
 
         $("#myModal").modal('show');
-        $('.del').click(function (){
+        $('.del').click(function () {
             window.location.replace('/delete_room/' + $(this).attr('id'));
 
         })

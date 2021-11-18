@@ -83,24 +83,25 @@ def news():
 def devs():
     params = dict()
     params["title"] = "Разработчики"
-    params["devs_list"] = [{"nickname": "Михаил Буянов",
-                            "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
-                                    "бэкенд"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/deep_dark_fantasies_vana"},
-                           {"nickname": "Прошак Валерий",
-                            "dev": ["написал 10 строчек кода"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/vproshak"},
-                           {"nickname": "Андрей Трофимов",
-                            "dev": ["фронтенд", "обмен данными с сервером"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/kalanod"},
-                           {"nickname": "Влад Ревякин",
-                            "dev": ["написал события", "отдыхал"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/id515647622"}
-                           ]
+    params["devs_list"] = [
+        {"nickname": "Андрей Трофимов",
+         "dev": ["фронтенд", "обмен данными с сервером"],
+         "link_text": "VK",
+         "link": "https://vk.com/kalanod"},
+        {"nickname": "Михаил Буянов",
+         "dev": ["дизайн",
+                 "бэкенд"],
+         "link_text": "VK",
+         "link": "https://vk.com/deep_dark_fantasies_vana"},
+        {"nickname": "Прошак Валерий",
+         "dev": [""],
+         "link_text": "VK",
+         "link": "https://vk.com/vproshak"},
+        {"nickname": "Влад Ревякин",
+         "dev": [""],
+         "link_text": "VK",
+         "link": "https://vk.com/id515647622"}
+    ]
     print(params["devs_list"])
 
     return render_template('devs.html', **params)
