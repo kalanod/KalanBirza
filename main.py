@@ -47,7 +47,7 @@ def load_user(user_id):
 
 @app.errorhandler(404)
 def not_found(error):
-    return make_response(jsonify({'error': 'Not found - 404'}), 404)
+    return make_response(render_template('not_found.html'))
 
 
 @app.errorhandler(405)
@@ -96,7 +96,7 @@ def devs():
          "link_text": "VK",
          "link": "https://vk.com/id515647622"}
     ]
-    print(params["devs_list"])
+
 
     return render_template('devs.html', **params)
 
@@ -111,7 +111,7 @@ def login():
             login_user(user, remember=form.remember_me.data)
             param = dict()
             param["title"] = "Успех"
-            return redirect('/')
+            return redirect('/rooms')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
                                form=form)
@@ -129,15 +129,15 @@ def logout():
 def reqister():
     form = RegisterForm()
     if form.validate_on_submit():
-        if form.password.data != form.password_again.data:
-            return render_template('register.html', title='Регистрация',
-                                   form=form,
-                                   message="Пароли не совпадают")
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
                                    message="Такой пользователь уже есть")
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
         user = User(
             nickname=form.nickname.data,
             email=form.email.data,
@@ -145,7 +145,8 @@ def reqister():
         user.set_password(form.password.data)
         db_sess.add(user)
         db_sess.commit()
-        return redirect('/')
+        login_user(user, remember=True)
+        return redirect('/rooms')
     return render_template('register.html', title='Регистрация', form=form)
 
 
@@ -196,13 +197,13 @@ def in_room(room_id):
 
 
 def update_stock_cards(room_id, json):
-    print('updating stock cards...')
-    print(json)
+    #print('updating stock cards...')
+    #print(json)
     emit('update_stock_cards', json, to=room_id)
 
 
 def show_stock_cards(room_id):
-    print('showing stock cards...')
+    #print('showing stock cards...')
     emit('show_stock_cards', [], to=room_id)
 
 
@@ -224,8 +225,8 @@ def win(room_id, json):
 
 @socketIO.on('decision')
 def make_decision(json):
-    print('get_decision from server')
-    print(f'json: {json}')
+    #print('get_decision from server')
+    #print(f'json: {json}')
     data = ''
     if json['code'] == '1':
         data = 'Игрок готов'
@@ -284,7 +285,7 @@ def make_decision(json):
 def detele_room(room_id):
     room_id = int(room_id)
     global active_rooms
-    print('')
+    #('')
     room = get_room(room_id)
 
     if room is None:
@@ -391,18 +392,29 @@ def get_com_buy(json):
     for i in get_room(room).realty_list:
         if i.name == title:
             com = i
-    json = {
-        'player_id': id,
-        'room_id': room,
-        'title': title,
-        'des': 'des',
-        'bonus': com.bonus,
-        'cost': com.cost,
-        'owner': com.owner,
-        'count': com.realty_stock_quantity
-    }
-
-    emit('get_com_buy', json, to=room)
+    if com.owner:
+        json1 = {
+            'des': com.des,
+            'player_id': id,
+            'room_id': room,
+            'title': title,
+            'bonus': com.bonus,
+            'cost': com.cost,
+            'owner': com.owner.nickname,
+            'count': com.realty_stock_quantity
+        }
+    else:
+        json1 = {
+            'des': com.des,
+            'player_id': id,
+            'room_id': room,
+            'title': title,
+            'bonus': com.bonus,
+            'cost': com.cost,
+            'owner': com.owner,
+            'count': com.realty_stock_quantity
+        }
+    emit('get_com_buy', json1, to=room)
 
 
 def main():

@@ -38,7 +38,7 @@ class InGameRoom:
                                                   "stock_cost": data_from_bd[company["id"]],
                                                   "stock_lowest_cost": company["stock_lowest_cost"],
                                                   "start_cost": company["stock_cost"],
-                                                  "img": company["img"]}))
+                                                  "img": company["img"], "des": company["des"]}))
 
                 else:
                     self.stock_list.append(Stock(company))
@@ -583,7 +583,7 @@ class InGamePlayer:
         return f'{self.id},' \
                f'{self.budget},' \
                f'{"|".join(list(map(lambda x: f"{x.id}:{self.stocks[x]}", self.stocks.keys())))},' \
-               f'{"|".join(list(map(lambda x: x.id, self.realty)))}'
+               f'{"|".join(list(map(lambda x: f"{x.id}", self.realty)))}'
 
     def __repr__(self):
         return f'<InGamePlayer> id: {self.id} nickname: {self.nickname}'
@@ -642,6 +642,7 @@ class Realty:
         self.cost = int(realty_dict["realty_cost"])
         self.realty_stock_quantity = int(realty_dict["realty_stock_quantity"])
         self.bonus = int(realty_dict["realty_bonus"])
+        self.des = realty_dict["des"]
         self.owner = None  # куплена ли игроком
 
     def __repr__(self):

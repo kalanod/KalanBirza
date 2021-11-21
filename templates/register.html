@@ -48,10 +48,10 @@
                     </p>
                 {% endfor %}
             </p>
-            <p style="color: white; font-weight: 100;">
-                {{ form.submit(type="submit", class="btn btn-primary", style="margin-left: 100px") }}
+        {{ form.submit(type="submit", class="btn btn-primary", style="margin-left: 100px") }}
+            <p style="color: red; font-weight: 700;margin-left: 20%; font-size: large">
+                {{ message }}
             </p>
-            {{ message }}
         </form>
     </div>
 {% endblock %}
