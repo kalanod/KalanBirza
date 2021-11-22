@@ -7,7 +7,7 @@ import json
 
 from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money, show_stock_cards
 
-START_BUDGET = 1000000
+START_BUDGET = 5000
 
 
 class InGameRoom:

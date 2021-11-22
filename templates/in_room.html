@@ -1,13 +1,11 @@
 <!doctype html>
 <html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <link rel="preconnect" href="https://fonts.gstatic.com">
-    <link rel="stylesheet"
-          href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
-          integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh"
-          crossorigin="anonymous">
+   <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+          integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css">
     <!-- <link rel="stylesheet"
           href="../static/css/in_room.css"> -->
     <title> {{ title }} </title>
@@ -265,9 +263,11 @@
     </style>
 </head>
 <body>
+<div class="toast-container" style="position: absolute; z-index: 11; top: 0;right: 0; text-align: right">
 
+</div>
 
-<div class="main">
+<div class="main" style="position: absolute">
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: -1">
 
         <div class="toast-container position-absolute top-0 end-0 p-3">
@@ -509,7 +509,7 @@
                                                           margin-top: 30%;
                                                           margin-left: 10%;
                                                           width: 80%; height: 8%;
-                                                          z-index: 999">Далее
+                                                          z-index: 9">Далее
         </button>
     </div>
     <div id="me">
@@ -560,15 +560,21 @@
     </div>
 </div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/3.1.3/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 <script type="text/javascript" charset="utf-8"></script>
-<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+<!--<script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>-->
+<!--<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>-->
+<!--<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>-->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"></script>
+
 <script>
     $(document).ready(function () {
+        var c_toast = 0;
+            $("#liveToastBtn").click(function (){
+                $(".toast-container").append('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="..." class="rounded me-2" alt="..."> <strong class="me-auto">Bootstrap</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">Видите? Именно так.</div></div>')
+            });
         $('#b111').click(function () {
             //console.log("ssssssssssssssssss")
-
             $('.toast-container').append('<div role="alert" aria-live="assertive" aria-atomic="true" class="toast" data-bs-autohide="false">' +
                 '<div class="toast-header">' +
                 '<img src="https://i.pinimg.com/736x/b4/ae/cf/b4aecfdb5a785db5aaea223d34fb0677.jpg" class="rounded me-2" alt="..."><strong class="me-auto">Bootstrap</strong><small>11 мин. назад</small><button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button></div><div class="toast-body">Привет мир! Это тост-сообщение</div></div>')
@@ -593,6 +599,7 @@
         $('#exit').click(function () {
             socket.emit('leave', {{current_room.id}});
         });
+
         $('#pas').click(function () {
             //document.getElementById("pas").disabled = true;
 
@@ -602,6 +609,14 @@
                     'player_id': '{{ current_user.id }}',
                     'code': '1'
                 })
+        });
+        socket.on('new_notice', function (data) {
+            if (data["id"] == {{ current_user.id }} || data["id"] == "all") {
+                const a = $('<div class="toast" id="' + c_toast + '"role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="' + data["img_src"] + '" class="rounded me-2" alt="..."> <strong class="me-auto">' + data["head"] + '</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">' + data["text"] + '</div></div>');
+                $(".toast-container").append(a);
+                $("#" + c_toast + "").toast('show');
+                c_toast++;
+            }
         });
         $('#card_0').click(function () {
             //document.getElementById("pas").disabled = true;

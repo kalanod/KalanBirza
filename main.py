@@ -336,6 +336,9 @@ def on_join(room):
     emit('make_turn', players, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
 
+    data = {"id": "all", "head": "новый игрой", "text": current_user.nickname+" входит в комнату", "img_src": "none"}
+    emit('new_notice', data, to=room)
+
 
 @socketIO.on('disconnect')
 def disconnect():
