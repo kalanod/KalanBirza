@@ -612,6 +612,7 @@
         });
         socket.on('new_notice', function (data) {
             if (data["id"] == {{ current_user.id }} || data["id"] == "all") {
+                console.log(data)
                 const a = $('<div class="toast" id="' + c_toast + '"role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="' + data["img_src"] + '" class="rounded me-2" alt="..."> <strong class="me-auto">' + data["head"] + '</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">' + data["text"] + '</div></div>');
                 $(".toast-container").append(a);
                 $("#" + c_toast + "").toast('show');
