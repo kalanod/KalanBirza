@@ -5,9 +5,10 @@ from data.users import User
 import random
 import json
 
-from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money, show_stock_cards
+from main import update_case, update_stock_cards, clear_playzone, update_stock_table, win, update_money, \
+    show_stock_cards
 
-START_BUDGET = 5000
+START_BUDGET = 50000
 
 
 class InGameRoom:
@@ -202,6 +203,8 @@ class InGameRoom:
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
         return conclusion
 
+
+
     def decision_handler(self):
         print('')
         print(f'decision_handler of {self} started')
@@ -241,6 +244,7 @@ class InGameRoom:
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
                 out_json = {}
+
                 for card in self.stocks_cards:
                     owner = card.players
                     if owner:
@@ -275,8 +279,6 @@ class InGameRoom:
                     player.budget += cost
                     player.stocks[stock] -= quantity
                     update_money(self.id, {"id": player.id, "money": player.budget})
-
-
 
             # покупка недвижимости можно краткое название, но лучше не надо
             elif code == 4:
