@@ -10,6 +10,9 @@
           href="../static/css/in_room.css"> -->
     <title> {{ title }} </title>
     <style>
+        html::-webkit-scrollbar {
+            display: none; /*chrome*/
+        }
         .main, body, html {
             height: 100%;
             width: 100%;
@@ -266,7 +269,6 @@
 <div class="toast-container" style="position: absolute; z-index: 11; top: 0;right: 0; text-align: right">
 
 </div>
-
 <div class="main" style="position: absolute">
     <div aria-live="polite" aria-atomic="true" class="position-relative" style="z-index: -1">
 
@@ -318,7 +320,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="buy_close_btn" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="fin_buy">Купить</button>
                 </div>
             </div>
@@ -338,7 +340,7 @@
                 </div>
 
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
+                    <button type="button" id="sell_close_btn" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                     <button type="button" class="btn btn-primary" data-dismiss="modal" id="fin_cell">Продать</button>
                 </div>
             </div>
@@ -569,6 +571,7 @@
 
 <script>
     $(document).ready(function () {
+
         var c_toast = 0;
             $("#liveToastBtn").click(function (){
                 $(".toast-container").append('<div class="toast" role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="..." class="rounded me-2" alt="..."> <strong class="me-auto">Bootstrap</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">Видите? Именно так.</div></div>')
@@ -585,13 +588,10 @@
         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
         var toastList = toastElList.map(function (toastEl) {
             return new bootstrap.Toast(toastEl)
-
         })
         var progress = 0
         var socket = io();
-        socket.on('connect', function () {
-            socket.emit('join', {{current_room.id}});
-        });
+        socket.emit('join', {{current_room.id}})
         socket.on('win', function (data) {
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Победил игрок ' + data['nickname'])
@@ -613,7 +613,7 @@
         socket.on('new_notice', function (data) {
             if (data["id"] == {{ current_user.id }} || data["id"] == "all") {
                 console.log(data)
-                const a = $('<div class="toast" id="' + c_toast + '"role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="' + data["img_src"] + '" class="rounded me-2" alt="..."> <strong class="me-auto">' + data["head"] + '</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">' + data["text"] + '</div></div>');
+                const a = $('<div class="toast" id="' + c_toast + '"role="alert" aria-live="assertive" aria-atomic="true"> <div class="toast-header"> <img src="' + data["img_src"] + '" class="rounded me-2" alt="..." style="height: 25px"> <strong class="me-auto">' + data["head"] + '</strong> <small class="text-muted">прямо сейчас</small> <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Закрыть"></button> </div><div class="toast-body">' + data["text"] + '</div></div>');
                 $(".toast-container").append(a);
                 $("#" + c_toast + "").toast('show');
                 c_toast++;
@@ -638,6 +638,14 @@
                     'code': '2',
                     "card_num": '1'
                 })
+        });
+        $('#buy_close_btn').click(function () {
+            $('#buy_window').modal('toggle')
+
+        });
+        $('#sell_close_btn').click(function () {
+            $('#sell_window').modal('toggle')
+
         });
         $('#card_2').click(function () {
             //document.getElementById("pas").disabled = true;
@@ -796,6 +804,8 @@
                 'quantity': count,
                 'room_id': {{current_room.id}}
             })
+            $('#sell_window').modal('toggle')
+
             //socket.emit('sell', title, count)
         });
         $('#fin_buy').click(function () {
@@ -810,6 +820,7 @@
                 'title': title,
                 'room_id': {{current_room.id}}
             })
+            $('#buy_window').modal('toggle')
             //socket.emit('sell', title, count)
         });
 

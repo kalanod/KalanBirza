@@ -240,27 +240,71 @@ def my_des(json):
         if player in card.players:  # это надо будет показывать на самой карте
             return False
         answer = {"text": f"акции ({card.quantity}) компании {card.stock.name} куплены за {card.cost}",
-                  "head": "Покупка акций"}
+                  "head": "Покупка акций", "img": "/static/img/green_sq.png", "id": current_user.id}
         return answer
-
     elif code == "3":
         if not json['company_id'].isdigit():
             stock = room.get_stock_from_short_name(json['company_id'])
         else:
             stock = room.get_stock(json['company_id'])
         quantity = int(json['quantity'])
-
         if quantity <= 0:
-            return False
+            answer = {"text": f"брооо, это ты конечно ловко придумал", "head": "Продажа акций",
+                      "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
         if player.stocks[stock] < quantity:
-            return False
-        answer = {"text": f"акции ({quantity}) компании {stock.name} проданы", "head": "Продажа акций"}
+            answer = {"text": f"Не хватает акций для продажи", "head": "Продажа акций", "id": current_user.id,
+                      "img": "/static/img/red_sq.png"}
+            return answer
+        answer = {"text": f"акции ({quantity}) компании {stock.name} проданы",
+                  "head": "Продажа акций", "id": current_user.id, "img": "/static/img/green_sq.png"}
         return answer
 
     # покупка недвижимости можно краткое название, но лучше не надо
     elif code == 4:
+        if json['company_id']:
+            realty = room.get_realty(json['company_id'])
 
-        answer = {"text": json['title'] + " куплена", "head": "Покупка недвижимости"}
+        elif json['title']:
+
+            title = json['title']
+            realty = None
+            for realty_in_list in room.realty_list:
+                if realty_in_list.name == title:
+                    realty = realty_in_list
+                    break
+
+        else:
+            return False
+
+        if realty is None:
+            answer = {"text": f"Похоже, такой недвижимости нет", "head": "Покупка недвижимости",
+                      "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
+
+        if realty.owner is not None:
+            answer = {"text": f"Похоже, уже кто то купил эту компанию", "head": "Покупка недвижимости",
+                      "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
+
+        if player.budget < realty.cost:
+            answer = {"text": f"Тебе не хватает денег(", "head": "Покупка недвижимости",
+                      "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
+
+        if realty in player.realty:
+            answer = {"text": f"Ты и так владелец этой компании)", "head": "Покупка недвижимости",
+                      "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
+
+        if room.get_stock(realty.id) in player.stocks and player.stocks[
+            room.get_stock(realty.id)] < realty.realty_stock_quantity:
+            answer = {"text": f"Похоже, тебе не хватает акций этой компании для покупки её недвижимости",
+                      "head": "Покупка недвижимости", "id": current_user.id, "img": "/static/img/red_sq.png"}
+            return answer
+
+        answer = {"text": json['title'] + " куплена!", "head": "Покупка недвижимости",
+                  "id": current_user.id, "img": "/static/img/green_sq.png"}
         return answer
 
     # продажа недвижимости
@@ -310,7 +354,7 @@ def make_decision(json):
 
     answer = my_des(json)
     if answer:
-        send_notif(room_id, text=answer["text"], head=answer["head"])
+        send_notif(room_id, text=answer["text"], head=answer["head"], id=answer["id"], img=answer["img"])
 
     room.add_decision_to_queue(json)
     # пока добавим обработку всех решений в очереди сюда
@@ -374,7 +418,7 @@ def detele_room(room_id):
 
     return redirect('/rooms')
 
-
+@socketIO.on('my_join')
 @socketIO.on('join')
 def on_join(room):
     join_room(room)
@@ -397,7 +441,8 @@ def on_join(room):
     players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
     emit('make_turn', players, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
-    send_notif(room, text=current_user.nickname + " входит в комнату", head="новый игрой")
+    send_notif(room, text=current_user.nickname + " входит в комнату",
+               head="новый игрой", img="/static/img/blue_sq.png")
 
 
 def send_notif(room, text="text", id="all", head="head", img="none"):
@@ -410,7 +455,6 @@ def send_notif(room, text="text", id="all", head="head", img="none"):
 @socketIO.on('disconnect')
 def disconnect():
     for room in active_rooms:
-
         room.leave_player(current_user.id)
         current_room = room
         json = {'data': []}
@@ -418,7 +462,8 @@ def disconnect():
             json['data'].append(
                 {'nickname': player.nickname, 'budget': player.budget})
         emit('update_players', json, to=room)
-        send_notif(room, text=current_user.nickname + "вышел из комнаты", head="игрой отключился")
+        send_notif(room, text=current_user.nickname + "вышел из комнаты",
+                   head="игрой отключился", img="/static/img/blue_sq.png")
 
 
 @socketIO.on('leave')
