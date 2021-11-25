@@ -227,6 +227,7 @@ class InGameRoom:
             # игрок готов
             if code == 1:
                 player.ready = True
+                print("stage = " + str(self.stage))
                 if len(self.get_unready_players()) == 0:
                     self.next_stage()  # как только все игроки готовы начинается следующая стадия хода
 

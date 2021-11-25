@@ -333,6 +333,8 @@ def make_decision(json):
     if json['code'] == '1':
         data = 'Игрок готов'
         log(json['room_id'], data)
+        if int(room.stage) == 3:
+            emit("show_pass", current_user.id, to=room_id)
     elif json['code'] == '2':
         data = f'Выбор карты акций {list(json.keys())[-1]} от 0 до 2 покупка будет происходить во время аукциона'
         log(json['room_id'], data)
@@ -355,7 +357,6 @@ def make_decision(json):
     answer = my_des(json)
     if answer:
         send_notif(room_id, text=answer["text"], head=answer["head"], id=answer["id"], img=answer["img"])
-
     room.add_decision_to_queue(json)
     # пока добавим обработку всех решений в очереди сюда
     room.decision_handler()

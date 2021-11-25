@@ -599,10 +599,13 @@
         $('#exit').click(function () {
             socket.emit('leave', {{current_room.id}});
         });
-
+        socket.on('show_pass', function (data){
+            if (data == {{ current_user.id }}) {
+                document.getElementById("pas").disabled = false;
+            }
+        });
         $('#pas').click(function () {
-            //document.getElementById("pas").disabled = true;
-
+            document.getElementById("pas").disabled = true;
             socket.emit('decision',
                 {
                     'room_id': '{{ current_room.id }}',
@@ -836,7 +839,7 @@
         });
 
         socket.on('update_stock_cards', function (data) {
-            // document.getElementById("pas").disabled = false;
+            document.getElementById("pas").disabled = false;
             // progress = 0
             // var a = document.getElementById('stonks_for_sale').style.display = 'block';
             var fid = 0
@@ -864,13 +867,13 @@
             }
         });
         socket.on('show_stock_cards', function (data) {
-            //document.getElementById("pas").disabled = false;
+            document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('stonks_for_sale').style.display = 'block';
             document.getElementById('case').style.display = 'None';
         });
         socket.on('update_case', function (data) {
-            //document.getElementById("pas").disabled = false;
+            document.getElementById("pas").disabled = false;
             progress = 0
             document.getElementById('stonks_for_sale').style.display = 'None';
             document.getElementById('case').style.display = 'block';
