@@ -60,6 +60,7 @@ def base():
     params = dict()
     params["title"] = "Список комнат"
     params["rooms"] = active_rooms
+    print(active_rooms)
     return render_template('index.html', **params)
 
 
