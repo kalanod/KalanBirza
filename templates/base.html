@@ -12,11 +12,13 @@
         body {
             background-color: #2b2b2b;
         }
-        .group{
+
+        .group {
             float: left;
             margin-left: 10px;
             margin-top: 10px;
         }
+
         html, body, main {
             margin: 0;
             height: 55%;
@@ -95,9 +97,13 @@
         $("#my").hide();
 
 
-        $("#myModal").modal('show');
+        //$("#myModal").modal('show');
         $('.del').click(function () {
             window.location.replace('/delete_room/' + $(this).attr('id'));
+        })
+        $('#confirm_leave').click(function () {
+            var id = $('#live_room_id').text()
+            window.location.replace('/leave_game/' + id + "/" + {{ current_user.id }});
 
         })
         $('#create_room').click(function () {
@@ -107,6 +113,13 @@
             //$('#create_room_result').text('main.php?name=');
 
         });
+        $('#exampleModal1').on('show.bs.modal', function (event) {
+
+            var button = $(event.relatedTarget) // Кнопка, что спровоцировало модальное окно
+            console.log(button.attr('id'))
+            $("#live_room_id").text((button.attr('id')));
+
+        })
 
 
 //refresh_rooms();
@@ -119,24 +132,24 @@
             modal.find('.modal-title').text('Новая комната')
             modal.find('.modal-body input').val(recipient)
         })
+
+        $(".option2").click(function () {
+            $("#opened").hide();
+            $("#my").show();
+            $("#group1").hide()
+            $("#group2").show()
+
+
+        });
+        $(".option1").click(function () {
+            $("#opened").show();
+            $("#my").hide();
+            $("#group2").hide()
+            $("#group1").show()
+
+
+        });
     });
-    $(".option2").click(function (){
-        $("#opened").hide();
-        $("#my").show();
-        $("#group1").hide()
-        $("#group2").show()
-
-
-    });
-    $(".option1").click(function (){
-        $("#opened").show();
-        $("#my").hide();
-        $("#group2").hide()
-        $("#group1").show()
-
-
-    });
-
 </script>
 </body>
 </html>

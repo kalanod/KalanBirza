@@ -4,6 +4,32 @@
 
     {% if current_user.is_authenticated %}
         <div class="bd-example">
+            <div class="modal fade" id="exampleModal1" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+                 aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41;">
+                        <div class="modal-header">
+                            <h4 class="modal-title" id="exampleModalLabel2" style="color: white; font-weight: 300">Покинуть игру</h4>
+                        </div>
+                        <div class="modal-body">
+                            <form>
+                                <div class="form-group">
+                                    <label for="room_name" class="form-control-label"
+                                           style="color: white; font-weight: 200">Точно выходим? Вероятно, вернуться в эту игру не удасться</label>
+                                    <label style="display: none" id="live_room_id"></label>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="confirm_leave">Выход</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bd-example">
             <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
                  aria-hidden="true">
                 <div class="modal-dialog" role="document">
@@ -54,62 +80,73 @@
         <br>
         <br>
         <div id="opened">
-            {% for room in rooms %}
-                {% if room %}
-                    {% if room.stage == -1 %}
-                    <div>
-                        <div class="card"
-                             style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
-                            <div class="card-header" style="color: white">
-                                <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
 
-                                    <h5 style="float: right; font-weight: 100"> открыта </h5>
+            {% if rooms[0] %}
+                {% for room in rooms %}
+                    {% if room %}
+                        {% if room.stage == -1 %}
+                            <div>
+                                <div class="card"
+                                     style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
+                                    <div class="card-header" style="color: white">
+                                        <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
 
-                            </div>
-                            <span class="card-header" style="color: white">
+                                        <h5 style="float: right; font-weight: 100"> открыта </h5>
+
+                                    </div>
+                                    <span class="card-header" style="color: white">
                         <h5 style="float: left; font-weight: 100">игроки: {{ room.players|map(attribute="nickname", default="Anonymous")|join(', ') }}</h5>
                         <h5 style="float: right; font-weight: 100">в сети: {{ room.get_online_players()|length }}</h5>
                     </span>
-                            <div class="card-body">
-                                <a href="{{ '/connect_to_room/' + room.id|string + '/' + current_user.id|string }}"
-                                   class="btn btn-primary">Присоединится</a>
-                                <a class="btn btn-outline-light" href="/delete_room/{{ room.id|string }}"
-                                   id="{{ 'del_' + room.id|string }}" style="color: white; margin-left: 2px">удалить
-                                    комнату</a>
+                                    <div class="card-body">
+                                        <a href="{{ '/connect_to_room/' + room.id|string + '/' + current_user.id|string }}"
+                                           class="btn btn-primary">Присоединится</a>
+                                        <a class="btn btn-outline-light" href="/delete_room/{{ room.id|string }}"
+                                           id="{{ 'del_' + room.id|string }}" style="color: white; margin-left: 2px">удалить
+                                            комнату</a>
+                                    </div>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        {% endif %}
+
                     {% endif %}
-                {% endif %}
-            {% endfor %}
+                {% endfor %}
+            {% else %}
+                <div style="margin-left: auto; margin-right: auto;margin-top: auto;margin-bottom: auto">
+                    <img src="//static/img/no_room.png" alt=":/">
+                    <h2>Нет открытых комнат</h2>
+                </div>
+            {% endif %}
         </div>
 
         <div id="my">
             {% for room in rooms %}
                 {% if room %}
-                    {% if room.stage != -1 %}
-                    <div>
-                        <div class="card"
-                             style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
-                            <div class="card-header" style="color: white">
-                                <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
+                    {% if room.stage != -1 and current_user.id|string in room.players|map(attribute="id", default="Anonymous")|join(', ') %}
+                        <div>
+                            <div class="card"
+                                 style="border: 1px solid #474747; background-color: #3c3f41; width: 99%; margin-left: 0.5%; margin-top: 10px">
+                                <div class="card-header" style="color: white">
+                                    <h5 style="float: left; font-weight: 300">{{ room.title }}</h5>
 
                                     <h5 style="float: right; font-weight: 100"> открыта </h5>
 
-                            </div>
-                            <span class="card-header" style="color: white">
+                                </div>
+                                <span class="card-header" style="color: white">
                         <h5 style="float: left; font-weight: 100">игроки: {{ room.players|map(attribute="nickname", default="Anonymous")|join(', ') }}</h5>
                         <h5 style="float: right; font-weight: 100">в сети: {{ room.get_online_players()|length }}</h5>
                     </span>
-                            <div class="card-body">
-                                <a href="{{ '/connect_to_room/' + room.id|string + '/' + current_user.id|string }}"
-                                   class="btn btn-primary">Присоединится</a>
-                                <a class="btn btn-outline-light" href="/delete_room/{{ room.id|string }}"
-                                   id="{{ 'del_' + room.id|string }}" style="color: white; margin-left: 2px">удалить
-                                    комнату</a>
+                                <div class="card-body">
+                                    <a href="{{ '/connect_to_room/' + room.id|string + '/' + current_user.id|string }}"
+                                       class="btn btn-primary">Присоединится</a>
+                                    <button id="{{room.id|string }}" type="button" class="btn btn-outline-light"
+                                            data-toggle="modal"
+                                            data-target="#exampleModal1" style="color: white; margin-left: 2px">выйти
+                                        из игры
+                                    </button>
+                                </div>
                             </div>
                         </div>
-                    </div>
                     {% endif %}
                 {% endif %}
             {% endfor %}

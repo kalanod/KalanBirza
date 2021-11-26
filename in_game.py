@@ -124,6 +124,12 @@ class InGameRoom:
 
         self.get_player(player_id).online = True
 
+    def remove_player(self, player_id):
+        if self.player_in_room(player_id):
+            for player in self.players:
+                if player.id == player_id:
+                    self.players.remove(player)
+                    return
         #print('')
         #print(f'{self.get_player(player_id)} join to {self}')
         #print(f'online players: {self.get_online_players()}')

@@ -182,6 +182,21 @@ def connect_to_room(room_id, player_id):
     else:
         return redirect('/rooms')
 
+@app.route('/leave_game/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
+@socketIO.on('remove_user')
+def remove_user(room_id, player_id):
+    room = get_room(room_id)
+    if room.player_in_room(player_id):
+        room.remove_player(player_id)
+        json = {'data': []}
+
+        #send_notif(room, text="вышел", head="игрок покинул игру", img="/static/img/yellow_sq.png")
+        return redirect(f'/rooms/')
+    else:
+        return redirect('/rooms')
+
+
+
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 def leave_from_room(room_id, player_id):
