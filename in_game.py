@@ -21,7 +21,7 @@ class InGameRoom:
 
         self.stock_list = []
         self.realty_list = []
-        with open('./static/stock.json') as file:
+        with open('./static/stock.json', 'r', encoding='utf-8') as file:
             companies = json.loads(file.read())['companies']
 
             data_from_bd = dict()
@@ -121,14 +121,15 @@ class InGameRoom:
     def add_player(self, player_id):
         if not self.player_in_room(player_id):
             self.players.append(InGamePlayer(f'{player_id},{START_BUDGET},,', self))
-
         self.get_player(player_id).online = True
+        self.save_to_db()
 
     def remove_player(self, player_id):
         if self.player_in_room(player_id):
             for player in self.players:
                 if player.id == player_id:
                     self.players.remove(player)
+                    self.save_to_db()
                     return
         #print('')
         #print(f'{self.get_player(player_id)} join to {self}')
@@ -214,8 +215,6 @@ class InGameRoom:
     def share_generator(self):
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
         return conclusion
-
-
 
     def decision_handler(self):
         if loger:
@@ -357,6 +356,7 @@ class InGameRoom:
                 realty.owner = None
 
                 update_money(self.id, {"id": player.id, "money": player.budget})
+                self.save_to_db()
 
         # print('')
 
@@ -399,6 +399,7 @@ class InGameRoom:
                                              "free": owner}
             update_stock_cards(self.id, out_json)
             show_stock_cards(self.id)
+            self.save_to_db()
 
         elif self.stage == 0:  # отличие только в том, что в комнату нельзя зайти и выйти из нее полностью
             self.stage = 1
@@ -533,7 +534,7 @@ class InGameRoom:
             player.stocks = start_stocks
             player.realty = []
 
-        with open('./static/stock.json') as file:
+        with open('./static/stock.json', 'r', encoding='utf-8') as file:
             companies = json.loads(file.read())['companies']
             if loger:
                 print('companies:', companies)
