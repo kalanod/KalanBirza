@@ -1,6 +1,7 @@
 from data import db_session
 from data.rooms import Rooms
 from data.users import User
+from data.stock import Stock_d
 
 import random
 import json
@@ -23,7 +24,6 @@ class InGameRoom:
         self.realty_list = []
         with open('./static/stock.json', 'r', encoding='utf-8') as file:
             companies = json.loads(file.read())['companies']
-
             data_from_bd = dict()
             for line in data_string.split():
                 data_from_bd[int(line.split(',')[0])] = int(line.split(',')[1])
@@ -82,7 +82,10 @@ class InGameRoom:
             2: "Аукцион",
             3: "Событие"
         }
-        self.stage = -1
+        if self.players:
+            self.stage = 0
+        else:
+            self.stage = -1
         self.stocks_cards = []
         self.decisions_queue = []
 
@@ -139,7 +142,7 @@ class InGameRoom:
 
     def leave_player(self, player_id):
         if self.player_in_room(player_id):
-            if self.stage == -1:
+            if self.stage == -2:
                 self.players.remove(self.get_player(player_id))
                 self.save_to_db()
 
@@ -211,6 +214,8 @@ class InGameRoom:
             if not stock in player.stocks.keys():
                 player.stocks[stock] = 0
             player.stocks[stock] += quantity
+            for i in range(quantity):
+                player.d_stocks.append(Stock_d(stock.id, stock.cost))
 
     def share_generator(self):
         conclusion = list(map(lambda x: StockCard(x, random.randint(1, 10)), random.sample(self.stock_list, 3)))
@@ -292,6 +297,11 @@ class InGameRoom:
                     player.budget += cost
                     player.stocks[stock] -= quantity
                     update_money(self.id, {"id": player.id, "money": player.budget})
+                    for i in range(quantity):
+                        for j in player.d_stocks:
+                            if str(j.id) == str(stock.id):
+                                player.d_stocks.remove(j)
+                                break
 
             # покупка недвижимости можно краткое название, но лучше не надо
             elif code == 4:
@@ -565,7 +575,7 @@ class InGamePlayer:
         self.online = False
         self.ready = False  # нажал ли игрок
         self.room = room
-
+        self.d_stocks = []
         # дальше будем загружать всю информацию из строки
         # пока в строке только ID и бюджет игрока
         player_data = player_data.split(',')

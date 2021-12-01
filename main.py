@@ -191,7 +191,7 @@ def remove_user(room_id, player_id):
         json = {'data': []}
 
         #send_notif(room, text="вышел", head="игрок покинул игру", img="/static/img/yellow_sq.png")
-        return redirect(f'/rooms/')
+        return redirect(f'/rooms')
     else:
         return redirect('/rooms')
 
@@ -380,9 +380,39 @@ def make_decision(json):
     emit('make_turn', players, to=room_id)
     emit('decision_on', to=room_id)
 
-    stonks = {'id': int(json['player_id']), 'data': [
-        {'short_name': i.short_name, 'cost': i.cost, 'stocks': room.get_player(int(json['player_id'])).stocks[i]} for i
-        in room.get_player(int(json['player_id'])).stocks]}
+    d_stonks = dict()
+    d_stonks.clear()
+    for i in room.get_player(int(json['player_id'])).d_stocks:
+        if str(i.id) in d_stonks:
+            d_stonks[str(i.id)][0] += 1
+            d_stonks[str(i.id)][1] += i.price
+        else:
+            d_stonks[str(i.id)] = [1, i.price]
+    print('\n\n\n\n')
+
+    for i in d_stonks:
+        #print(str(d_stonks[i][1] / d_stonks[i][0]), str(room.stock_list[int(i) - 1].cost))
+        d_stonks[i] = str(d_stonks[i][0] * room.stock_list[int(i) - 1].cost - d_stonks[i][1])
+
+    print('d_stocks')
+    print(d_stonks)
+    print('\n\n\n\n')
+    for i in room.get_player(int(json['player_id'])).stocks:
+        if str(i.id) not in d_stonks:
+            d_stonks[str(i.id)] = '+0'
+        else:
+            if int(d_stonks[str(i.id)]) > 0:
+                d_stonks[str(i.id)] = '+' + d_stonks[str(i.id)]
+    #print(room.stock_list)
+    stonks = {'id': int(json['player_id']),
+              'data': [
+        {'short_name': i.short_name,
+         'cost': i.cost,
+         'stocks': room.get_player(int(json['player_id'])).stocks[i],
+         'delta': d_stonks[str(i.id)]
+         } for i in room.get_player(int(json['player_id'])).stocks]
+              }
+
 
     emit('update_bag', stonks, to=room_id)
 

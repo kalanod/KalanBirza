@@ -679,7 +679,6 @@
             document.getElementById('progress-bar').style.width = String(progress) + '%';
         });
         $('.sell').click(function () {
-
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Продажа ' + this.value)
         });
@@ -691,8 +690,8 @@
                     if (data['data'][stonk]['stocks'] != '0') {
                         const elem = $('<li class="sell"><a href = "#" class="sell">'
                             + data['data'][stonk]['short_name'] + ' '
-                            + data['data'][stonk]['cost'] + ' | '
-                            + data['data'][stonk]['stocks'] + ' продать</a></li>');
+                            + data['data'][stonk]['stocks'] + ' продать  |  '
+                            + data['data'][stonk]['delta'] + '  </a></li>');
                         $('#bag').append(elem);
                         elem.click((e) => {
                             $('#sell_window').modal('toggle')
@@ -704,7 +703,7 @@
                             $('#LongTitle').text("Продать " + f_title)
                             f_count = st.slice(index2 + 1, index3)
                             $('#c_price').text("Введите число, максимум: " + f_count)
-                            var count2 = $('#recipient-name').value
+                            $('#recipient-name').attr("value", f_count)
 
 
                         });
