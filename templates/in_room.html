@@ -264,10 +264,33 @@
             margin-top: auto;
         }
 
+        .start_screen {
+            position: absolute;
+            width: 95%;
+            height: 95%;
+            margin-top: 2.5%;
+            margin-left: 2.5%;
+            background-color: #363a3b;
+            z-index: 22;
+        }
+
+        .npcard {
+            background-color: #303435;
+            border: #727272 1px solid;
+            transition: background-color .4s;
+            cursor: pointer;
+        }
+
+        .npcard:hover {
+            background-color: #3a3f40;
+            border: #969696 1px solid;
+            transition: background-color .4s;
+        }
+
     </style>
 </head>
 <body>
-<div class="toast-container" style="position: absolute; z-index: 11; top: 0;right: 0; text-align: right">
+<div class="toast-container" style="position: absolute; z-index: 23; top: 0;right: 0; text-align: right">
 
 </div>
 <div class="main" style="position: absolute">
@@ -369,6 +392,25 @@
             </div>
         </div>
     </div>
+    <div class="start_screen" style="display: none">
+        <a href="/rooms">
+            <div href="/rooms" class="btn btn-outline-light exit"
+                 style="float: right; margin-top: 1%; margin-right: 2%; width: 140px; height: 40px">выйти
+            </div>
+        </a>
+        <div class="start_screen2" style="height: 80%; width: 80%; margin-left: 15%">
+
+        <div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 20%">
+            <img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap">
+            <div class="card-body">
+                <p class="card-text" style="color: white">пригласить игрока</p>
+            </div>
+        </div>
+        </div>
+        <button class="btn btn-primary" type="submit" id="start_game_btn" style="margin-left: 45%; margin-bottom: 2%; float: bottom">
+            Начать игру
+        </button>
+    </div>
     <div id="players" style="border-bottom-width: 2px;
                              border-bottom-style: solid;
                              border-bottom-color: #2b2b2b;
@@ -390,8 +432,8 @@
             {% endfor %}
         </div>
         <a href="/rooms">
-            <div href="/rooms" class="btn btn-outline-light"
-                 style="float: right; margin-top: 1%; margin-right: 1%; width: 10%; height: 50%" id="exit">выйти
+            <div href="/rooms" class="btn btn-outline-light exit"
+                 style="float: right; margin-top: 1%; margin-right: 1%; width: 10%; height: 50%" id="exit_btn">выйти
             </div>
         </a>
 
@@ -574,6 +616,46 @@
 
 <script>
     $(document).ready(function () {
+        if (-1 == {{ current_room.stage }})
+        {
+            $('.start_screen').show()
+            $('#players').hide()
+        }
+        //$('#start_game_btn').disabled = true;
+        document.getElementById("start_game_btn").disabled = true;
+
+        onclick_copySelf();
+
+        function onclick_copySelf() {
+
+            let copy = document.querySelectorAll('.npcard');
+            for (let i = 0; i < copy.length; i++) {
+                copy[i].addEventListener('click', function () {
+                    copyToClipboard(this.textContent);
+                    ui_copyDone(this);
+                });
+            }
+        }
+
+        function copyToClipboard(str) {
+            var area = document.createElement('textarea');
+            document.body.appendChild(area);
+            area.value = "http://192.168.60.203:5000/room/{{current_room.id}}";
+            area.select();
+            document.execCommand("copy");
+            document.body.removeChild(area);
+        }
+
+        function ui_copyDone(btn) {
+            var contentSaved = btn.innerHTML;
+            btn.innerHTML = '<img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">ссылка-приглашение скопирована</p></div>';
+            btn.classList.add('copied');
+
+            setTimeout(function () {
+                btn.innerHTML = contentSaved;
+                btn.classList.remove('copied');
+            }, 1500);
+        }
 
         var c_toast = 0;
         $("#liveToastBtn").click(function () {
@@ -587,7 +669,6 @@
             $('.toast').show()
         });
 
-
         var toastElList = [].slice.call(document.querySelectorAll('.toast'))
         var toastList = toastElList.map(function (toastEl) {
             return new bootstrap.Toast(toastEl)
@@ -599,7 +680,7 @@
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Победил игрок ' + data['nickname'])
         });
-        $('#exit').click(function () {
+        $('.exit').click(function () {
             socket.emit('leave', {{current_room.id}});
         });
         socket.on('show_pass', function (data) {
@@ -616,6 +697,15 @@
                     'code': '1'
                 })
         });
+        $('#start_game_btn').click(function () {
+            document.getElementById("pas").disabled = true;
+            socket.emit('decision',
+                {
+                    'room_id': '{{ current_room.id }}',
+                    'player_id': '{{ current_user.id }}',
+                    'code': '1'
+                })
+        })
         socket.on('new_notice', function (data) {
             if (data["id"] == {{ current_user.id }} || data["id"] == "all") {
                 console.log(data)
@@ -899,17 +989,28 @@
         });
 
         socket.on('update_players', function (json) {
-            $('#online').empty()
-
-            for (var player in json['data']) {
-
-                $('#online').append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
-
+            const online = $('#online')
+            const ss = $('.start_screen2');
+            online.empty()
+            ss.empty()
+            let c_players = 0;
+            for (const player in json['data']) {
+                online.append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
+                ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">' + json['data'][player]["nickname"] + '</p></div></div>')
+                c_players ++;
             }
+            ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">пригласить игрока</p></div></div>')
+
+            if (c_players > 1){
+                document.getElementById("start_game_btn").disabled = false;
+            }
+            else {
+                document.getElementById("start_game_btn").disabled = true;
+            }
+            onclick_copySelf();
 
 
         });
-
 
         function refresh_rooms() {
 
@@ -921,9 +1022,6 @@
             }, 1000);
 
         }
-
-
-        //refresh_rooms();
     });
 
 
