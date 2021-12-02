@@ -400,14 +400,15 @@
         </a>
         <div class="start_screen2" style="height: 80%; width: 80%; margin-left: 15%">
 
-        <div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 20%">
-            <img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap">
-            <div class="card-body">
-                <p class="card-text" style="color: white">пригласить игрока</p>
+            <div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 20%">
+                <img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap">
+                <div class="card-body">
+                    <p class="card-text" style="color: white">пригласить игрока</p>
+                </div>
             </div>
         </div>
-        </div>
-        <button class="btn btn-primary" type="submit" id="start_game_btn" style="margin-left: 45%; margin-bottom: 2%; float: bottom">
+        <button class="btn btn-primary" type="submit" id="start_game_btn"
+                style="margin-left: 45%; margin-bottom: 2%; float: bottom">
             Начать игру
         </button>
     </div>
@@ -616,8 +617,9 @@
 
 <script>
     $(document).ready(function () {
-        if (-1 == {{ current_room.stage }})
-        {
+        let c_players = 0;
+        let ready_players = 0;
+        if (-1 == {{ current_room.stage }}) {
             $('.start_screen').show()
             $('#players').hide()
         }
@@ -628,7 +630,7 @@
 
         function onclick_copySelf() {
 
-            let copy = document.querySelectorAll('.npcard');
+            let copy = document.querySelectorAll('.npcard1');
             for (let i = 0; i < copy.length; i++) {
                 copy[i].addEventListener('click', function () {
                     copyToClipboard(this.textContent);
@@ -640,7 +642,7 @@
         function copyToClipboard(str) {
             var area = document.createElement('textarea');
             document.body.appendChild(area);
-            area.value = "http://192.168.60.203:5000/room/{{current_room.id}}";
+            area.value = "http://192.168.60.203:5000/connect_to_room/{{current_room.id}}";
             area.select();
             document.execCommand("copy");
             document.body.removeChild(area);
@@ -675,7 +677,8 @@
         })
         var progress = 0
         var socket = io();
-        socket.emit('join', {{current_room.id}})
+        console.log({{current_room.id}})
+        socket.emit('my_join', {{current_room.id}})
         socket.on('win', function (data) {
             $('#exampleModalCenter').modal('toggle')
             $('#name_winner').text('Победил игрок ' + data['nickname'])
@@ -698,14 +701,30 @@
                 })
         });
         $('#start_game_btn').click(function () {
-            document.getElementById("pas").disabled = true;
-            socket.emit('decision',
+            document.getElementById("start_game_btn").disabled = true;
+            socket.emit('ready_to_start',
                 {
                     'room_id': '{{ current_room.id }}',
-                    'player_id': '{{ current_user.id }}',
-                    'code': '1'
+                    'player_id': '{{ current_user.id }}'
                 })
         })
+        socket.on('new_ready_user', function (data) {
+            $('#in_loby_player_' + data).css('border', '3px solid #5eee11');
+            ready_players++;
+            console.log("----")
+            console.log(ready_players)
+            console.log(c_players)
+            if (ready_players == c_players) {
+                $('.start_screen').hide()
+                $('#players').show()
+            }
+        });
+        socket.on('start_game', function (data) {
+            $('.start_screen').hide()
+            $('#players').show()
+
+        });
+
         socket.on('new_notice', function (data) {
             if (data["id"] == {{ current_user.id }} || data["id"] == "all") {
                 console.log(data)
@@ -989,22 +1008,22 @@
         });
 
         socket.on('update_players', function (json) {
+            console.log('data2')
             const online = $('#online')
             const ss = $('.start_screen2');
             online.empty()
             ss.empty()
-            let c_players = 0;
+            c_players = 0;
             for (const player in json['data']) {
                 online.append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
-                ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">' + json['data'][player]["nickname"] + '</p></div></div>')
-                c_players ++;
+                ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%" id="in_loby_player_' + json['data'][player]["id"] + '"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">' + json['data'][player]["nickname"] + '</p></div></div>')
+                c_players++;
             }
-            ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">пригласить игрока</p></div></div>')
-
-            if (c_players > 1){
+            ss.append('<div class="card npcard npcard1" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">пригласить игрока</p></div></div>')
+            ready_players = 0;
+            if (c_players > 1) {
                 document.getElementById("start_game_btn").disabled = false;
-            }
-            else {
+            } else {
                 document.getElementById("start_game_btn").disabled = true;
             }
             onclick_copySelf();
@@ -1022,7 +1041,8 @@
             }, 1000);
 
         }
-    });
+    })
+    ;
 
 
 </script>

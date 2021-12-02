@@ -142,7 +142,7 @@ class InGameRoom:
 
     def leave_player(self, player_id):
         if self.player_in_room(player_id):
-            if self.stage == -2:
+            if self.stage == -1:
                 self.players.remove(self.get_player(player_id))
                 self.save_to_db()
 

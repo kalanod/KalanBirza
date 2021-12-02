@@ -182,6 +182,18 @@ def connect_to_room(room_id, player_id):
     else:
         return redirect('/rooms')
 
+
+@app.route('/connect_to_room/<int:room_id>', methods=['GET', 'POST'])
+def connect_to_room_byId(room_id):
+    room = get_room(room_id)
+    if room.player_in_room(current_user.id) or room.stage == -1:
+        room.add_player(current_user.id)
+        return redirect(f'/room/{room_id}')
+
+    else:
+        return redirect('/rooms')
+
+
 @app.route('/leave_game/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
 @socketIO.on('remove_user')
 def remove_user(room_id, player_id):
@@ -190,12 +202,10 @@ def remove_user(room_id, player_id):
         room.remove_player(player_id)
         json = {'data': []}
 
-        #send_notif(room, text="вышел", head="игрок покинул игру", img="/static/img/yellow_sq.png")
+        # send_notif(room, text="вышел", head="игрок покинул игру", img="/static/img/yellow_sq.png")
         return redirect(f'/rooms')
     else:
         return redirect('/rooms')
-
-
 
 
 @app.route('/leave_from_room/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -391,7 +401,7 @@ def make_decision(json):
     print('\n\n\n\n')
 
     for i in d_stonks:
-        #print(str(d_stonks[i][1] / d_stonks[i][0]), str(room.stock_list[int(i) - 1].cost))
+        # print(str(d_stonks[i][1] / d_stonks[i][0]), str(room.stock_list[int(i) - 1].cost))
         d_stonks[i] = str(d_stonks[i][0] * room.stock_list[int(i) - 1].cost - d_stonks[i][1])
 
     print('d_stocks')
@@ -403,16 +413,15 @@ def make_decision(json):
         else:
             if int(d_stonks[str(i.id)]) > 0:
                 d_stonks[str(i.id)] = '+' + d_stonks[str(i.id)]
-    #print(room.stock_list)
+    # print(room.stock_list)
     stonks = {'id': int(json['player_id']),
               'data': [
-        {'short_name': i.short_name,
-         'cost': i.cost,
-         'stocks': room.get_player(int(json['player_id'])).stocks[i],
-         'delta': d_stonks[str(i.id)]
-         } for i in room.get_player(int(json['player_id'])).stocks]
+                  {'short_name': i.short_name,
+                   'cost': i.cost,
+                   'stocks': room.get_player(int(json['player_id'])).stocks[i],
+                   'delta': d_stonks[str(i.id)]
+                   } for i in room.get_player(int(json['player_id'])).stocks]
               }
-
 
     emit('update_bag', stonks, to=room_id)
 
@@ -465,6 +474,7 @@ def detele_room(room_id):
 
     return redirect('/rooms')
 
+
 @socketIO.on('my_join')
 @socketIO.on('join')
 def on_join(room):
@@ -473,7 +483,7 @@ def on_join(room):
     json = {'data': []}
     for player in current_room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget})
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
     emit('update_players', json, to=room)
     com = {}
     for i in get_room(room).realty_list:
@@ -489,7 +499,7 @@ def on_join(room):
     emit('make_turn', players, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
     send_notif(room, text=current_user.nickname + " входит в комнату",
-               head="новый игрой", img="/static/img/blue_sq.png")
+               head="новый игрок", img="/static/img/blue_sq.png")
 
 
 def send_notif(room, text="text", id="all", head="head", img="none"):
@@ -507,10 +517,10 @@ def disconnect():
         json = {'data': []}
         for player in current_room.players:
             json['data'].append(
-                {'nickname': player.nickname, 'budget': player.budget})
+                {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
         emit('update_players', json, to=room)
         send_notif(room, text=current_user.nickname + "вышел из комнаты",
-                   head="игрой отключился", img="/static/img/blue_sq.png")
+                   head="игрок отключился", img="/static/img/blue_sq.png")
 
 
 @socketIO.on('leave')
@@ -523,7 +533,7 @@ def on_leave(room):
     json = {'data': []}
     for player in current_room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget})
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
     emit('update_players', json, to=room)
     send_notif(room, text=current_user.nickname + " вышел из комнаты", head="игрой отключился")
 
@@ -541,6 +551,11 @@ def add_message(json, room_id):
     room = '1'
     emit('new_message', json, to=room)
 
+@socketIO.on('ready_to_start')
+def ready_to_start(json1):
+    room = int(json1['room_id'])
+    id1 = json1['player_id']
+    emit('new_ready_user', id1, to=room)
 
 @socketIO.on('get_com_buy')
 def get_com_buy(json):
