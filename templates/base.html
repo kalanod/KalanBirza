@@ -108,7 +108,13 @@
         })
         $('#create_room').click(function () {
             //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
-            window.location.replace('/create_room/' + $('#room_name').val() + "/" + {{ current_user.id }});
+            var room_name = $('#room_name').val()
+            if (room_name){
+                window.location.replace('/create_room/' + room_name + "/" + {{ current_user.id }});
+            }
+            else {
+                $('#incorrect_room_name').show()
+            }
             //console.log($('#name').text())
             //$('#create_room_result').text('main.php?name=');
 

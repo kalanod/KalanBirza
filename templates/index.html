@@ -47,9 +47,12 @@
                                     <label for="room_name" class="form-control-label"
                                            style="color: white; font-weight: 200">Название:</label>
                                     <input type="text" class="form-control" id="room_name">
+                                                            <p style="color: red; display: none" id="incorrect_room_name">Некорректное название комнаты</p>
+
                                 </div>
                             </form>
                         </div>
+
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Закрыть</button>
                             <button type="button" class="btn btn-primary" id="create_room">Создать</button>
@@ -160,7 +163,7 @@
         </div>
     {% endif %}
     <script>
-
+        let i = 0;
         {% if rooms[0] %}
             {% for room in rooms %}
                 {% if room %}
@@ -173,16 +176,16 @@
         if (i === 1) {
             document.getElementById("no_room").style.display = "none"
         }
-        let i = 0;
+        i = 0;
         {% for room in rooms %}
-                {% if room %}
-                    {% if room.stage != -1 and current_user.id|string in room.players|map(attribute="id", default="Anonymous")|join(', ') %}
-                        i = 1;
-                    {% endif %}
+            {% if room %}
+                {% if room.stage != -1 and current_user.id|string in room.players|map(attribute="id", default="Anonymous")|join(', ') %}
+                    i = 1;
                 {% endif %}
-            {% endfor %}
-    if (i === 1) {
-            document.getElementById("no_room1").style.display = "none"
+            {% endif %}
+        {% endfor %}
+        if (i === 1) {
+            document.getElementById("no_room2").style.display = "none"
         }
     </script>
 {% endblock %}
