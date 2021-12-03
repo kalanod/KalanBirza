@@ -16,7 +16,7 @@ class InGameRoom:
     def __init__(self, id, title, data_string='', players_string=''):
         self.id = id
         self.title = title
-
+        self.redy_players = []
         # дальше будем загружать всю информацию из строки
         # пока в строке только стоимость акций и ID
 
@@ -169,7 +169,6 @@ class InGameRoom:
         for player in self.players:
             if player.id == player_id:
                 return player
-
         return None
 
     def get_unready_players(self):

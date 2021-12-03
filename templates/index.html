@@ -9,20 +9,23 @@
                 <div class="modal-dialog" role="document">
                     <div class="modal-content" style="border: 1px solid #474747; background-color: #3c3f41;">
                         <div class="modal-header">
-                            <h4 class="modal-title" id="exampleModalLabel2" style="color: white; font-weight: 300">Покинуть игру</h4>
+                            <h4 class="modal-title" id="exampleModalLabel2" style="color: white; font-weight: 300">
+                                Покинуть игру</h4>
                         </div>
                         <div class="modal-body">
                             <form>
                                 <div class="form-group">
                                     <label for="room_name" class="form-control-label"
-                                           style="color: white; font-weight: 200">Точно выходим? Вероятно, вернуться в эту игру не удасться</label>
+                                           style="color: white; font-weight: 200">Точно выходим? Вероятно, вернуться в
+                                        эту игру не удасться</label>
                                     <label style="display: none" id="live_room_id"></label>
                                 </div>
                             </form>
                         </div>
                         <div class="modal-footer">
                             <button type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
-                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="confirm_leave">Выход</button>
+                            <button type="button" class="btn btn-danger" data-dismiss="modal" id="confirm_leave">Выход
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -80,7 +83,6 @@
         <br>
         <br>
         <div id="opened">
-
             {% if rooms[0] %}
                 {% for room in rooms %}
                     {% if room %}
@@ -108,17 +110,16 @@
                                 </div>
                             </div>
                         {% endif %}
-
                     {% endif %}
                 {% endfor %}
-            {% else %}
-                <div style="margin-left: auto; margin-right: auto;margin-top: auto;margin-bottom: auto">
-                    <img src="../static/img/no_room.png" alt=":/">
-                    <h2>Нет открытых комнат</h2>
-                </div>
             {% endif %}
+            <div style="margin: auto;display: flex;justify-content: center;" id="no_room">
+                <div>
+                    <img src="../static/img/no_room.png" alt=":/">
+                    <h2 style="color: #b8b8b8; float: bottom">Нет открытых комнат</h2>
+                </div>
+            </div>
         </div>
-
         <div id="my">
             {% for room in rooms %}
                 {% if room %}
@@ -139,7 +140,7 @@
                                 <div class="card-body">
                                     <a href="{{ '/connect_to_room/' + room.id|string + '/' + current_user.id|string }}"
                                        class="btn btn-primary">Присоединится</a>
-                                    <button id="{{room.id|string }}" type="button" class="btn btn-outline-light"
+                                    <button id="{{ room.id|string }}" type="button" class="btn btn-outline-light"
                                             data-toggle="modal"
                                             data-target="#exampleModal1" style="color: white; margin-left: 2px">выйти
                                         из игры
@@ -150,6 +151,38 @@
                     {% endif %}
                 {% endif %}
             {% endfor %}
+            <div style="margin: auto;display: flex;justify-content: center;" id="no_room2">
+                <div>
+                    <img src="../static/img/no_room.png" alt=":/">
+                    <h2 style="color: #b8b8b8; float: bottom">Нет открытых комнат</h2>
+                </div>
+            </div>
         </div>
     {% endif %}
+    <script>
+
+        {% if rooms[0] %}
+            {% for room in rooms %}
+                {% if room %}
+                    {% if room.stage == -1 %}
+                        i = 1;
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+        if (i === 1) {
+            document.getElementById("no_room").style.display = "none"
+        }
+        let i = 0;
+        {% for room in rooms %}
+                {% if room %}
+                    {% if room.stage != -1 and current_user.id|string in room.players|map(attribute="id", default="Anonymous")|join(', ') %}
+                        i = 1;
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+    if (i === 1) {
+            document.getElementById("no_room1").style.display = "none"
+        }
+    </script>
 {% endblock %}

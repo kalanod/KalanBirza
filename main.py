@@ -150,6 +150,32 @@ def reqister():
     return render_template('register.html', title='Регистрация', form=form)
 
 
+@app.route('/register_to_room/<int:room_id>', methods=['GET', 'POST'])
+def reqister_to_room(room_id):
+    form = RegisterForm()
+    if form.validate_on_submit():
+        db_sess = db_session.create_session()
+        if db_sess.query(User).filter(User.email == form.email.data).first():
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Такой пользователь уже есть")
+        if form.password.data != form.password_again.data:
+            return render_template('register.html', title='Регистрация',
+                                   form=form,
+                                   message="Пароли не совпадают")
+        user = User(
+            nickname=form.nickname.data,
+            email=form.email.data,
+        )
+        user.set_password(form.password.data)
+        db_sess.add(user)
+        db_sess.commit()
+        login_user(user, remember=True)
+        return redirect(f'/connect_to_room/{room_id}')
+    return render_template('register.html', title='Регистрация', form=form)
+
+
+
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     print('creating room', title, creator_id)
@@ -185,13 +211,16 @@ def connect_to_room(room_id, player_id):
 
 @app.route('/connect_to_room/<int:room_id>', methods=['GET', 'POST'])
 def connect_to_room_byId(room_id):
-    room = get_room(room_id)
-    if room.player_in_room(current_user.id) or room.stage == -1:
-        room.add_player(current_user.id)
-        return redirect(f'/room/{room_id}')
+    if current_user.is_authenticated:
+        room = get_room(room_id)
+        if room.player_in_room(current_user.id) or room.stage == -1:
+            room.add_player(current_user.id)
+            return redirect(f'/room/{room_id}')
 
+        else:
+            return redirect('/rooms')
     else:
-        return redirect('/rooms')
+        return redirect(f'/register_to_room/{room_id}')
 
 
 @app.route('/leave_game/<int:room_id>/<int:player_id>', methods=['GET', 'POST'])
@@ -225,6 +254,7 @@ def update_stock_cards(room_id, json):
     # print('updating stock cards...')
     # print(json)
     emit('update_stock_cards', json, to=room_id)
+    #emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
 
 
 def show_stock_cards(room_id):
@@ -234,6 +264,7 @@ def show_stock_cards(room_id):
 
 def update_stock_table(room_id, json):
     emit('update_stock_table', json, to=room_id)
+    #emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
 
 
 def update_case(room_id, json):
@@ -351,10 +382,12 @@ def my_des(json):
 
 @socketIO.on('decision')
 def make_decision(json):
+
     # print('get_decision from server')
     # print(f'json: {json}')
     data = ''
     room_id = int(json["room_id"])
+
     room = get_room(room_id)
     if json['code'] == '1':
         data = 'Игрок готов'
@@ -388,6 +421,7 @@ def make_decision(json):
     room.decision_handler()
     players = [len(room.players), len([i for i in room.players if i.ready])]
     emit('make_turn', players, to=room_id)
+    #emit('new_ready_user_ingame', current_user.id, to=room_id)
     emit('decision_on', to=room_id)
 
     d_stonks = dict()
@@ -404,8 +438,7 @@ def make_decision(json):
         # print(str(d_stonks[i][1] / d_stonks[i][0]), str(room.stock_list[int(i) - 1].cost))
         d_stonks[i] = str(d_stonks[i][0] * room.stock_list[int(i) - 1].cost - d_stonks[i][1])
 
-    print('d_stocks')
-    print(d_stonks)
+    print(list(map(lambda x: x.id, get_room(room_id).players)))
     print('\n\n\n\n')
     for i in room.get_player(int(json['player_id'])).stocks:
         if str(i.id) not in d_stonks:
@@ -438,8 +471,9 @@ def make_decision(json):
     json = {'data': []}
     for player in room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget})
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready})
     emit('update_players', json, to=room_id)
+    # emit('new_ready_user_ingame', current_user.id, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
 
@@ -449,7 +483,6 @@ def detele_room(room_id):
     global active_rooms
     # ('')
     room = get_room(room_id)
-
     if room is None:
         print(f'room with id {room_id} not found')
         return redirect('/rooms')
@@ -497,6 +530,7 @@ def on_join(room):
     emit('update_bag', stonks, to=room)
     players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
     emit('make_turn', players, to=room)
+    #emit('new_ready_user_ingame', current_user.id, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
     send_notif(room, text=current_user.nickname + " входит в комнату",
                head="новый игрок", img="/static/img/blue_sq.png")

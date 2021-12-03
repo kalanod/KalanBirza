@@ -719,6 +719,14 @@
                 $('#players').show()
             }
         });
+        socket.on('new_ready_user_ingame', function (data) {
+            $('#in_online_player' + data).css('border', '2px solid #5eee11');
+        });
+        socket.on('update_user_ingame', function (data) {
+            for (i in data) {
+                $('#in_online_player' + i).css('border', '2px solid black');
+            }
+        });
         socket.on('start_game', function (data) {
             $('.start_screen').hide()
             $('#players').show()
@@ -782,7 +790,6 @@
             $('#log').append('<h6 style="margin: 10px">' + data + '</h6>')
         });
         socket.on('make_turn', function (data) {
-
             var ar = data[1] / data[0]
             progress = 100 * ar
             document.getElementById('progress-bar').style.width = String(progress) + '%';
@@ -1015,8 +1022,12 @@
             ss.empty()
             c_players = 0;
             for (const player in json['data']) {
-                online.append('<a href="#"><div class= "player_card" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
-                ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%" id="in_loby_player_' + json['data'][player]["id"] + '"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">' + json['data'][player]["nickname"] + '</p></div></div>')
+                if (json['data'][player]["ready"]) {
+                    online.append('<a href="#"><div class= "player_card" id="in_online_player' + json['data'][player]["id"] + '" style="border: chartreuse 2px solid"><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
+                } else {
+                    online.append('<a href="#"><div class= "player_card" id="in_online_player' + json['data'][player]["id"] + '" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
+                }
+                ss.append('<div class="card npcard" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%" id="in_loby_player_' + json['data'][player]["id"] + '"><img class="card-img-top" src="../static/img/avatar.jpg" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">' + json['data'][player]["nickname"] + '</p></div></div>')
                 c_players++;
             }
             ss.append('<div class="card npcard npcard1" style="width: 12%; margin-top: 18%; float: left; margin-left: 3%"><img class="card-img-top" src="../static/img/add_player.png" alt="Card image cap"><div class="card-body"><p class="card-text" style="color: white">пригласить игрока</p></div></div>')

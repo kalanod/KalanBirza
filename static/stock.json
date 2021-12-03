@@ -18,33 +18,33 @@
     {
       "id": 2,
       "department_id": 2,
-      "name": "United Aerospace Corporation",
-      "short_name": "UAC",
+      "name": "United Aerospace",
+      "short_name": "USpace",
       "img": "data:image/png;base64,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",
       "need_for_win": 1,
       "stock_cost": 300,
       "stock_lowest_cost": 30,
-      "realty_name": "Mission Control Center",
+      "realty_name": "Космопорт",
       "realty_stock_quantity": 20,
       "realty_cost": 1000000,
       "realty_bonus": 1000,
-      "des": "Рыбные фермы от компании KalanCO уже который год показывают отличный результат принося своему владельцу стабильный доход"
+      "des": "Настало время поднять свою голову и устремить взгляд к звёздам! Постройте космопорт и покиньте эту планету, захваченную капитализмом\nкупите эту компанию чтобы победить в игре"
 
     },
     {
       "id": 3,
       "department_id": 3,
-      "name": "MetIndustries",
-      "short_name": "MTI",
+      "name": "Met_Industries",
+      "short_name": "Met_Industries",
       "img": "https://i.ebayimg.com/images/g/nDUAAOSwI59Z5XHg/s-l400.jpg",
       "need_for_win": 0,
       "stock_cost": 100,
       "stock_lowest_cost": 10,
-      "realty_name": "Walter White's laboratory",
+      "realty_name": "Марко-Лаборатория",
       "realty_stock_quantity": 5,
       "realty_cost": 30000,
       "realty_bonus": 1000,
-      "des": "Рыбные фермы от компании KalanCO уже который год показывают отличный результат принося своему владельцу стабильный доход"
+      "des": ""
     },
     {
       "id": 4,
