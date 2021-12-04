@@ -101,24 +101,8 @@
         $('.del').click(function () {
             window.location.replace('/delete_room/' + $(this).attr('id'));
         })
-        $('#confirm_leave').click(function () {
-            var id = $('#live_room_id').text()
-            window.location.replace('/leave_game/' + id + "/" + {{ current_user.id }});
 
-        })
-        $('#create_room').click(function () {
-            //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
-            var room_name = $('#room_name').val()
-            if (room_name){
-                window.location.replace('/create_room/' + room_name + "/" + {{ current_user.id }});
-            }
-            else {
-                $('#incorrect_room_name').show()
-            }
-            //console.log($('#name').text())
-            //$('#create_room_result').text('main.php?name=');
 
-        });
         $('#exampleModal1').on('show.bs.modal', function (event) {
 
             var button = $(event.relatedTarget) // Кнопка, что спровоцировало модальное окно

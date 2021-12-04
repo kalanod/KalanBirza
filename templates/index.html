@@ -187,5 +187,23 @@
         if (i === 1) {
             document.getElementById("no_room2").style.display = "none"
         }
+        $('#confirm_leave').click(function () {
+            var id = $('#live_room_id').text()
+            window.location.replace('/leave_game/' + id + "/" + {{ current_user.id }});
+
+        });
+         $('#create_room').click(function () {
+            //$('#create_room_result').text('Создана комната ' + $('#room_name').val());
+            var room_name = $('#room_name').val()
+            if (room_name){
+                window.location.replace('/create_room/' + room_name + "/" + {{ current_user.id }});
+            }
+            else {
+                $('#incorrect_room_name').show()
+            }
+            //console.log($('#name').text())
+            //$('#create_room_result').text('main.php?name=');
+
+        });
     </script>
 {% endblock %}

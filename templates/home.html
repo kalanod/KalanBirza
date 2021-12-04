@@ -1,63 +1,112 @@
 {% extends "base.html" %}
 
 {% block content %}
-
-    <div id="text">
-        <div class="join2"><a href="/register" style="text-decoration: none;">
-            <H1 STYLE="color: white; position: relative; font-size: 520%; text-decoration: none;">
-                Присоединяйся
-            </H1></a>
-        </div>
-        <H1 STYLE="color: white; position: relative; font-size: 520%;margin-top: 34%; text-decoration: none;">
-            прямо сейчас
-        </H1>
-
-        <H3 STYLE="color: #b8b8b8; position: center; padding-top: 5%;
-            margin-top: 50px;">
-            Зови друзей учавствовать в увлекательных торгах акциями, покупке недвижимости и достижению богадства!
-        </H3>
-    </div>
-    <div id="carusel">
-        <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
-            <div class="carousel-inner">
-                <div class="carousel-item active">
-                    <img class="d-block w-100 qwe"
-                         src="../static/img/ad_1.png"
-                         alt="Первый слайд">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100 qwe"
-                         src="../static/img/ad_2.png"
-                         alt="Второй слайд">
-                </div>
-                <div class="carousel-item">
-                    <img class="d-block w-100 qwe"
-                         src="../static/img/ad3.png"
-                         alt="Третий слайд">
-                </div>
+    <div style="width: 100%; height: 100%">
+        <div id="text">
+            <div class="join2"><a href="/register" style="text-decoration: none;">
+                <H1 STYLE="color: white; position: relative; font-size: 520%; text-decoration: none;">
+                    Присоединяйся
+                </H1></a>
             </div>
-            <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
-                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-                <span class="sr-only">Previous</span>
-            </a>
-            <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
-                <span class="carousel-control-next-icon" aria-hidden="true"></span>
-                <span class="sr-only">Next</span>
-            </a>
+            <H1 STYLE="color: white; position: relative; font-size: 520%;margin-top: 34%; text-decoration: none;">
+                прямо сейчас
+            </H1>
+
+            <H3 STYLE="color: #b8b8b8; position: center; padding-top: 5%;
+            margin-top: 50px;">
+                Зови друзей учавствовать в увлекательных торгах акциями, покупке недвижимости и достижению богадства!
+            </H3>
+        </div>
+        <div id="carusel">
+            <div id="carouselExampleControls" class="carousel slide" data-ride="carousel">
+                <div class="carousel-inner">
+                    <div class="carousel-item active">
+                        <img class="d-block w-100 qwe"
+                             src="../static/img/ad_1.png"
+                             alt="Первый слайд">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100 qwe"
+                             src="../static/img/ad_2.png"
+                             alt="Второй слайд">
+                    </div>
+                    <div class="carousel-item">
+                        <img class="d-block w-100 qwe"
+                             src="../static/img/ad3.png"
+                             alt="Третий слайд">
+                    </div>
+                </div>
+                <a class="carousel-control-prev" href="#carouselExampleControls" role="button" data-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#carouselExampleControls" role="button" data-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="sr-only">Next</span>
+                </a>
+            </div>
         </div>
     </div>
     <div class="cards_block">
+        <div class="card mycard">
+            <div class="card-header">
+                Если хотите узнать больше..
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Подробнее об игре</h5>
+                <p class="card-text">Каланбиржа - бесплатная многопользовательская онлайн игра иммитирующая биржевую
+                    торговлю акциями...</p>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    подробнее
+                </button>
+                <div class="collapse" id="collapseExample">
+                    <div class="card card-body">
+                        Игра была придумана в 2020 году и существовала в виде колод карт с акциями и событиями, с 28 марта 2021 года ведётся разработка web версии. Разработка веслась на базе ЯНДЕКС ЛИЦЕЯ, где в последствии игра была использована как выпускная работа. От всей души хочу поблагодарить Александра Лубкова, Антона Орлова и Ксению Александровну! Без вас этот проект был бы невозможен)
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card">
+            <div class="card-header">
+                Если вам очень понравилось..
+            </div>
+            <div class="card-body">
+                <h5 class="card-title">Поддержать проект</h5>
+                <p class="card-text">Каланбиржа имеет открытый исходный код, и вы сами можете учавствовать в её развитии!</p>
+                <button class="btn btn-primary" type="button" data-toggle="collapse" data-target="#collapseExample1"
+                        aria-expanded="false" aria-controls="collapseExample">
+                    поддержать
+                </button>
+                <div class="collapse" id="collapseExample1">
+                    <div class="card card-body">
+                        Меня зовут Андрей Трофимов, я студент и буду рад любой вашей помощи!
+                        <p>Вы можете получить исходники игры тут <a href="https://github.com/kalanod/KalanBirza">каланбиржа</a></p>
+                        <p>Вы можете поддержать проект материально переведя любую сумму на карту 5469550037591085 (все деньги будут поровну распределены между разработчиками)</p>
+                        <p>Ваши замечания и предложения пишите мне в <a href="https://vk.com/kalanod">вк</a> или на почту yaidf@ya.ru</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
     <style>
+        .mycard {
+            margin-bottom: 3%;
+        }
+
         .cards_block {
+            margin-top: 12%;
             width: 280%;
-            height: 100%;
+            height: 190%;
             margin-left: -90%;
             margin-right: -90%;
+            padding-right: 105%;
+            padding-left: 105%;
             background-color: #808080;
-            margin-top: 40%;
+
             display: block;
-            position: absolute;
+
             -webkit-border-radius: 100% 100% 0 0;
             -moz-border-radius: 2000px 0 0 0;
         }
@@ -72,15 +121,7 @@
         }
 
         .join2 {
-            margin-top: 20%;
-            width: 620px;
-            height: 115px;
-            margin-bottom: 20%;
-            position: absolute;
-        }
-
-        .join2 {
-           margin-top: 20%;
+            margin-top: 10%;
             width: 620px;
             height: 115px;
             margin-bottom: 20%;
@@ -105,9 +146,6 @@
             margin-right: 4%;
             margin-left: 4%;
             float: left;
-
-            display: block;
-            position: absolute;
         }
 
         #carusel {
