@@ -70,9 +70,19 @@ def home():
 
 
 @app.route('/', methods=['GET', 'POST'])
-def news():
+def home2():
     return render_template('home.html')
 
+
+@app.route('/news', methods=['GET', 'POST'])
+def news():
+    db_sess = db_session.create_session()
+    params = dict()
+    params["title"] = "Новости"
+    params["news_list"] = reversed(db_sess.query(News).all())
+    print(params["news_list"])
+
+    return render_template('news.html', **params)
 
 @app.route('/devs', methods=['GET', 'POST'])
 def devs():
@@ -175,7 +185,6 @@ def reqister_to_room(room_id):
     return render_template('register.html', title='Регистрация', form=form)
 
 
-
 @app.route('/create_room/<title>/<creator_id>')
 def create_room(title, creator_id):
     print('creating room', title, creator_id)
@@ -254,7 +263,7 @@ def update_stock_cards(room_id, json):
     # print('updating stock cards...')
     # print(json)
     emit('update_stock_cards', json, to=room_id)
-    #emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
+    # emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
 
 
 def show_stock_cards(room_id):
@@ -264,7 +273,7 @@ def show_stock_cards(room_id):
 
 def update_stock_table(room_id, json):
     emit('update_stock_table', json, to=room_id)
-    #emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
+    # emit('update_user_ingame', list(map(lambda x: x.id, get_room(room_id).players)), to=room_id)
 
 
 def update_case(room_id, json):
@@ -382,7 +391,6 @@ def my_des(json):
 
 @socketIO.on('decision')
 def make_decision(json):
-
     # print('get_decision from server')
     # print(f'json: {json}')
     data = ''
@@ -421,7 +429,7 @@ def make_decision(json):
     room.decision_handler()
     players = [len(room.players), len([i for i in room.players if i.ready])]
     emit('make_turn', players, to=room_id)
-    #emit('new_ready_user_ingame', current_user.id, to=room_id)
+    # emit('new_ready_user_ingame', current_user.id, to=room_id)
     emit('decision_on', to=room_id)
 
     d_stonks = dict()
@@ -530,7 +538,7 @@ def on_join(room):
     emit('update_bag', stonks, to=room)
     players = [len(get_room(room).players), len([i for i in get_room(room).players if i.ready])]
     emit('make_turn', players, to=room)
-    #emit('new_ready_user_ingame', current_user.id, to=room)
+    # emit('new_ready_user_ingame', current_user.id, to=room)
     update_money(room, {"id": current_user.id, "money": get_room(room).get_player(current_user.id).budget})
     send_notif(room, text=current_user.nickname + " входит в комнату",
                head="новый игрок", img="/static/img/blue_sq.png")
@@ -585,11 +593,13 @@ def add_message(json, room_id):
     room = '1'
     emit('new_message', json, to=room)
 
+
 @socketIO.on('ready_to_start')
 def ready_to_start(json1):
     room = int(json1['room_id'])
     id1 = json1['player_id']
     emit('new_ready_user', id1, to=room)
+
 
 @socketIO.on('get_com_buy')
 def get_com_buy(json):
