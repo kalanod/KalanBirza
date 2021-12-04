@@ -642,7 +642,7 @@
         function copyToClipboard(str) {
             var area = document.createElement('textarea');
             document.body.appendChild(area);
-            area.value = "http://192.168.60.203:5000/connect_to_room/{{current_room.id}}";
+            area.value = "http://kalanbirza.herokuapp.com/connect_to_room/{{current_room.id}}";
             area.select();
             document.execCommand("copy");
             document.body.removeChild(area);
