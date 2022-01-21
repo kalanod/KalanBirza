@@ -805,21 +805,21 @@
                 for (var stonk in data['data']) {
                     if (data['data'][stonk]['stocks'] != '0') {
                         const elem = $('<li class="sell"><a href = "#" class="sell">'
-                            + data['data'][stonk]['short_name'] + ' '
-                            + data['data'][stonk]['stocks'] + ' продать  |  '
+                            + data['data'][stonk]['short_name'] + ' | у вас '
+                            + data['data'][stonk]['stocks'] + ' шт | '
                             + data['data'][stonk]['delta'] + '  </a></li>');
                         $('#bag').append(elem);
                         elem.click((e) => {
                             $('#sell_window').modal('toggle')
                             let st = e.target.innerHTML
-                            index1 = st.indexOf(' ')
-                            index2 = st.indexOf('|')
+                            index1 = st.indexOf(' | у вас ')
+                            index2 = st.indexOf(' шт')
                             index3 = st.indexOf('продать')
                             f_title = st.slice(0, index1)
                             $('#LongTitle').text("Продать " + f_title)
-                            f_count = st.slice(index2 + 1, index3)
+                            f_count = st.slice(index1 + 9, index2)
                             $('#c_price').text("Введите число, максимум: " + f_count)
-                            $('#recipient-name').attr("value", f_count)
+                            $('#recipient-name').val(f_count)
 
 
                         });
