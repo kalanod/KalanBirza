@@ -289,7 +289,7 @@
 
     </style>
 </head>
-<body>
+<body style="position: fixed;">
 <div class="toast-container" style="position: absolute; z-index: 23; top: 0;right: 0; text-align: right">
 
 </div>
@@ -833,8 +833,8 @@
                 console.log({{ current_user.id }})
                 for (var com in data['data']) {
                     if (data['data'][com]) {
-                        if (parseInt(data['data'][com]) == parseInt({{ current_user.id }})) {
-                            const elem = $('<li title="test" class="buy_bag" style="background-color: dodgerblue">' +
+                        if (parseInt(data['data'][com]['id']) == parseInt({{ current_user.id }})) {
+                            const elem = $('<li title="это ваша компания" class="buy_bag" style="background-color: dodgerblue">' +
                                 '<a href = "#" class="buy_bag" style="height: 35px">' +
                                 '<img src="../static/img/selled.png" style="position: absolute; z-index: 18; height: 9%; width: 100%; margin-top: 0">' +
                                 '<p class="name_company" style="z-index: 20; position: absolute">' + com + '</p>' +
@@ -850,8 +850,11 @@
                                 })
                             });
                         } else {
-                            const elem = $('<li title="test" class="buy_bag" style="background-color: darkgray"><a href = "#" class="buy_bag">'
-                                + com + '</a></li>');
+                            const elem = $('<li title="это компания пренадлежит ' + data['data'][com]['name'] +'" class="buy_bag" style="background-color: dodgerblue">' +
+                                '<a href = "#" class="buy_bag" style="height: 35px">' +
+                                '<img src="../static/img/selled.png" style="position: absolute; z-index: 18; height: 9%; width: 100%; margin-top: 0">' +
+                                '<p class="name_company" style="z-index: 20; position: absolute">' + com + '</p>' +
+                                '</a></li>');
                             $('#com').append(elem);
                             elem.click((e) => {
                                 let st = e.target.innerHTML
@@ -867,7 +870,7 @@
 
                         }
                     } else {
-                        const elem = $('<li title="test" class="buy_bag"><a href = "#" class="buy_bag">'
+                        const elem = $('<li title="эта компания никому не пренадлежит" class="buy_bag"><a href = "#" class="buy_bag">'
                             + com + '</a></li>');
                         $('#com').append(elem);
                         elem.click((e) => {
