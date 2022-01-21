@@ -479,8 +479,9 @@ def make_decision(json):
     json = {'data': []}
     for player in room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready})
-    emit('update_players', json, to=room_id)
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready,
+             'online': player.online})
+        emit('update_players', json, to=room_id)
     # emit('new_ready_user_ingame', current_user.id, to=room_id)
     # emit('update_decision') здесь передадим что то, что в последствии покажет решение игрока
 
@@ -525,7 +526,8 @@ def on_join(room):
     json = {'data': []}
     for player in current_room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready,
+             'online': player.online})
     emit('update_players', json, to=room)
     com = {}
     for i in current_room.realty_list:
@@ -565,7 +567,8 @@ def disconnect():
         json = {'data': []}
         for player in current_room.players:
             json['data'].append(
-                {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
+                {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready,
+                 'online': player.online})
         emit('update_players', json, to=room)
         send_notif(room, text=current_user.nickname + "вышел из комнаты",
                    head="игрок отключился", img="/static/img/blue_sq.png")
@@ -581,7 +584,8 @@ def on_leave(room):
     json = {'data': []}
     for player in current_room.players:
         json['data'].append(
-            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
+            {'nickname': player.nickname, 'budget': player.budget, 'id': player.id, 'ready': player.ready,
+             'online': player.online})
     emit('update_players', json, to=room)
     send_notif(room, text=current_user.nickname + " вышел из комнаты", head="игрой отключился", img="/static/img/red_sq.png")
 

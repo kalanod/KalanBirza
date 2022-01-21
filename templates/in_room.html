@@ -850,7 +850,7 @@
                                 })
                             });
                         } else {
-                            const elem = $('<li title="это компания пренадлежит ' + data['data'][com]['name'] +'" class="buy_bag" style="background-color: dodgerblue">' +
+                            const elem = $('<li title="это компания пренадлежит ' + data['data'][com]['name'] + '" class="buy_bag" style="background-color: dodgerblue">' +
                                 '<a href = "#" class="buy_bag" style="height: 35px">' +
                                 '<img src="../static/img/selled.png" style="position: absolute; z-index: 18; height: 9%; width: 100%; margin-top: 0">' +
                                 '<p class="name_company" style="z-index: 20; position: absolute">' + com + '</p>' +
@@ -1025,7 +1025,9 @@
             ss.empty()
             c_players = 0;
             for (const player in json['data']) {
-                if (json['data'][player]["ready"]) {
+                if (!json['data'][player]["online"]) {
+                    online.append('<a href="#"><div class= "player_card" id="in_online_player' + json['data'][player]["id"] + '" style="border: red 2px solid"><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
+                } else if (json['data'][player]["ready"]) {
                     online.append('<a href="#"><div class= "player_card" id="in_online_player' + json['data'][player]["id"] + '" style="border: chartreuse 2px solid"><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
                 } else {
                     online.append('<a href="#"><div class= "player_card" id="in_online_player' + json['data'][player]["id"] + '" ><h5 id = "player_name" style="color: white; font-weight: 300; margin-top: 4%">' + json['data'][player]["nickname"] + '</h5><h5 style="color: #A9A9A9; font-weight: 200; margin-top: 4%">' + json['data'][player]["budget"] + '</h5></div></a>')
