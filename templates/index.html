@@ -71,17 +71,10 @@
             <a href="#" class="btn btn-primary active option2">Мои игры</a>
         </div>
 
-        {% if not rooms[0] %}
-            <h1 style=" margin-top: 20%; margin-left: 38%; color: white">Нет открытых игр(</h1>
-            <button style=" margin-left: 45%" type="button" class="btn btn-primary" data-toggle="modal"
-                    data-target="#exampleModal">Новая игра
-            </button>
-        {% endif %}
-        {% if rooms[0] %}
             <button style="margin-top: 10px; margin-right: 10px; float: right" type="button" class="btn btn-primary"
                     data-toggle="modal" data-target="#exampleModal">Новая игра
             </button>
-        {% endif %}
+
 
         <br>
         <br>

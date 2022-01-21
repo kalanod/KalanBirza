@@ -471,12 +471,11 @@ def make_decision(json):
     com = {}
     for i in room.realty_list:
         if i.owner:
-            com[i.name] = i.owner.id
+            com[i.name] = {'id': i.owner.id, 'name': i.owner.get_name()}
         else:
             com[i.name] = None
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room_id)
-    current_room = room
     json = {'data': []}
     for player in room.players:
         json['data'].append(
@@ -529,8 +528,13 @@ def on_join(room):
             {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
     emit('update_players', json, to=room)
     com = {}
-    for i in get_room(room).realty_list:
-        com[i.name] = i.owner
+    for i in current_room.realty_list:
+        if i.owner:
+            com[i.name] = {'id': i.owner.id, 'name': i.owner.get_name()}
+            print("nanme=" + i.owner.get_name())
+        else:
+            com[i.name] = None
+
     com1 = {'id': current_user.id, 'data': com}
     emit('update_com', com1, to=room)
     stonks = {'id': current_user.id, 'data': [
@@ -546,7 +550,7 @@ def on_join(room):
                head="новый игрок", img="/static/img/blue_sq.png")
 
 
-def send_notif(room, text="text", id="all", head="head", img="none"):
+def send_notif(room, text="text", id="all", head="head", img="/static/img/blue_sq.png"):
     data = {"id": id, "head": head, "text": text, "img_src": img}
     emit('new_notice', data, to=room)
     print("tess")
@@ -579,7 +583,7 @@ def on_leave(room):
         json['data'].append(
             {'nickname': player.nickname, 'budget': player.budget, 'id': player.id})
     emit('update_players', json, to=room)
-    send_notif(room, text=current_user.nickname + " вышел из комнаты", head="игрой отключился")
+    send_notif(room, text=current_user.nickname + " вышел из комнаты", head="игрой отключился", img="/static/img/red_sq.png")
 
 
 @socketIO.on('sell')

@@ -39,7 +39,8 @@ class InGameRoom:
                                                   "stock_cost": data_from_bd[company["id"]],
                                                   "stock_lowest_cost": company["stock_lowest_cost"],
                                                   "start_cost": company["stock_cost"],
-                                                  "img": company["img"], "des": company["des"]}))
+                                                  "img": company["img"],
+                                                  "des": company["des"]}))
 
                 else:
                     self.stock_list.append(Stock(company))
@@ -604,10 +605,10 @@ class InGamePlayer:
         user = db_sess.query(User).filter(User.id == self.id).first()
         if user:
             self.nickname = user.nickname
-
         else:
             raise ValueError
-
+    def get_name(self):
+        return self.nickname
     def get_string_for_bd(self):
         return f'{self.id},' \
                f'{self.budget},' \
