@@ -16,7 +16,7 @@ class News(SqlAlchemyBase, SerializerMixin):
     header = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     text = sqlalchemy.Column(sqlalchemy.String, nullable=True)
     image_address = sqlalchemy.Column(sqlalchemy.String, nullable=True)
-    creator = orm.relationship('User', primaryjoin="User.id == News.creator_id")
+    creator = orm.relation('User', primaryjoin="User.id == News.creator_id")
 
     def __repr__(self):
         return f'<News> id: {self.id} creator: {self.creator_id}'
