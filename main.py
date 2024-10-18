@@ -1,3 +1,6 @@
+import glob
+import locale
+
 from flask import Flask, redirect, render_template
 from flask_login import LoginManager, logout_user, login_required
 
@@ -59,52 +62,85 @@ def method_not_allowed(error):
 
 @app.route('/rooms', methods=['GET', 'POST'])
 def base():
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
     params = dict()
     params["title"] = "Список комнат"
     params["rooms"] = active_rooms
-    return render_template('index.html', **params)
+    return render_template('index.html', **params, **languages[lang])
 
 
 @app.route('/', methods=['GET', 'POST'])
 def news():
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
     db_sess = db_session.create_session()
     params = dict()
     params["title"] = "Новости"
     params["news_list"] = reversed(db_sess.query(News).all())
     print(params["news_list"])
 
-    return render_template('news.html', **params)
+    return render_template('news.html', **params, **languages[lang])
 
 
 @app.route('/devs', methods=['GET', 'POST'])
 def devs():
-    params = dict()
-    params["title"] = "Разработчики"
-    params["devs_list"] = [{"nickname": "Михаил Буянов",
-                            "dev": ["дизайн ИЗВИНИТЕ ЗА 50 ОТТЕНКОВ СЕРОГО",
-                                    "бэкенд"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/deep_dark_fantasies_vana"},
-                           {"nickname": "Прошак Валерий",
-                            "dev": ["написал 10 строчек кода"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/vproshak"},
-                           {"nickname": "Андрей Трофимов",
-                            "dev": ["фронтенд", "обмен данными с сервером"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/kalanod"},
-                           {"nickname": "Влад Ревякин",
-                            "dev": ["написал события", "отдыхал"],
-                            "link_text": "VK",
-                            "link": "https://vk.com/id515647622"}
-                           ]
-    print(params["devs_list"])
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
 
-    return render_template('devs.html', **params)
+    params = dict()
+    params["title"] = languages[lang]["title_dev"]
+    if (lang == "ru_RU"):
+        params["devs_list"] = [{"nickname": "Михаил Буянов",
+                                 "dev": ["дизайн)))",
+                                         "бэкенд"],
+                                 "link_text": "VK",
+                                 "link": "https://vk.com/deep_dark_fantasies_vana"},
+                                {"nickname": "Прошак Валерий",
+                                 "dev": ["написал 10 строчек кода"],
+                                 "link_text": "VK",
+                                 "link": "https://vk.com/vproshak"},
+                                {"nickname": "Андрей Трофимов",
+                                 "dev": ["фронтенд", "обмен данными с сервером"],
+                                 "link_text": "VK",
+                                 "link": "https://vk.com/kalanod"},
+                                {"nickname": "Влад Ревякин",
+                                 "dev": ["написал события", "отдыхал"],
+                                 "link_text": "VK",
+                                 "link": "https://vk.com/id515647622"}
+                                ]
+    else:
+        params["devs_list"] = [{"nickname": "Mikhail Buyanov",
+                                "dev": ["design)))",
+                                        "backend"],
+                                "link_text": "VK",
+                                "link": "https://vk.com/deep_dark_fantasies_vana"},
+                               {"nickname": "Proshak Valeri",
+                                "dev": ["did nothing"],
+                                "link_text": "VK",
+                                "link": "https://vk.com/vproshak"},
+                               {"nickname": "Andrew Trofimov",
+                                "dev": ["frontend"],
+                                "link_text": "VK",
+                                "link": "https://vk.com/kalanod"},
+                               {"nickname": "Vlad Reviakin",
+                                "dev": ["in-game events"],
+                                "link_text": "VK",
+                                "link": "https://vk.com/id515647622"}
+                               ]
+
+    return render_template('devs.html', **params, **languages[lang])
 
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
+
     form = LoginForm()
     if form.validate_on_submit():
         db_sess = db_session.create_session()
@@ -116,8 +152,8 @@ def login():
             return redirect('/')
         return render_template('login.html',
                                message="Неправильный логин или пароль",
-                               form=form)
-    return render_template('login.html', title='Авторизация', form=form)
+                               form=form, **languages[lang])
+    return render_template('login.html', title='Авторизация', form=form, **languages[lang])
 
 
 @app.route('/logout')
@@ -129,17 +165,20 @@ def logout():
 
 @app.route('/register', methods=['GET', 'POST'])
 def reqister():
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
     form = RegisterForm()
     if form.validate_on_submit():
         if form.password.data != form.password_again.data:
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Пароли не совпадают")
+                                   message="Пароли не совпадают", **languages[lang])
         db_sess = db_session.create_session()
         if db_sess.query(User).filter(User.email == form.email.data).first():
             return render_template('register.html', title='Регистрация',
                                    form=form,
-                                   message="Такой пользователь уже есть")
+                                   message="Такой пользователь уже есть", **languages[lang])
         user = User(
             nickname=form.nickname.data,
             email=form.email.data,
@@ -148,7 +187,7 @@ def reqister():
         db_sess.add(user)
         db_sess.commit()
         return redirect('/')
-    return render_template('register.html', title='Регистрация', form=form)
+    return render_template('register.html', title='Регистрация', form=form, **languages[lang])
 
 
 @app.route('/create_room/<title>/<creator_id>')
@@ -193,8 +232,11 @@ def leave_from_room(room_id, player_id):
 
 @app.route('/room/<int:room_id>', methods=['GET', 'POST'])
 def in_room(room_id):
+    lang = request.args.get('lang')
+    if lang is None or lang not in languages:
+        lang = default_language
     current_room = get_room(room_id)
-    return render_template('in_room.html', current_room=current_room, title="В игре")
+    return render_template('in_room.html', current_room=current_room, title="В игре", **languages[lang])
 
 
 def update_stock_cards(room_id, json):
@@ -417,7 +459,8 @@ def main():
         new_room = InGameRoom(room_from_db.id, room_from_db.title, room_from_db.data, room_from_db.players)
         active_rooms.append(new_room)
 
-    port = int(os.environ.get("PORT", 5000))
+
+    port = int(os.environ.get("PORT", 3500))
     app.run(host='0.0.0.0', port=port)
     # app.run(debug=True)
 
@@ -458,4 +501,15 @@ def del_friend(self_id, friend_id):
 
 
 if __name__ == '__main__':
+    default_language = 'en_US'
+    locale.setlocale(locale.LC_ALL, default_language + ".utf8")
+    languages = {}
+    language_list = glob.glob("language/*.json")
+
+    for lang in language_list:
+        filename = lang.split('/')
+        lang_code = filename[1].split('.')[0]
+
+        with open(lang, 'r', encoding='utf8') as file:
+            languages[lang_code] = json.loads(file.read())
     main()

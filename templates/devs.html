@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 
 {% block content %}
-<h2 style="float: left; font-weight: 200; margin: 1%; color: silver;"> Разработчики: </h2>
+<h2 style="float: left; font-weight: 200; margin: 1%; color: silver;"> {{headline_dev}} </h2>
     {% for devs in devs_list %}
     {% if devs %}
     <div>

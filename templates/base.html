@@ -34,22 +34,26 @@
                                                     border-right-style: solid;
                                                     border-right-color: #2b2b2b;">
                 <img src="https://i.ibb.co/WBbGHq3/logo.png" width="30" height="30" class="d-inline-block align-top" alt="">
-                <span style="margin-left: 10px">Каланбиржа</span>
+                <span style="margin-left: 10px">{{app_name}}</span>
             </a>
             {% if current_user.is_authenticated %}
-                <a style="color: gray; margin-left: 0px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/rooms"> список комнат </a>
-                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/"> новости </a>
-                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/devs"> разработчики </a>
+                <a style="color: gray; margin-left: 0px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/rooms"> {{head_room_list}} </a>
+                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/">
+                    {{head_news}} </a>
+                <a style="color: gray; margin-left: 10px; float: left; margin-top: 1.5%; font-weight: 300; text-decoration: none;" href="/devs">
+                    {{head_devs}} </a>
             {% endif %}
             </div>
             <form class="form-inline">
+                <a class="btn btn-outline-light" style="margin-right: 10px" href="?lang=en_US">en</a>
+                <a class="btn btn-outline-light" style="margin-right: 10px" href="?lang=ru_RU">ru</a>
             {% if current_user.is_authenticated %}
                 <a style="color: white; margin-right: 15px"> {{ current_user.nickname }}</a>
                 <!-- <a class="btn btn-outline-light" style="margin-right: 10px" href="/rooms">играть</a> -->
-                <a class="btn btn-outline-light" style="" id="ex" href="/logout">выйти</a>
+                <a class="btn btn-outline-light" style="" id="ex" href="/logout">{{head_quit}}</a>
             {% else %}
-                <a class="btn btn-outline-light" href="/register" style="margin-right: 10px">Зарегистрироваться</a>
-                <a class="btn btn-outline-light" href="/login">Войти</a>
+                <a class="btn btn-outline-light" href="/register" style="margin-right: 10px">{{head_sign_up}}</a>
+                <a class="btn btn-outline-light" href="/login">{{head_sign_in}}</a>
             {% endif %}
             </form>
     </nav>
