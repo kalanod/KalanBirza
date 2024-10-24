@@ -25,6 +25,7 @@ from flask_socketio import SocketIO, send, emit, join_room, leave_room
 import os
 import random
 import time
+from flask import make_response
 
 # print(os.getcwd())
 
@@ -87,9 +88,16 @@ def news():
 
 @app.route('/devs', methods=['GET', 'POST'])
 def devs():
-    lang = request.args.get('lang')
-    if lang is None or lang not in languages:
-        lang = default_language
+    lang_param = request.args.get('lang')
+
+    if lang_param is not None and lang_param in languages:
+        lang = lang_param
+
+    else:
+        lang = request.cookies.get("language")
+        if lang is None or lang not in languages:
+            lang = default_language
+
 
     params = dict()
     params["title"] = languages[lang]["title_dev"]
@@ -131,8 +139,10 @@ def devs():
                                 "link_text": "VK",
                                 "link": "https://vk.com/id515647622"}
                                ]
-
-    return render_template('devs.html', **params, **languages[lang])
+    res = make_response(render_template('devs.html', **params, **languages[lang]))
+    if lang_param is not None and lang_param in languages:
+        res.set_cookie("language", lang_param)
+    return res
 
 
 @app.route('/login', methods=['GET', 'POST'])
